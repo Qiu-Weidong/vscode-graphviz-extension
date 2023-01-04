@@ -2,7 +2,7 @@
  copy from https://github.com/antlr/grammars-v4.git
  */
 
-grammar dot;
+grammar Dot;
 
 graph_list: graph+ EOF;
 

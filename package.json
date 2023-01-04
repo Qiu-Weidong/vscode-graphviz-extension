@@ -33,7 +33,8 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+    "antlr4": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
