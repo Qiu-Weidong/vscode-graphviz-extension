@@ -23,5 +23,5 @@ digraph G {
 	b3 -> end;
 
 	start [shape=Mdiamond];
-	end [shape=Msquare];
+	end [shape=Msquare];                                                   
 }

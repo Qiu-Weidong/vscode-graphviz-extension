@@ -1,43 +1,80 @@
 import * as vscode from 'vscode';
-import ColorProvider from './colorProvider';
+import { DotLexer } from './dot/DotLexer';
+import { DotParser, Graph_listContext } from './dot/DotParser';
+import { CharStreams, CommonTokenStream, Token } from 'antlr4ts';
+import { assert } from 'console';
+
+
+// 只缓存 token 流和语法树。todo: 缓存报错信息
+export let documents: Map<vscode.Uri, {
+  tokens: CommonTokenStream,
+  tree: Graph_listContext
+}> = new Map();
+
 
 export function activate(context: vscode.ExtensionContext) {
   // 这条命令会输出在 调试控制台 中，如果没有显示终端，可以点击 终端 -> 显示正在运行的任务。
   console.log('Congratulations, your extension "graphviz" is now active!');
 
-  // 使用 vscode.DocumentColorProvider 来提供颜色选择器
-  let colorProvider: vscode.DocumentColorProvider = {
-    provideDocumentColors: function (
-        document: vscode.TextDocument, 
-        token: vscode.CancellationToken
-      ): vscode.ProviderResult<vscode.ColorInformation[]> {
-      let result: vscode.ColorInformation[] = [];
-      // 一个汉字也占用一个 position
+  // 当关闭时会触发，打开时也会触发，关闭时 listener为 undefined, 注意打印 Uri 的时候需要调用toString
+  vscode.window.onDidChangeActiveTextEditor((editor) => {
+    if (editor == undefined || documents.has(editor.document.uri)) return;
+    parseDocument(editor.document);
+  });
 
-      // 找到颜色字段的范围
-      const range = new vscode.Range(new vscode.Position(3, 17), new vscode.Position(3, 23));
 
-      // 判断是否为合法颜色, 如果不是，则返回 null;
+  const tokenTypes = ['namespace', 'keyword', 'class', 'enum', 'interface',
+    'struct', 'typeParameter', 'type', 'parameter', 'variable',
+    'property', 'enumMember', 'decorator', 'event', 'function',
+    'method', 'comment', 'string', 'keyword',
+    'number', 'regexp', 'function', 'namespace', 'macro', 'class', 'enum', 'interface',
+    'struct', 'typeParameter', 'type', 'parameter', 'variable',
+    'property', 'enumMember', 'decorator', 'event'
+  ];
 
-      // 将字符串转换为 vscode.Color
-      result.push(new vscode.ColorInformation(range, new vscode.Color(255, 125, 244, 1)));
-      return result;
-    },
-    provideColorPresentations: function (
-        color: vscode.Color, 
-        context: { readonly document: vscode.TextDocument; readonly range: vscode.Range; }, 
-        token: vscode.CancellationToken
-      ): vscode.ProviderResult<vscode.ColorPresentation[]> {
-      // 将颜色转换为 16进制形式并返回
-      let result : vscode.ColorPresentation[] = [];
-      result.push(new vscode.ColorPresentation("颜色"));
-      return result;
+  const legend = new vscode.SemanticTokensLegend(tokenTypes);
+
+  const provider: vscode.DocumentSemanticTokensProvider = {
+    provideDocumentSemanticTokens(
+      document: vscode.TextDocument
+    ): vscode.ProviderResult<vscode.SemanticTokens> {
+      if(! documents.has(document.uri)) parseDocument(document);
+      assert(documents.has(document.uri));
+      let obj = documents.get(document.uri);
+      if (obj == undefined) return;
+      let { tokens } = obj;
+
+      const builder = new vscode.SemanticTokensBuilder(legend);
+      const n = tokens.getNumberOfOnChannelTokens();
+      for (let i = 0; i < n; i++) {
+        const token: Token = tokens.get(i);
+        builder.push(token.line - 1, token.charPositionInLine, token.text?.length || 0, token.type % tokenTypes.length);
+      }
+
+      return builder.build();
     }
   };
 
-  // let disposal = vscode.languages.registerColorProvider("dot", colorProvider );
-  let disposal = vscode.languages.registerColorProvider("dot", new ColorProvider() );
-  context.subscriptions.push(disposal);
+  vscode.languages.registerDocumentSemanticTokensProvider('dot', provider, legend);
 }
 
+// 生成语法树并缓存
+function parseDocument(document: vscode.TextDocument) {
+  if(documents.has(document.uri)) return;
+
+  const inputStream = CharStreams.fromString(document.getText());
+  const lexer = new DotLexer(inputStream);
+  const tokens = new CommonTokenStream(lexer);
+  const parser = new DotParser(tokens);
+  const tree = parser.graph_list();
+
+  documents.set(document.uri, { tokens, tree });
+}
+
+/**
+ * 当文件内容发生改变时触发
+ * vscode.workspace.onDidChangeTextDocument 
+ * 
+ * 当打开文件发生变化时触发，注意，当切换文件时会触发两次
+ */
 

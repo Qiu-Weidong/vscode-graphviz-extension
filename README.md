@@ -1,23 +1,6 @@
-# Hello World Sample
+# vscode-graphviz-extension
 
-This is a Hello World example that shows you how to use VS Code API.
-
-Guide for this sample: https://code.visualstudio.com/api/get-started/your-first-extension.
-
-## Demo
-
-![demo](demo.gif)
-
-## VS Code API
-
-### `vscode` module
-
-- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
-- [`window.showInformationMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)
-
-### Contribution Points
-
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
+这是一个 graphviz 的 vscode 插件。
 
 ## Running the Sample
 
@@ -25,3 +8,11 @@ Guide for this sample: https://code.visualstudio.com/api/get-started/your-first-
 - Run the `Run Extension` target in the Debug View. This will:
 	- Start a task `npm: watch` to compile the code
 	- Run the extension in a new VS Code window
+
+## todo
+ - 语法高亮
+ - 颜色选择
+ - 代码提示和自动补全
+ - 错误诊断
+ - 代码格式化
+ - Hover
