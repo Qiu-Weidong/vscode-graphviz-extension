@@ -22,14 +22,15 @@ export function activate(context: vscode.ExtensionContext) {
     parseDocument(editor.document);
   });
 
+  vscode.workspace.onDidChangeTextDocument((e) => {
+    parseDocument(e.document);
+  });
+
 
   const tokenTypes = ['namespace', 'keyword', 'class', 'enum', 'interface',
     'struct', 'typeParameter', 'type', 'parameter', 'variable',
     'property', 'enumMember', 'decorator', 'event', 'function',
-    'method', 'comment', 'string', 'keyword',
-    'number', 'regexp', 'function', 'namespace', 'macro', 'class', 'enum', 'interface',
-    'struct', 'typeParameter', 'type', 'parameter', 'variable',
-    'property', 'enumMember', 'decorator', 'event'
+    'method', 'comment', 'string', 'number', 'regexp', 'function', 'macro',
   ];
 
   const legend = new vscode.SemanticTokensLegend(tokenTypes);
@@ -38,17 +39,17 @@ export function activate(context: vscode.ExtensionContext) {
     provideDocumentSemanticTokens(
       document: vscode.TextDocument
     ): vscode.ProviderResult<vscode.SemanticTokens> {
-      if(! documents.has(document.uri)) parseDocument(document);
+      if (!documents.has(document.uri)) parseDocument(document);
       assert(documents.has(document.uri));
       let obj = documents.get(document.uri);
       if (obj == undefined) return;
       let { tokens } = obj;
 
       const builder = new vscode.SemanticTokensBuilder(legend);
-      const n = tokens.getNumberOfOnChannelTokens();
-      for (let i = 0; i < n; i++) {
-        const token: Token = tokens.get(i);
-        builder.push(token.line - 1, token.charPositionInLine, token.text?.length || 0, token.type % tokenTypes.length);
+      // const n = tokens.getNumberOfOnChannelTokens();
+      for (const token of tokens.getTokens()) {
+        if (token.type > 10)
+          builder.push(token.line - 1, token.charPositionInLine, token.text?.length || 0, 2);
       }
 
       return builder.build();
@@ -60,8 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 // 生成语法树并缓存
 function parseDocument(document: vscode.TextDocument) {
-  if(documents.has(document.uri)) return;
-
   const inputStream = CharStreams.fromString(document.getText());
   const lexer = new DotLexer(inputStream);
   const tokens = new CommonTokenStream(lexer);
