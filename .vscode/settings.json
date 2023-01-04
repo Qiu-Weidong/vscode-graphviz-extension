@@ -1,0 +1,8 @@
+{
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "antlr4.generation": {
+      "mode": "none"
+    },
+    "antlr4.referencesCodeLens.enabled": true,
+}
