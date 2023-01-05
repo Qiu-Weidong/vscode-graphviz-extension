@@ -3,9 +3,11 @@ import { DotParser, Graph_listContext } from './dot/DotParser';
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { Uri, TextDocument } from 'vscode';
 
+// 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
   tokens: CommonTokenStream,
-  tree: Graph_listContext
+  tree: Graph_listContext,
+  nodes: Set<string>
 };
 
 
@@ -39,7 +41,7 @@ class TextDocuments {
     parser.removeErrorListeners();
     const tree = parser.graph_list();
 
-    this.documents.set(document.uri, { tokens, tree });
+    this.documents.set(document.uri, { tokens, tree, nodes: new Set() });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {

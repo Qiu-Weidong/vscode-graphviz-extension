@@ -6,7 +6,7 @@ grammar Dot;
 
 graph_list: graph+ EOF;
 
-graph: STRICT? ( GRAPH | DIGRAPH) id_? '{' stmt_list '}';
+graph: STRICT? ( GRAPH | DIGRAPH) id? '{' stmt_list '}';
 
 stmt_list: ( stmt ';'?)*;
 
@@ -14,14 +14,14 @@ stmt:
 	node_stmt
 	| edge_stmt
 	| attr_stmt
-	| id_ '=' id_
+	| lexpr '=' rexpr
 	| subgraph;
 
 attr_stmt: ( GRAPH | NODE | EDGE) attr_list;
 
 attr_list: ( '[' a_list? ']')+;
 
-a_list: ( id_ ( '=' id_)? ','?)+;
+a_list: ( lexpr '=' rexpr ','?)+;
 
 edge_stmt: ( node_id | subgraph) edgeRHS attr_list?;
 
@@ -31,13 +31,20 @@ edgeop: '->' | '--';
 
 node_stmt: node_id attr_list?;
 
-node_id: id_ port?;
+node_id: id port?;
 
-port: ':' id_ ( ':' id_)?;
+port: ':' id ( ':' id)?;
 
-subgraph: ( SUBGRAPH id_?)? '{' stmt_list '}';
+compass_pt  :	('n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_');
 
-id_: ID | STRING | HTML_STRING | NUMBER;
+subgraph: ( SUBGRAPH id?)? '{' stmt_list '}';
+
+// 等号左边可以是 ID、String。等号右边可以是 ID、STRING、HTML_STRING、NUMBER
+// 图名称、子图名称、节点名称可以是 ID、STRING、NUMBER。
+id: ID | STRING | NUMBER;
+
+lexpr: ID | STRING ;
+rexpr: ID | STRING | HTML_STRING | NUMBER;
 
 // "The keywords node, edge, graph, digraph, subgraph, and strict are case-independent"
 
