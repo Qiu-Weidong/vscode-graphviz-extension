@@ -77,15 +77,15 @@ HTML_STRING: '<' ( TAG | ~ [<>])* '>';
 
 fragment TAG: '<' .*? '>';
 
-COMMENT: '/*' .*? '*/' -> skip;
+COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 
-LINE_COMMENT: '//' .*? '\r'? '\n' -> skip;
+LINE_COMMENT: '//' .*? '\r'? '\n' -> channel(HIDDEN);
 
 /** "a '#' character is considered a line output from a C preprocessor (e.g.,
  # 34 to indicate
  line
  34 ) and discarded"
  */
-PREPROC: '#' ~[\r\n]* -> skip;
+PREPROC: '#' ~[\r\n]* -> channel(HIDDEN);
 
 WS: [ \t\n\r]+ -> skip;

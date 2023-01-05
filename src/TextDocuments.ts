@@ -32,8 +32,11 @@ class TextDocuments {
   public updateDocument(document: TextDocument): void {
     const inputStream = CharStreams.fromString(document.getText());
     const lexer = new DotLexer(inputStream);
+    lexer.removeErrorListeners();
+
     const tokens = new CommonTokenStream(lexer);
     const parser = new DotParser(tokens);
+    parser.removeErrorListeners();
     const tree = parser.graph_list();
 
     this.documents.set(document.uri, { tokens, tree });
