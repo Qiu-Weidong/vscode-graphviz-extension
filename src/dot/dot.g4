@@ -33,17 +33,37 @@ node_stmt: node_id attr_list?;
 
 node_id: id port?;
 
-port: ':' id ( ':' id)?;
+port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 
-compass_pt  :	('n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw' | 'c' | '_');
+compass_pt: (
+		'n'
+		| 'ne'
+		| 'e'
+		| 'se'
+		| 's'
+		| 'sw'
+		| 'w'
+		| 'nw'
+		| 'c'
+		| '_'
+		| '"n"'
+		| '"ne"'
+		| '"e"'
+		| '"se"'
+		| '"s"'
+		| '"sw"'
+		| '"w"'
+		| '"nw"'
+		| '"c"'
+		| '"_"'
+	);
 
 subgraph: ( SUBGRAPH id?)? '{' stmt_list '}';
 
-// 等号左边可以是 ID、String。等号右边可以是 ID、STRING、HTML_STRING、NUMBER
-// 图名称、子图名称、节点名称可以是 ID、STRING、NUMBER。
+// 等号左边可以是 ID、String。等号右边可以是 ID、STRING、HTML_STRING、NUMBER 图名称、子图名称、节点名称可以是 ID、STRING、NUMBER。
 id: ID | STRING | NUMBER;
 
-lexpr: ID | STRING ;
+lexpr: ID | STRING;
 rexpr: ID | STRING | HTML_STRING | NUMBER;
 
 // "The keywords node, edge, graph, digraph, subgraph, and strict are case-independent"

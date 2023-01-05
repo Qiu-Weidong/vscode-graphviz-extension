@@ -38,20 +38,40 @@ export class DotParser extends Parser {
 	public static readonly T__7 = 8;
 	public static readonly T__8 = 9;
 	public static readonly T__9 = 10;
-	public static readonly STRICT = 11;
-	public static readonly GRAPH = 12;
-	public static readonly DIGRAPH = 13;
-	public static readonly NODE = 14;
-	public static readonly EDGE = 15;
-	public static readonly SUBGRAPH = 16;
-	public static readonly NUMBER = 17;
-	public static readonly STRING = 18;
-	public static readonly ID = 19;
-	public static readonly HTML_STRING = 20;
-	public static readonly COMMENT = 21;
-	public static readonly LINE_COMMENT = 22;
-	public static readonly PREPROC = 23;
-	public static readonly WS = 24;
+	public static readonly T__10 = 11;
+	public static readonly T__11 = 12;
+	public static readonly T__12 = 13;
+	public static readonly T__13 = 14;
+	public static readonly T__14 = 15;
+	public static readonly T__15 = 16;
+	public static readonly T__16 = 17;
+	public static readonly T__17 = 18;
+	public static readonly T__18 = 19;
+	public static readonly T__19 = 20;
+	public static readonly T__20 = 21;
+	public static readonly T__21 = 22;
+	public static readonly T__22 = 23;
+	public static readonly T__23 = 24;
+	public static readonly T__24 = 25;
+	public static readonly T__25 = 26;
+	public static readonly T__26 = 27;
+	public static readonly T__27 = 28;
+	public static readonly T__28 = 29;
+	public static readonly T__29 = 30;
+	public static readonly STRICT = 31;
+	public static readonly GRAPH = 32;
+	public static readonly DIGRAPH = 33;
+	public static readonly NODE = 34;
+	public static readonly EDGE = 35;
+	public static readonly SUBGRAPH = 36;
+	public static readonly NUMBER = 37;
+	public static readonly STRING = 38;
+	public static readonly ID = 39;
+	public static readonly HTML_STRING = 40;
+	public static readonly COMMENT = 41;
+	public static readonly LINE_COMMENT = 42;
+	public static readonly PREPROC = 43;
+	public static readonly WS = 44;
 	public static readonly RULE_graph_list = 0;
 	public static readonly RULE_graph = 1;
 	public static readonly RULE_stmt_list = 2;
@@ -65,23 +85,31 @@ export class DotParser extends Parser {
 	public static readonly RULE_node_stmt = 10;
 	public static readonly RULE_node_id = 11;
 	public static readonly RULE_port = 12;
-	public static readonly RULE_subgraph = 13;
-	public static readonly RULE_id_ = 14;
+	public static readonly RULE_compass_pt = 13;
+	public static readonly RULE_subgraph = 14;
+	public static readonly RULE_id = 15;
+	public static readonly RULE_lexpr = 16;
+	public static readonly RULE_rexpr = 17;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"graph_list", "graph", "stmt_list", "stmt", "attr_stmt", "attr_list", 
 		"a_list", "edge_stmt", "edgeRHS", "edgeop", "node_stmt", "node_id", "port", 
-		"subgraph", "id_",
+		"compass_pt", "subgraph", "id", "lexpr", "rexpr",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
 		undefined, "'{'", "'}'", "';'", "'='", "'['", "']'", "','", "'->'", "'--'", 
-		"':'",
+		"':'", "'n'", "'ne'", "'e'", "'se'", "'s'", "'sw'", "'w'", "'nw'", "'c'", 
+		"'_'", "'\"n\"'", "'\"ne\"'", "'\"e\"'", "'\"se\"'", "'\"s\"'", "'\"sw\"'", 
+		"'\"w\"'", "'\"nw\"'", "'\"c\"'", "'\"_\"'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
-		undefined, undefined, undefined, undefined, "STRICT", "GRAPH", "DIGRAPH", 
-		"NODE", "EDGE", "SUBGRAPH", "NUMBER", "STRING", "ID", "HTML_STRING", "COMMENT", 
+		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
+		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
+		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
+		undefined, undefined, undefined, "STRICT", "GRAPH", "DIGRAPH", "NODE", 
+		"EDGE", "SUBGRAPH", "NUMBER", "STRING", "ID", "HTML_STRING", "COMMENT", 
 		"LINE_COMMENT", "PREPROC", "WS",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(DotParser._LITERAL_NAMES, DotParser._SYMBOLIC_NAMES, []);
@@ -118,21 +146,21 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 31;
+			this.state = 37;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 30;
+				this.state = 36;
 				this.graph();
 				}
 				}
-				this.state = 33;
+				this.state = 39;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.STRICT) | (1 << DotParser.GRAPH) | (1 << DotParser.DIGRAPH))) !== 0));
-			this.state = 35;
+			} while (((((_la - 31)) & ~0x1F) === 0 && ((1 << (_la - 31)) & ((1 << (DotParser.STRICT - 31)) | (1 << (DotParser.GRAPH - 31)) | (1 << (DotParser.DIGRAPH - 31)))) !== 0));
+			this.state = 41;
 			this.match(DotParser.EOF);
 			}
 		}
@@ -158,17 +186,17 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 38;
+			this.state = 44;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === DotParser.STRICT) {
 				{
-				this.state = 37;
+				this.state = 43;
 				this.match(DotParser.STRICT);
 				}
 			}
 
-			this.state = 40;
+			this.state = 46;
 			_la = this._input.LA(1);
 			if (!(_la === DotParser.GRAPH || _la === DotParser.DIGRAPH)) {
 			this._errHandler.recoverInline(this);
@@ -180,21 +208,21 @@ export class DotParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
-			this.state = 42;
+			this.state = 48;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0)) {
+			if (((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (DotParser.NUMBER - 37)) | (1 << (DotParser.STRING - 37)) | (1 << (DotParser.ID - 37)))) !== 0)) {
 				{
-				this.state = 41;
-				this.id_();
+				this.state = 47;
+				this.id();
 				}
 			}
 
-			this.state = 44;
+			this.state = 50;
 			this.match(DotParser.T__0);
-			this.state = 45;
+			this.state = 51;
 			this.stmt_list();
-			this.state = 46;
+			this.state = 52;
 			this.match(DotParser.T__1);
 			}
 		}
@@ -220,27 +248,27 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 54;
+			this.state = 60;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.T__0) | (1 << DotParser.GRAPH) | (1 << DotParser.NODE) | (1 << DotParser.EDGE) | (1 << DotParser.SUBGRAPH) | (1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0)) {
+			while (_la === DotParser.T__0 || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (DotParser.GRAPH - 32)) | (1 << (DotParser.NODE - 32)) | (1 << (DotParser.EDGE - 32)) | (1 << (DotParser.SUBGRAPH - 32)) | (1 << (DotParser.NUMBER - 32)) | (1 << (DotParser.STRING - 32)) | (1 << (DotParser.ID - 32)))) !== 0)) {
 				{
 				{
-				this.state = 48;
+				this.state = 54;
 				this.stmt();
-				this.state = 50;
+				this.state = 56;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === DotParser.T__2) {
 					{
-					this.state = 49;
+					this.state = 55;
 					this.match(DotParser.T__2);
 					}
 				}
 
 				}
 				}
-				this.state = 56;
+				this.state = 62;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -265,13 +293,13 @@ export class DotParser extends Parser {
 		let _localctx: StmtContext = new StmtContext(this._ctx, this.state);
 		this.enterRule(_localctx, 6, DotParser.RULE_stmt);
 		try {
-			this.state = 65;
+			this.state = 71;
 			this._errHandler.sync(this);
 			switch ( this.interpreter.adaptivePredict(this._input, 5, this._ctx) ) {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 57;
+				this.state = 63;
 				this.node_stmt();
 				}
 				break;
@@ -279,7 +307,7 @@ export class DotParser extends Parser {
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 58;
+				this.state = 64;
 				this.edge_stmt();
 				}
 				break;
@@ -287,7 +315,7 @@ export class DotParser extends Parser {
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 59;
+				this.state = 65;
 				this.attr_stmt();
 				}
 				break;
@@ -295,19 +323,19 @@ export class DotParser extends Parser {
 			case 4:
 				this.enterOuterAlt(_localctx, 4);
 				{
-				this.state = 60;
-				this.id_();
-				this.state = 61;
+				this.state = 66;
+				this.lexpr();
+				this.state = 67;
 				this.match(DotParser.T__3);
-				this.state = 62;
-				this.id_();
+				this.state = 68;
+				this.rexpr();
 				}
 				break;
 
 			case 5:
 				this.enterOuterAlt(_localctx, 5);
 				{
-				this.state = 64;
+				this.state = 70;
 				this.subgraph();
 				}
 				break;
@@ -335,9 +363,9 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 67;
+			this.state = 73;
 			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.GRAPH) | (1 << DotParser.NODE) | (1 << DotParser.EDGE))) !== 0))) {
+			if (!(((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & ((1 << (DotParser.GRAPH - 32)) | (1 << (DotParser.NODE - 32)) | (1 << (DotParser.EDGE - 32)))) !== 0))) {
 			this._errHandler.recoverInline(this);
 			} else {
 				if (this._input.LA(1) === Token.EOF) {
@@ -347,7 +375,7 @@ export class DotParser extends Parser {
 				this._errHandler.reportMatch(this);
 				this.consume();
 			}
-			this.state = 68;
+			this.state = 74;
 			this.attr_list();
 			}
 		}
@@ -373,29 +401,29 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 75;
+			this.state = 81;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 70;
+				this.state = 76;
 				this.match(DotParser.T__4);
-				this.state = 72;
+				this.state = 78;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0)) {
+				if (_la === DotParser.STRING || _la === DotParser.ID) {
 					{
-					this.state = 71;
+					this.state = 77;
 					this.a_list();
 					}
 				}
 
-				this.state = 74;
+				this.state = 80;
 				this.match(DotParser.T__5);
 				}
 				}
-				this.state = 77;
+				this.state = 83;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			} while (_la === DotParser.T__4);
@@ -423,42 +451,34 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 87;
+			this.state = 91;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 79;
-				this.id_();
-				this.state = 82;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === DotParser.T__3) {
-					{
-					this.state = 80;
-					this.match(DotParser.T__3);
-					this.state = 81;
-					this.id_();
-					}
-				}
-
 				this.state = 85;
+				this.lexpr();
+				this.state = 86;
+				this.match(DotParser.T__3);
+				this.state = 87;
+				this.rexpr();
+				this.state = 89;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === DotParser.T__6) {
 					{
-					this.state = 84;
+					this.state = 88;
 					this.match(DotParser.T__6);
 					}
 				}
 
 				}
 				}
-				this.state = 89;
+				this.state = 93;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0));
+			} while (_la === DotParser.STRING || _la === DotParser.ID);
 			}
 		}
 		catch (re) {
@@ -483,36 +503,35 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 93;
+			this.state = 97;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case DotParser.NUMBER:
 			case DotParser.STRING:
 			case DotParser.ID:
-			case DotParser.HTML_STRING:
 				{
-				this.state = 91;
+				this.state = 95;
 				this.node_id();
 				}
 				break;
 			case DotParser.T__0:
 			case DotParser.SUBGRAPH:
 				{
-				this.state = 92;
+				this.state = 96;
 				this.subgraph();
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			this.state = 95;
+			this.state = 99;
 			this.edgeRHS();
-			this.state = 97;
+			this.state = 101;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === DotParser.T__4) {
 				{
-				this.state = 96;
+				this.state = 100;
 				this.attr_list();
 				}
 			}
@@ -541,30 +560,29 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 104;
+			this.state = 108;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			do {
 				{
 				{
-				this.state = 99;
+				this.state = 103;
 				this.edgeop();
-				this.state = 102;
+				this.state = 106;
 				this._errHandler.sync(this);
 				switch (this._input.LA(1)) {
 				case DotParser.NUMBER:
 				case DotParser.STRING:
 				case DotParser.ID:
-				case DotParser.HTML_STRING:
 					{
-					this.state = 100;
+					this.state = 104;
 					this.node_id();
 					}
 					break;
 				case DotParser.T__0:
 				case DotParser.SUBGRAPH:
 					{
-					this.state = 101;
+					this.state = 105;
 					this.subgraph();
 					}
 					break;
@@ -573,7 +591,7 @@ export class DotParser extends Parser {
 				}
 				}
 				}
-				this.state = 106;
+				this.state = 110;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			} while (_la === DotParser.T__7 || _la === DotParser.T__8);
@@ -601,7 +619,7 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 108;
+			this.state = 112;
 			_la = this._input.LA(1);
 			if (!(_la === DotParser.T__7 || _la === DotParser.T__8)) {
 			this._errHandler.recoverInline(this);
@@ -637,14 +655,14 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 110;
+			this.state = 114;
 			this.node_id();
-			this.state = 112;
+			this.state = 116;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === DotParser.T__4) {
 				{
-				this.state = 111;
+				this.state = 115;
 				this.attr_list();
 				}
 			}
@@ -673,14 +691,14 @@ export class DotParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 114;
-			this.id_();
-			this.state = 116;
+			this.state = 118;
+			this.id();
+			this.state = 120;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === DotParser.T__9) {
 				{
-				this.state = 115;
+				this.state = 119;
 				this.port();
 				}
 			}
@@ -707,24 +725,76 @@ export class DotParser extends Parser {
 		this.enterRule(_localctx, 24, DotParser.RULE_port);
 		let _la: number;
 		try {
+			this.state = 130;
+			this._errHandler.sync(this);
+			switch ( this.interpreter.adaptivePredict(this._input, 17, this._ctx) ) {
+			case 1:
+				this.enterOuterAlt(_localctx, 1);
+				{
+				this.state = 122;
+				this.match(DotParser.T__9);
+				this.state = 123;
+				this.id();
+				this.state = 126;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === DotParser.T__9) {
+					{
+					this.state = 124;
+					this.match(DotParser.T__9);
+					this.state = 125;
+					this.compass_pt();
+					}
+				}
+
+				}
+				break;
+
+			case 2:
+				this.enterOuterAlt(_localctx, 2);
+				{
+				this.state = 128;
+				this.match(DotParser.T__9);
+				this.state = 129;
+				this.compass_pt();
+				}
+				break;
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public compass_pt(): Compass_ptContext {
+		let _localctx: Compass_ptContext = new Compass_ptContext(this._ctx, this.state);
+		this.enterRule(_localctx, 26, DotParser.RULE_compass_pt);
+		let _la: number;
+		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 118;
-			this.match(DotParser.T__9);
-			this.state = 119;
-			this.id_();
-			this.state = 122;
-			this._errHandler.sync(this);
+			this.state = 132;
 			_la = this._input.LA(1);
-			if (_la === DotParser.T__9) {
-				{
-				this.state = 120;
-				this.match(DotParser.T__9);
-				this.state = 121;
-				this.id_();
+			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.T__10) | (1 << DotParser.T__11) | (1 << DotParser.T__12) | (1 << DotParser.T__13) | (1 << DotParser.T__14) | (1 << DotParser.T__15) | (1 << DotParser.T__16) | (1 << DotParser.T__17) | (1 << DotParser.T__18) | (1 << DotParser.T__19) | (1 << DotParser.T__20) | (1 << DotParser.T__21) | (1 << DotParser.T__22) | (1 << DotParser.T__23) | (1 << DotParser.T__24) | (1 << DotParser.T__25) | (1 << DotParser.T__26) | (1 << DotParser.T__27) | (1 << DotParser.T__28) | (1 << DotParser.T__29))) !== 0))) {
+			this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
 				}
-			}
 
+				this._errHandler.reportMatch(this);
+				this.consume();
+			}
 			}
 		}
 		catch (re) {
@@ -744,36 +814,36 @@ export class DotParser extends Parser {
 	// @RuleVersion(0)
 	public subgraph(): SubgraphContext {
 		let _localctx: SubgraphContext = new SubgraphContext(this._ctx, this.state);
-		this.enterRule(_localctx, 26, DotParser.RULE_subgraph);
+		this.enterRule(_localctx, 28, DotParser.RULE_subgraph);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 128;
+			this.state = 138;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la === DotParser.SUBGRAPH) {
 				{
-				this.state = 124;
+				this.state = 134;
 				this.match(DotParser.SUBGRAPH);
-				this.state = 126;
+				this.state = 136;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0)) {
+				if (((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (DotParser.NUMBER - 37)) | (1 << (DotParser.STRING - 37)) | (1 << (DotParser.ID - 37)))) !== 0)) {
 					{
-					this.state = 125;
-					this.id_();
+					this.state = 135;
+					this.id();
 					}
 				}
 
 				}
 			}
 
-			this.state = 130;
+			this.state = 140;
 			this.match(DotParser.T__0);
-			this.state = 131;
+			this.state = 141;
 			this.stmt_list();
-			this.state = 132;
+			this.state = 142;
 			this.match(DotParser.T__1);
 			}
 		}
@@ -792,16 +862,88 @@ export class DotParser extends Parser {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public id_(): Id_Context {
-		let _localctx: Id_Context = new Id_Context(this._ctx, this.state);
-		this.enterRule(_localctx, 28, DotParser.RULE_id_);
+	public id(): IdContext {
+		let _localctx: IdContext = new IdContext(this._ctx, this.state);
+		this.enterRule(_localctx, 30, DotParser.RULE_id);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 134;
+			this.state = 144;
 			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << DotParser.NUMBER) | (1 << DotParser.STRING) | (1 << DotParser.ID) | (1 << DotParser.HTML_STRING))) !== 0))) {
+			if (!(((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (DotParser.NUMBER - 37)) | (1 << (DotParser.STRING - 37)) | (1 << (DotParser.ID - 37)))) !== 0))) {
+			this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
+				}
+
+				this._errHandler.reportMatch(this);
+				this.consume();
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public lexpr(): LexprContext {
+		let _localctx: LexprContext = new LexprContext(this._ctx, this.state);
+		this.enterRule(_localctx, 32, DotParser.RULE_lexpr);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 146;
+			_la = this._input.LA(1);
+			if (!(_la === DotParser.STRING || _la === DotParser.ID)) {
+			this._errHandler.recoverInline(this);
+			} else {
+				if (this._input.LA(1) === Token.EOF) {
+					this.matchedEOF = true;
+				}
+
+				this._errHandler.reportMatch(this);
+				this.consume();
+			}
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return _localctx;
+	}
+	// @RuleVersion(0)
+	public rexpr(): RexprContext {
+		let _localctx: RexprContext = new RexprContext(this._ctx, this.state);
+		this.enterRule(_localctx, 34, DotParser.RULE_rexpr);
+		let _la: number;
+		try {
+			this.enterOuterAlt(_localctx, 1);
+			{
+			this.state = 148;
+			_la = this._input.LA(1);
+			if (!(((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (DotParser.NUMBER - 37)) | (1 << (DotParser.STRING - 37)) | (1 << (DotParser.ID - 37)) | (1 << (DotParser.HTML_STRING - 37)))) !== 0))) {
 			this._errHandler.recoverInline(this);
 			} else {
 				if (this._input.LA(1) === Token.EOF) {
@@ -829,63 +971,69 @@ export class DotParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\x1A\x8B\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03.\x99\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
-		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x03\x02\x06\x02\"\n\x02\r\x02\x0E" +
-		"\x02#\x03\x02\x03\x02\x03\x03\x05\x03)\n\x03\x03\x03\x03\x03\x05\x03-" +
-		"\n\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x04\x03\x04\x05\x045\n\x04" +
-		"\x07\x047\n\x04\f\x04\x0E\x04:\v\x04\x03\x05\x03\x05\x03\x05\x03\x05\x03" +
-		"\x05\x03\x05\x03\x05\x03\x05\x05\x05D\n\x05\x03\x06\x03\x06\x03\x06\x03" +
-		"\x07\x03\x07\x05\x07K\n\x07\x03\x07\x06\x07N\n\x07\r\x07\x0E\x07O\x03" +
-		"\b\x03\b\x03\b\x05\bU\n\b\x03\b\x05\bX\n\b\x06\bZ\n\b\r\b\x0E\b[\x03\t" +
-		"\x03\t\x05\t`\n\t\x03\t\x03\t\x05\td\n\t\x03\n\x03\n\x03\n\x05\ni\n\n" +
-		"\x06\nk\n\n\r\n\x0E\nl\x03\v\x03\v\x03\f\x03\f\x05\fs\n\f\x03\r\x03\r" +
-		"\x05\rw\n\r\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E}\n\x0E\x03\x0F\x03" +
-		"\x0F\x05\x0F\x81\n\x0F\x05\x0F\x83\n\x0F\x03\x0F\x03\x0F\x03\x0F\x03\x0F" +
-		"\x03\x10\x03\x10\x03\x10\x02\x02\x02\x11\x02\x02\x04\x02\x06\x02\b\x02" +
-		"\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C" +
-		"\x02\x1E\x02\x02\x06\x03\x02\x0E\x0F\x04\x02\x0E\x0E\x10\x11\x03\x02\n" +
-		"\v\x03\x02\x13\x16\x02\x92\x02!\x03\x02\x02\x02\x04(\x03\x02\x02\x02\x06" +
-		"8\x03\x02\x02\x02\bC\x03\x02\x02\x02\nE\x03\x02\x02\x02\fM\x03\x02\x02" +
-		"\x02\x0EY\x03\x02\x02\x02\x10_\x03\x02\x02\x02\x12j\x03\x02\x02\x02\x14" +
-		"n\x03\x02\x02\x02\x16p\x03\x02\x02\x02\x18t\x03\x02\x02\x02\x1Ax\x03\x02" +
-		"\x02\x02\x1C\x82\x03\x02\x02\x02\x1E\x88\x03\x02\x02\x02 \"\x05\x04\x03" +
-		"\x02! \x03\x02\x02\x02\"#\x03\x02\x02\x02#!\x03\x02\x02\x02#$\x03\x02" +
-		"\x02\x02$%\x03\x02\x02\x02%&\x07\x02\x02\x03&\x03\x03\x02\x02\x02\')\x07" +
-		"\r\x02\x02(\'\x03\x02\x02\x02()\x03\x02\x02\x02)*\x03\x02\x02\x02*,\t" +
-		"\x02\x02\x02+-\x05\x1E\x10\x02,+\x03\x02\x02\x02,-\x03\x02\x02\x02-.\x03" +
-		"\x02\x02\x02./\x07\x03\x02\x02/0\x05\x06\x04\x0201\x07\x04\x02\x021\x05" +
-		"\x03\x02\x02\x0224\x05\b\x05\x0235\x07\x05\x02\x0243\x03\x02\x02\x024" +
-		"5\x03\x02\x02\x0257\x03\x02\x02\x0262\x03\x02\x02\x027:\x03\x02\x02\x02" +
-		"86\x03\x02\x02\x0289\x03\x02\x02\x029\x07\x03\x02\x02\x02:8\x03\x02\x02" +
-		"\x02;D\x05\x16\f\x02<D\x05\x10\t\x02=D\x05\n\x06\x02>?\x05\x1E\x10\x02" +
-		"?@\x07\x06\x02\x02@A\x05\x1E\x10\x02AD\x03\x02\x02\x02BD\x05\x1C\x0F\x02" +
-		"C;\x03\x02\x02\x02C<\x03\x02\x02\x02C=\x03\x02\x02\x02C>\x03\x02\x02\x02" +
-		"CB\x03\x02\x02\x02D\t\x03\x02\x02\x02EF\t\x03\x02\x02FG\x05\f\x07\x02" +
-		"G\v\x03\x02\x02\x02HJ\x07\x07\x02\x02IK\x05\x0E\b\x02JI\x03\x02\x02\x02" +
-		"JK\x03\x02\x02\x02KL\x03\x02\x02\x02LN\x07\b\x02\x02MH\x03\x02\x02\x02" +
-		"NO\x03\x02\x02\x02OM\x03\x02\x02\x02OP\x03\x02\x02\x02P\r\x03\x02\x02" +
-		"\x02QT\x05\x1E\x10\x02RS\x07\x06\x02\x02SU\x05\x1E\x10\x02TR\x03\x02\x02" +
-		"\x02TU\x03\x02\x02\x02UW\x03\x02\x02\x02VX\x07\t\x02\x02WV\x03\x02\x02" +
-		"\x02WX\x03\x02\x02\x02XZ\x03\x02\x02\x02YQ\x03\x02\x02\x02Z[\x03\x02\x02" +
-		"\x02[Y\x03\x02\x02\x02[\\\x03\x02\x02\x02\\\x0F\x03\x02\x02\x02]`\x05" +
-		"\x18\r\x02^`\x05\x1C\x0F\x02_]\x03\x02\x02\x02_^\x03\x02\x02\x02`a\x03" +
-		"\x02\x02\x02ac\x05\x12\n\x02bd\x05\f\x07\x02cb\x03\x02\x02\x02cd\x03\x02" +
-		"\x02\x02d\x11\x03\x02\x02\x02eh\x05\x14\v\x02fi\x05\x18\r\x02gi\x05\x1C" +
-		"\x0F\x02hf\x03\x02\x02\x02hg\x03\x02\x02\x02ik\x03\x02\x02\x02je\x03\x02" +
-		"\x02\x02kl\x03\x02\x02\x02lj\x03\x02\x02\x02lm\x03\x02\x02\x02m\x13\x03" +
-		"\x02\x02\x02no\t\x04\x02\x02o\x15\x03\x02\x02\x02pr\x05\x18\r\x02qs\x05" +
-		"\f\x07\x02rq\x03\x02\x02\x02rs\x03\x02\x02\x02s\x17\x03\x02\x02\x02tv" +
-		"\x05\x1E\x10\x02uw\x05\x1A\x0E\x02vu\x03\x02\x02\x02vw\x03\x02\x02\x02" +
-		"w\x19\x03\x02\x02\x02xy\x07\f\x02\x02y|\x05\x1E\x10\x02z{\x07\f\x02\x02" +
-		"{}\x05\x1E\x10\x02|z\x03\x02\x02\x02|}\x03\x02\x02\x02}\x1B\x03\x02\x02" +
-		"\x02~\x80\x07\x12\x02\x02\x7F\x81\x05\x1E\x10\x02\x80\x7F\x03\x02\x02" +
-		"\x02\x80\x81\x03\x02\x02\x02\x81\x83\x03\x02\x02\x02\x82~\x03\x02\x02" +
-		"\x02\x82\x83\x03\x02\x02\x02\x83\x84\x03\x02\x02\x02\x84\x85\x07\x03\x02" +
-		"\x02\x85\x86\x05\x06\x04\x02\x86\x87\x07\x04\x02\x02\x87\x1D\x03\x02\x02" +
-		"\x02\x88\x89\t\x05\x02\x02\x89\x1F\x03\x02\x02\x02\x16#(,48CJOTW[_chl" +
-		"rv|\x80\x82";
+		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
+		"\x13\t\x13\x03\x02\x06\x02(\n\x02\r\x02\x0E\x02)\x03\x02\x03\x02\x03\x03" +
+		"\x05\x03/\n\x03\x03\x03\x03\x03\x05\x033\n\x03\x03\x03\x03\x03\x03\x03" +
+		"\x03\x03\x03\x04\x03\x04\x05\x04;\n\x04\x07\x04=\n\x04\f\x04\x0E\x04@" +
+		"\v\x04\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05\x03\x05" +
+		"\x05\x05J\n\x05\x03\x06\x03\x06\x03\x06\x03\x07\x03\x07\x05\x07Q\n\x07" +
+		"\x03\x07\x06\x07T\n\x07\r\x07\x0E\x07U\x03\b\x03\b\x03\b\x03\b\x05\b\\" +
+		"\n\b\x06\b^\n\b\r\b\x0E\b_\x03\t\x03\t\x05\td\n\t\x03\t\x03\t\x05\th\n" +
+		"\t\x03\n\x03\n\x03\n\x05\nm\n\n\x06\no\n\n\r\n\x0E\np\x03\v\x03\v\x03" +
+		"\f\x03\f\x05\fw\n\f\x03\r\x03\r\x05\r{\n\r\x03\x0E\x03\x0E\x03\x0E\x03" +
+		"\x0E\x05\x0E\x81\n\x0E\x03\x0E\x03\x0E\x05\x0E\x85\n\x0E\x03\x0F\x03\x0F" +
+		"\x03\x10\x03\x10\x05\x10\x8B\n\x10\x05\x10\x8D\n\x10\x03\x10\x03\x10\x03" +
+		"\x10\x03\x10\x03\x11\x03\x11\x03\x12\x03\x12\x03\x13\x03\x13\x03\x13\x02" +
+		"\x02\x02\x14\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02" +
+		"\x12\x02\x14\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02\"\x02$\x02" +
+		"\x02\t\x03\x02\"#\x04\x02\"\"$%\x03\x02\n\v\x03\x02\r \x03\x02\')\x03" +
+		"\x02()\x03\x02\'*\x02\x9D\x02\'\x03\x02\x02\x02\x04.\x03\x02\x02\x02\x06" +
+		">\x03\x02\x02\x02\bI\x03\x02\x02\x02\nK\x03\x02\x02\x02\fS\x03\x02\x02" +
+		"\x02\x0E]\x03\x02\x02\x02\x10c\x03\x02\x02\x02\x12n\x03\x02\x02\x02\x14" +
+		"r\x03\x02\x02\x02\x16t\x03\x02\x02\x02\x18x\x03\x02\x02\x02\x1A\x84\x03" +
+		"\x02\x02\x02\x1C\x86\x03\x02\x02\x02\x1E\x8C\x03\x02\x02\x02 \x92\x03" +
+		"\x02\x02\x02\"\x94\x03\x02\x02\x02$\x96\x03\x02\x02\x02&(\x05\x04\x03" +
+		"\x02\'&\x03\x02\x02\x02()\x03\x02\x02\x02)\'\x03\x02\x02\x02)*\x03\x02" +
+		"\x02\x02*+\x03\x02\x02\x02+,\x07\x02\x02\x03,\x03\x03\x02\x02\x02-/\x07" +
+		"!\x02\x02.-\x03\x02\x02\x02./\x03\x02\x02\x02/0\x03\x02\x02\x0202\t\x02" +
+		"\x02\x0213\x05 \x11\x0221\x03\x02\x02\x0223\x03\x02\x02\x0234\x03\x02" +
+		"\x02\x0245\x07\x03\x02\x0256\x05\x06\x04\x0267\x07\x04\x02\x027\x05\x03" +
+		"\x02\x02\x028:\x05\b\x05\x029;\x07\x05\x02\x02:9\x03\x02\x02\x02:;\x03" +
+		"\x02\x02\x02;=\x03\x02\x02\x02<8\x03\x02\x02\x02=@\x03\x02\x02\x02><\x03" +
+		"\x02\x02\x02>?\x03\x02\x02\x02?\x07\x03\x02\x02\x02@>\x03\x02\x02\x02" +
+		"AJ\x05\x16\f\x02BJ\x05\x10\t\x02CJ\x05\n\x06\x02DE\x05\"\x12\x02EF\x07" +
+		"\x06\x02\x02FG\x05$\x13\x02GJ\x03\x02\x02\x02HJ\x05\x1E\x10\x02IA\x03" +
+		"\x02\x02\x02IB\x03\x02\x02\x02IC\x03\x02\x02\x02ID\x03\x02\x02\x02IH\x03" +
+		"\x02\x02\x02J\t\x03\x02\x02\x02KL\t\x03\x02\x02LM\x05\f\x07\x02M\v\x03" +
+		"\x02\x02\x02NP\x07\x07\x02\x02OQ\x05\x0E\b\x02PO\x03\x02\x02\x02PQ\x03" +
+		"\x02\x02\x02QR\x03\x02\x02\x02RT\x07\b\x02\x02SN\x03\x02\x02\x02TU\x03" +
+		"\x02\x02\x02US\x03\x02\x02\x02UV\x03\x02\x02\x02V\r\x03\x02\x02\x02WX" +
+		"\x05\"\x12\x02XY\x07\x06\x02\x02Y[\x05$\x13\x02Z\\\x07\t\x02\x02[Z\x03" +
+		"\x02\x02\x02[\\\x03\x02\x02\x02\\^\x03\x02\x02\x02]W\x03\x02\x02\x02^" +
+		"_\x03\x02\x02\x02_]\x03\x02\x02\x02_`\x03\x02\x02\x02`\x0F\x03\x02\x02" +
+		"\x02ad\x05\x18\r\x02bd\x05\x1E\x10\x02ca\x03\x02\x02\x02cb\x03\x02\x02" +
+		"\x02de\x03\x02\x02\x02eg\x05\x12\n\x02fh\x05\f\x07\x02gf\x03\x02\x02\x02" +
+		"gh\x03\x02\x02\x02h\x11\x03\x02\x02\x02il\x05\x14\v\x02jm\x05\x18\r\x02" +
+		"km\x05\x1E\x10\x02lj\x03\x02\x02\x02lk\x03\x02\x02\x02mo\x03\x02\x02\x02" +
+		"ni\x03\x02\x02\x02op\x03\x02\x02\x02pn\x03\x02\x02\x02pq\x03\x02\x02\x02" +
+		"q\x13\x03\x02\x02\x02rs\t\x04\x02\x02s\x15\x03\x02\x02\x02tv\x05\x18\r" +
+		"\x02uw\x05\f\x07\x02vu\x03\x02\x02\x02vw\x03\x02\x02\x02w\x17\x03\x02" +
+		"\x02\x02xz\x05 \x11\x02y{\x05\x1A\x0E\x02zy\x03\x02\x02\x02z{\x03\x02" +
+		"\x02\x02{\x19\x03\x02\x02\x02|}\x07\f\x02\x02}\x80\x05 \x11\x02~\x7F\x07" +
+		"\f\x02\x02\x7F\x81\x05\x1C\x0F\x02\x80~\x03\x02\x02\x02\x80\x81\x03\x02" +
+		"\x02\x02\x81\x85\x03\x02\x02\x02\x82\x83\x07\f\x02\x02\x83\x85\x05\x1C" +
+		"\x0F\x02\x84|\x03\x02\x02\x02\x84\x82\x03\x02\x02\x02\x85\x1B\x03\x02" +
+		"\x02\x02\x86\x87\t\x05\x02\x02\x87\x1D\x03\x02\x02\x02\x88\x8A\x07&\x02" +
+		"\x02\x89\x8B\x05 \x11\x02\x8A\x89\x03\x02\x02\x02\x8A\x8B\x03\x02\x02" +
+		"\x02\x8B\x8D\x03\x02\x02\x02\x8C\x88\x03\x02\x02\x02\x8C\x8D\x03\x02\x02" +
+		"\x02\x8D\x8E\x03\x02\x02\x02\x8E\x8F\x07\x03\x02\x02\x8F\x90\x05\x06\x04" +
+		"\x02\x90\x91\x07\x04\x02\x02\x91\x1F\x03\x02\x02\x02\x92\x93\t\x06\x02" +
+		"\x02\x93!\x03\x02\x02\x02\x94\x95\t\x07\x02\x02\x95#\x03\x02\x02\x02\x96" +
+		"\x97\t\b\x02\x02\x97%\x03\x02\x02\x02\x16).2:>IPU[_cglpvz\x80\x84\x8A" +
+		"\x8C";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!DotParser.__ATN) {
@@ -943,8 +1091,8 @@ export class GraphContext extends ParserRuleContext {
 	public GRAPH(): TerminalNode | undefined { return this.tryGetToken(DotParser.GRAPH, 0); }
 	public DIGRAPH(): TerminalNode | undefined { return this.tryGetToken(DotParser.DIGRAPH, 0); }
 	public STRICT(): TerminalNode | undefined { return this.tryGetToken(DotParser.STRICT, 0); }
-	public id_(): Id_Context | undefined {
-		return this.tryGetRuleContext(0, Id_Context);
+	public id(): IdContext | undefined {
+		return this.tryGetRuleContext(0, IdContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -1022,14 +1170,11 @@ export class StmtContext extends ParserRuleContext {
 	public attr_stmt(): Attr_stmtContext | undefined {
 		return this.tryGetRuleContext(0, Attr_stmtContext);
 	}
-	public id_(): Id_Context[];
-	public id_(i: number): Id_Context;
-	public id_(i?: number): Id_Context | Id_Context[] {
-		if (i === undefined) {
-			return this.getRuleContexts(Id_Context);
-		} else {
-			return this.getRuleContext(i, Id_Context);
-		}
+	public lexpr(): LexprContext | undefined {
+		return this.tryGetRuleContext(0, LexprContext);
+	}
+	public rexpr(): RexprContext | undefined {
+		return this.tryGetRuleContext(0, RexprContext);
 	}
 	public subgraph(): SubgraphContext | undefined {
 		return this.tryGetRuleContext(0, SubgraphContext);
@@ -1136,13 +1281,22 @@ export class Attr_listContext extends ParserRuleContext {
 
 
 export class A_listContext extends ParserRuleContext {
-	public id_(): Id_Context[];
-	public id_(i: number): Id_Context;
-	public id_(i?: number): Id_Context | Id_Context[] {
+	public lexpr(): LexprContext[];
+	public lexpr(i: number): LexprContext;
+	public lexpr(i?: number): LexprContext | LexprContext[] {
 		if (i === undefined) {
-			return this.getRuleContexts(Id_Context);
+			return this.getRuleContexts(LexprContext);
 		} else {
-			return this.getRuleContext(i, Id_Context);
+			return this.getRuleContext(i, LexprContext);
+		}
+	}
+	public rexpr(): RexprContext[];
+	public rexpr(i: number): RexprContext;
+	public rexpr(i?: number): RexprContext | RexprContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(RexprContext);
+		} else {
+			return this.getRuleContext(i, RexprContext);
 		}
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
@@ -1335,8 +1489,8 @@ export class Node_stmtContext extends ParserRuleContext {
 
 
 export class Node_idContext extends ParserRuleContext {
-	public id_(): Id_Context {
-		return this.getRuleContext(0, Id_Context);
+	public id(): IdContext {
+		return this.getRuleContext(0, IdContext);
 	}
 	public port(): PortContext | undefined {
 		return this.tryGetRuleContext(0, PortContext);
@@ -1370,14 +1524,11 @@ export class Node_idContext extends ParserRuleContext {
 
 
 export class PortContext extends ParserRuleContext {
-	public id_(): Id_Context[];
-	public id_(i: number): Id_Context;
-	public id_(i?: number): Id_Context | Id_Context[] {
-		if (i === undefined) {
-			return this.getRuleContexts(Id_Context);
-		} else {
-			return this.getRuleContext(i, Id_Context);
-		}
+	public id(): IdContext | undefined {
+		return this.tryGetRuleContext(0, IdContext);
+	}
+	public compass_pt(): Compass_ptContext | undefined {
+		return this.tryGetRuleContext(0, Compass_ptContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -1407,13 +1558,42 @@ export class PortContext extends ParserRuleContext {
 }
 
 
+export class Compass_ptContext extends ParserRuleContext {
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return DotParser.RULE_compass_pt; }
+	// @Override
+	public enterRule(listener: DotListener): void {
+		if (listener.enterCompass_pt) {
+			listener.enterCompass_pt(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: DotListener): void {
+		if (listener.exitCompass_pt) {
+			listener.exitCompass_pt(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: DotVisitor<Result>): Result {
+		if (visitor.visitCompass_pt) {
+			return visitor.visitCompass_pt(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
 export class SubgraphContext extends ParserRuleContext {
 	public stmt_list(): Stmt_listContext {
 		return this.getRuleContext(0, Stmt_listContext);
 	}
 	public SUBGRAPH(): TerminalNode | undefined { return this.tryGetToken(DotParser.SUBGRAPH, 0); }
-	public id_(): Id_Context | undefined {
-		return this.tryGetRuleContext(0, Id_Context);
+	public id(): IdContext | undefined {
+		return this.tryGetRuleContext(0, IdContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -1443,7 +1623,70 @@ export class SubgraphContext extends ParserRuleContext {
 }
 
 
-export class Id_Context extends ParserRuleContext {
+export class IdContext extends ParserRuleContext {
+	public ID(): TerminalNode | undefined { return this.tryGetToken(DotParser.ID, 0); }
+	public STRING(): TerminalNode | undefined { return this.tryGetToken(DotParser.STRING, 0); }
+	public NUMBER(): TerminalNode | undefined { return this.tryGetToken(DotParser.NUMBER, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return DotParser.RULE_id; }
+	// @Override
+	public enterRule(listener: DotListener): void {
+		if (listener.enterId) {
+			listener.enterId(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: DotListener): void {
+		if (listener.exitId) {
+			listener.exitId(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: DotVisitor<Result>): Result {
+		if (visitor.visitId) {
+			return visitor.visitId(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class LexprContext extends ParserRuleContext {
+	public ID(): TerminalNode | undefined { return this.tryGetToken(DotParser.ID, 0); }
+	public STRING(): TerminalNode | undefined { return this.tryGetToken(DotParser.STRING, 0); }
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number { return DotParser.RULE_lexpr; }
+	// @Override
+	public enterRule(listener: DotListener): void {
+		if (listener.enterLexpr) {
+			listener.enterLexpr(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: DotListener): void {
+		if (listener.exitLexpr) {
+			listener.exitLexpr(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: DotVisitor<Result>): Result {
+		if (visitor.visitLexpr) {
+			return visitor.visitLexpr(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+
+export class RexprContext extends ParserRuleContext {
 	public ID(): TerminalNode | undefined { return this.tryGetToken(DotParser.ID, 0); }
 	public STRING(): TerminalNode | undefined { return this.tryGetToken(DotParser.STRING, 0); }
 	public HTML_STRING(): TerminalNode | undefined { return this.tryGetToken(DotParser.HTML_STRING, 0); }
@@ -1452,23 +1695,23 @@ export class Id_Context extends ParserRuleContext {
 		super(parent, invokingState);
 	}
 	// @Override
-	public get ruleIndex(): number { return DotParser.RULE_id_; }
+	public get ruleIndex(): number { return DotParser.RULE_rexpr; }
 	// @Override
 	public enterRule(listener: DotListener): void {
-		if (listener.enterId_) {
-			listener.enterId_(this);
+		if (listener.enterRexpr) {
+			listener.enterRexpr(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: DotListener): void {
-		if (listener.exitId_) {
-			listener.exitId_(this);
+		if (listener.exitRexpr) {
+			listener.exitRexpr(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: DotVisitor<Result>): Result {
-		if (visitor.visitId_) {
-			return visitor.visitId_(this);
+		if (visitor.visitRexpr) {
+			return visitor.visitRexpr(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

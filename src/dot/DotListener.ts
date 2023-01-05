@@ -16,8 +16,11 @@ import { EdgeopContext } from "./DotParser";
 import { Node_stmtContext } from "./DotParser";
 import { Node_idContext } from "./DotParser";
 import { PortContext } from "./DotParser";
+import { Compass_ptContext } from "./DotParser";
 import { SubgraphContext } from "./DotParser";
-import { Id_Context } from "./DotParser";
+import { IdContext } from "./DotParser";
+import { LexprContext } from "./DotParser";
+import { RexprContext } from "./DotParser";
 
 
 /**
@@ -169,6 +172,17 @@ export interface DotListener extends ParseTreeListener {
 	exitPort?: (ctx: PortContext) => void;
 
 	/**
+	 * Enter a parse tree produced by `DotParser.compass_pt`.
+	 * @param ctx the parse tree
+	 */
+	enterCompass_pt?: (ctx: Compass_ptContext) => void;
+	/**
+	 * Exit a parse tree produced by `DotParser.compass_pt`.
+	 * @param ctx the parse tree
+	 */
+	exitCompass_pt?: (ctx: Compass_ptContext) => void;
+
+	/**
 	 * Enter a parse tree produced by `DotParser.subgraph`.
 	 * @param ctx the parse tree
 	 */
@@ -180,14 +194,36 @@ export interface DotListener extends ParseTreeListener {
 	exitSubgraph?: (ctx: SubgraphContext) => void;
 
 	/**
-	 * Enter a parse tree produced by `DotParser.id_`.
+	 * Enter a parse tree produced by `DotParser.id`.
 	 * @param ctx the parse tree
 	 */
-	enterId_?: (ctx: Id_Context) => void;
+	enterId?: (ctx: IdContext) => void;
 	/**
-	 * Exit a parse tree produced by `DotParser.id_`.
+	 * Exit a parse tree produced by `DotParser.id`.
 	 * @param ctx the parse tree
 	 */
-	exitId_?: (ctx: Id_Context) => void;
+	exitId?: (ctx: IdContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `DotParser.lexpr`.
+	 * @param ctx the parse tree
+	 */
+	enterLexpr?: (ctx: LexprContext) => void;
+	/**
+	 * Exit a parse tree produced by `DotParser.lexpr`.
+	 * @param ctx the parse tree
+	 */
+	exitLexpr?: (ctx: LexprContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `DotParser.rexpr`.
+	 * @param ctx the parse tree
+	 */
+	enterRexpr?: (ctx: RexprContext) => void;
+	/**
+	 * Exit a parse tree produced by `DotParser.rexpr`.
+	 * @param ctx the parse tree
+	 */
+	exitRexpr?: (ctx: RexprContext) => void;
 }
 

@@ -16,8 +16,11 @@ import { EdgeopContext } from "./DotParser";
 import { Node_stmtContext } from "./DotParser";
 import { Node_idContext } from "./DotParser";
 import { PortContext } from "./DotParser";
+import { Compass_ptContext } from "./DotParser";
 import { SubgraphContext } from "./DotParser";
-import { Id_Context } from "./DotParser";
+import { IdContext } from "./DotParser";
+import { LexprContext } from "./DotParser";
+import { RexprContext } from "./DotParser";
 
 
 /**
@@ -120,6 +123,13 @@ export interface DotVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPort?: (ctx: PortContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `DotParser.compass_pt`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCompass_pt?: (ctx: Compass_ptContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `DotParser.subgraph`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -127,10 +137,24 @@ export interface DotVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitSubgraph?: (ctx: SubgraphContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `DotParser.id_`.
+	 * Visit a parse tree produced by `DotParser.id`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitId_?: (ctx: Id_Context) => Result;
+	visitId?: (ctx: IdContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `DotParser.lexpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitLexpr?: (ctx: LexprContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `DotParser.rexpr`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitRexpr?: (ctx: RexprContext) => Result;
 }
 
