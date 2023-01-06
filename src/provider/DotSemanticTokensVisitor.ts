@@ -61,7 +61,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
       this.addHighlight(terminal, 'keyword');
     }
   }
-  visitRexpr(ctx: RexprContext) {}
+  visitRexpr(ctx: RexprContext) { this.visitChildren(ctx); }
   
   visit(tree: ParseTree): void {
     tree.accept(this);
@@ -101,7 +101,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
     // string
     else if(num == 19) return 'string';
     // ID
-    else if(num == 20) return 'variable';
+    else if(num == 20) return 'parameter';
 
     // 由于 HTML_STRING有多行，因此和注释一起渲染。
     else

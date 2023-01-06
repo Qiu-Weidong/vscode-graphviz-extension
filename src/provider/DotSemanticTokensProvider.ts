@@ -8,18 +8,24 @@ import { DotSemanticTokensVisitor } from "./DotSemanticTokensVisitor";
 
 export class DotSemanticTokensProvider implements DocumentSemanticTokensProvider {
 
-  readonly legend = new SemanticTokensLegend([
-    'namespace', 'class', 'enum', 'interface', 'struct',
-    'typeParameter', 'type', 'parameter', 'variable',
-    'property', 'enumMember', 'decorator',
-    'event', 'function', 'method', 'macro', 'label', 'comment',
-    'string', 'keyword', 'number', 'regexp', 'operator',
-  ]);
+  readonly legend = new SemanticTokensLegend(
+    [
+      'namespace', 'class', 'enum', 'interface', 'struct',
+      'typeParameter', 'type', 'parameter', 'variable',
+      'property', 'enumMember', 'decorator',
+      'event', 'function', 'method', 'macro', 'label', 'comment',
+      'string', 'keyword', 'number', 'regexp', 'operator',
+    ],
+    [
+      'declaration', 'definition', 'readonly', 'static', 'deprecated',
+      'abstract', 'async', 'modification', 'documentation', 'defaultLibrary',
+    ]
+  );
 
   provideDocumentSemanticTokens(document: TextDocument, token: CancellationToken): ProviderResult<SemanticTokens> {
     // 所有的 provider 第一步都是更新文档内容、语法树和token流。
     textDocuments.updateDocument(document);
-    
+
     const builder = new SemanticTokensBuilder(this.legend);
 
     const tree = textDocuments.getTree(document);

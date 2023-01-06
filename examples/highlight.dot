@@ -22,3 +22,22 @@ number
 regexp
 operator
 
+class.abstract
+namespace.async
+type.modification
+variable.documentation
+variable.deprecated
+variable.readonly
+variable.static.readonly
+enumMember.declaration
+variable.declaration.readonly
+variable.definition.readonly
+macro
+regexp.readonly
+class.static
+struct.static
+class.readonly
+class.abstract.readonly
+
+
+

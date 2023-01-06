@@ -10,8 +10,9 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}"
-			],
+				"--extensionDevelopmentPath=${workspaceFolder}",
+        "${workspaceFolder}/examples"
+      ],
 			"outFiles": [
 				"${workspaceFolder}/out/**/*.js"
 			],
