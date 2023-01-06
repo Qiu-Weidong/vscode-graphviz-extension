@@ -5,10 +5,11 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import {
   Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext,
   Attr_listContext, A_listContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext,
-  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, Id_Context
+  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext
 } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
-import { SemanticTokensBuilder } from "vscode";
+import { Position, Range, SemanticTokensBuilder } from "vscode";
+import { assert } from "console";
 
 
 export class DotSemanticTokensVisitor implements DotVisitor<void> {
@@ -17,21 +18,50 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
     this.builder = builder;
   }
 
-  visitGraph_list(ctx: Graph_listContext) {}
-  visitGraph(ctx: GraphContext) {};
-  visitStmt_list(ctx: Stmt_listContext) {}
-  visitStmt(ctx: StmtContext) {}
-  visitAttr_stmt(ctx: Attr_stmtContext) {}
-  visitAttr_list(ctx: Attr_listContext) {}
-  visitA_list(ctx: A_listContext) {}
-  visitEdge_stmt(ctx: Edge_stmtContext) {}
-  visitEdgeRHS(ctx: EdgeRHSContext) {}
-  visitEdgeop(ctx: EdgeopContext) {}
-  visitNode_stmt(ctx: Node_stmtContext) {}
-  visitNode_id(ctx: Node_idContext) {}
-  visitPort(ctx: PortContext) {}
-  visitSubgraph(ctx: SubgraphContext) {}
-  visitId_(ctx: Id_Context) {}
+  private addHighlight(node: TerminalNode, tokenType: string): void {
+    const token = node.symbol;
+    const range = new Range(
+      new Position(token.line-1, token.charPositionInLine),
+      new Position(token.line-1, token.charPositionInLine+(token.text?.length || 0))
+    );
+    this.builder.push(range, tokenType);
+  }
+
+  visitGraph_list(ctx: Graph_listContext) { this.visitChildren(ctx); }
+  visitGraph(ctx: GraphContext) {
+    this.visitChildren(ctx);
+  }
+  visitStmt_list(ctx: Stmt_listContext) { this.visitChildren(ctx); }
+  visitStmt(ctx: StmtContext) { 
+    // let lexpr = ctx.lexpr();
+    // if(lexpr != undefined) {
+    //   const lexpr_terminal = lexpr.ID() || lexpr.STRING();
+    //   if(lexpr_terminal != undefined)
+    //     this.addHighlight(lexpr_terminal, 'keyword');
+    // }
+    this.visitChildren(ctx); 
+  }
+  visitAttr_stmt(ctx: Attr_stmtContext) { this.visitChildren(ctx); }
+  visitAttr_list(ctx: Attr_listContext) { this.visitChildren(ctx); }
+  visitA_list(ctx: A_listContext) { this.visitChildren(ctx); }
+  visitEdge_stmt(ctx: Edge_stmtContext) { this.visitChildren(ctx); }
+  visitEdgeRHS(ctx: EdgeRHSContext) { this.visitChildren(ctx); }
+  visitEdgeop(ctx: EdgeopContext) { this.visitChildren(ctx); }
+  visitNode_stmt(ctx: Node_stmtContext) { this.visitChildren(ctx); }
+  visitNode_id(ctx: Node_idContext) { this.visitChildren(ctx); }
+  visitPort(ctx: PortContext) { this.visitChildren(ctx); }
+  visitCompass_pt(ctx: Compass_ptContext) { 
+    this.visitChildren(ctx); 
+  }
+  visitSubgraph(ctx: SubgraphContext) { this.visitChildren(ctx); }
+  visitId(ctx: IdContext) { this.visitChildren(ctx); }
+  visitLexpr(ctx: LexprContext) {
+    const terminal = ctx.ID() || ctx.STRING();
+    if(terminal != undefined) {
+      this.addHighlight(terminal, 'keyword');
+    }
+  }
+  visitRexpr(ctx: RexprContext) {}
   
   visit(tree: ParseTree): void {
     tree.accept(this);
@@ -44,12 +74,55 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   
   visitTerminal(node: TerminalNode): void {
     // 遍历到终结符
+    const tokenType = DotSemanticTokensVisitor.getTokenType(node.symbol.type);
+    if(tokenType != 'none') {
+      this.addHighlight(node, tokenType);
+    }
   }
   
   visitErrorNode(node: ErrorNode): void {
     // 这里不报异常，和普通终结符一样处理
     this.visitTerminal(node);
   }
+  
+  // 注意，当语法更新时，需要同步更新
+  static getTokenType(num: number): string {
+    
+    assert(num < 22);
+    // '=' '->' '--' ':'
+    if(num in [4, 8, 9, 10]) return 'operator';
+    // 'strict' 给个 decorator
+    else if(num == 12) return 'interface';
+    // 'graph' 'subgraph' 'digraph' 'node' 'edge'
+    else if(num >= 13 && num <= 17 ) return 'class';
+    // number
+    else if(num == 18) return 'number'; 
+    // string
+    else if(num == 19) return 'string';
+    // ID
+    else if(num == 20) return 'variable';
 
+    // 由于 HTML_STRING有多行，因此和注释一起渲染。
+    else
+      return 'none';
+  }
 }
+
+
+/**
+ * 标准token类型
+ * namespace class enum	interface	struct 
+ * typeParameter type
+ * parameter	variable	property	
+ * enumMember decorator	
+ * event	function
+ * method macro	label comment	
+ * string	keyword	number 
+ * regexp	operator
+ * 
+ * 标准 modifier 类型
+ * declaration	definition readonly
+ * static deprecated	abstract	
+ * async	modification	documentation	defaultLibrary
+ */
 

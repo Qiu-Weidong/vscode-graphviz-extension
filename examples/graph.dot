@@ -1,3 +1,8 @@
 graph {
-    
+  a -> b;
+  e -> d;
+
+  x [color=blue];
+  y [shape=box];
+  
 }

@@ -5,8 +5,10 @@ import { Uri, TextDocument } from 'vscode';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
+  content: string,
   tokens: CommonTokenStream,
   tree: Graph_listContext,
+  
   nodes: Set<string>
 };
 
@@ -19,12 +21,12 @@ class TextDocuments {
     this.documents = new Map();
   }
 
-  public addDocument(document: TextDocument): void {
-    // 适用于第一次打开文档
-    if (this.documents.has(document.uri)) return;
+  // public addDocument(document: TextDocument): void {
+  //   // 适用于第一次打开文档
+  //   if (this.documents.has(document.uri)) return;
 
-    this.updateDocument(document);
-  }
+  //   this.updateDocument(document);
+  // }
 
   public removeDocument(document: TextDocument): void {
     if (!this.documents.has(document.uri)) return;
@@ -32,16 +34,21 @@ class TextDocuments {
   }
 
   public updateDocument(document: TextDocument): void {
+    // 通过检查文本内容是否改变来更新语法树等信息。
+    if(this.documents.get(document.uri)?.content == document.getText()) {
+      return;
+    }
+
     const inputStream = CharStreams.fromString(document.getText());
     const lexer = new DotLexer(inputStream);
-    lexer.removeErrorListeners();
+    // lexer.removeErrorListeners();
 
     const tokens = new CommonTokenStream(lexer);
     const parser = new DotParser(tokens);
-    parser.removeErrorListeners();
+    // parser.removeErrorListeners();
     const tree = parser.graph_list();
 
-    this.documents.set(document.uri, { tokens, tree, nodes: new Set() });
+    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes: new Set() });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {

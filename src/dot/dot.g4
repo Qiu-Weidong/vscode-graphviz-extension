@@ -36,26 +36,9 @@ node_id: id port?;
 port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 
 compass_pt: (
-		'n'
-		| 'ne'
-		| 'e'
-		| 'se'
-		| 's'
-		| 'sw'
-		| 'w'
-		| 'nw'
-		| 'c'
 		| '_'
-		| '"n"'
-		| '"ne"'
-		| '"e"'
-		| '"se"'
-		| '"s"'
-		| '"sw"'
-		| '"w"'
-		| '"nw"'
-		| '"c"'
-		| '"_"'
+		| ID
+    | STRING
 	);
 
 subgraph: ( SUBGRAPH id?)? '{' stmt_list '}';
