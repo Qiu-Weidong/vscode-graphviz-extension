@@ -75,6 +75,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   visitTerminal(node: TerminalNode): void {
     // 遍历到终结符
     const tokenType = DotSemanticTokensVisitor.getTokenType(node.symbol.type);
+    // if(tokenType == 'operator') { console.log('fuck'); }
     if(tokenType != 'none') {
       this.addHighlight(node, tokenType);
     }
@@ -90,7 +91,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
     
     assert(num < 22);
     // '=' '->' '--' ':'
-    if(num in [4, 8, 9, 10]) return 'operator';
+    if(num == 4 || num >=8 && num <= 10) { return 'operator';}
     // 'strict' 给个 decorator
     else if(num == 12) return 'interface';
     // 'graph' 'subgraph' 'digraph' 'node' 'edge'
