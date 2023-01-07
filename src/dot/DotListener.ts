@@ -10,6 +10,7 @@ import { StmtContext } from "./DotParser";
 import { Attr_stmtContext } from "./DotParser";
 import { Attr_listContext } from "./DotParser";
 import { A_listContext } from "./DotParser";
+import { Assign_stmtContext } from "./DotParser";
 import { Edge_stmtContext } from "./DotParser";
 import { EdgeRHSContext } from "./DotParser";
 import { EdgeopContext } from "./DotParser";
@@ -104,6 +105,17 @@ export interface DotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitA_list?: (ctx: A_listContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `DotParser.assign_stmt`.
+	 * @param ctx the parse tree
+	 */
+	enterAssign_stmt?: (ctx: Assign_stmtContext) => void;
+	/**
+	 * Exit a parse tree produced by `DotParser.assign_stmt`.
+	 * @param ctx the parse tree
+	 */
+	exitAssign_stmt?: (ctx: Assign_stmtContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `DotParser.edge_stmt`.

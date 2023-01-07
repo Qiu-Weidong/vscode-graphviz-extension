@@ -1,6 +1,4 @@
 /* eslint-disable class-methods-use-this */
-
-import { assert } from "console";
 import * as vscode from "vscode";
 import colors from "./colors";
 

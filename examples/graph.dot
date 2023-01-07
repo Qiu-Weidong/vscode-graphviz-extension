@@ -1,8 +1,8 @@
-graph {
+digraph {
   a -> b;
   e -> d;
 
-  x [color=blue];
+  x [color="#cccccc"];
   y [shape=box];
   
 }

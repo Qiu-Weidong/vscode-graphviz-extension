@@ -2,7 +2,7 @@ digraph {
     a -> b;
     c -> d;
     
-    fillcolor = "#123456";
+    fillcolor = "#93210a";
     fillcolor = "#c37b33cc";
     
     subgraph cluster_0 {
@@ -14,12 +14,14 @@ digraph {
 
         subgraph cluster_0 {
             style=filled;
-            color=lightgrey;
-            node [style=filled,color=white];
+            color="#5c0e0e58";
+            node [style=filled,color="#600c0cff"];
             a0 -> a1 -> a2 -> a3;
             label = "process #1";
 	    }
 	}
+
+    "这里" -> "和这里";
     
     // fillcolor="#142614";
     /*

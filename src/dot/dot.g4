@@ -14,14 +14,16 @@ stmt:
 	node_stmt
 	| edge_stmt
 	| attr_stmt
-	| lexpr '=' rexpr
+	| assign_stmt
 	| subgraph;
 
 attr_stmt: ( GRAPH | NODE | EDGE) attr_list;
 
 attr_list: ( '[' a_list? ']')+;
 
-a_list: ( lexpr '=' rexpr ','?)+;
+a_list: ( assign_stmt ','?)+;
+
+assign_stmt: lexpr '=' rexpr ;
 
 edge_stmt: ( node_id | subgraph) edgeRHS attr_list?;
 
@@ -36,7 +38,6 @@ node_id: id port?;
 port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 
 compass_pt: (
-		| '_'
 		| ID
     | STRING
 	);

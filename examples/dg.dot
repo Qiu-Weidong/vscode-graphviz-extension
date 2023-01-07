@@ -1,5 +1,5 @@
 digraph g {
-	node [shape=plaintext];
+	node [shape=plaintext, label="你好"];
 	A1 -> B1;
 	A2 -> B2;
 	A3 -> B3;

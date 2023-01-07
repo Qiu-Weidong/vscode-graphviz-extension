@@ -5,7 +5,7 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import {
   Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext,
   Attr_listContext, A_listContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext,
-  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext
+  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext, Assign_stmtContext
 } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
 import { Position, Range, SemanticTokensBuilder } from "vscode";
@@ -44,6 +44,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   visitAttr_stmt(ctx: Attr_stmtContext) { this.visitChildren(ctx); }
   visitAttr_list(ctx: Attr_listContext) { this.visitChildren(ctx); }
   visitA_list(ctx: A_listContext) { this.visitChildren(ctx); }
+  visitAssign_stmt(ctx: Assign_stmtContext) { this.visitChildren(ctx); }
   visitEdge_stmt(ctx: Edge_stmtContext) { this.visitChildren(ctx); }
   visitEdgeRHS(ctx: EdgeRHSContext) { this.visitChildren(ctx); }
   visitEdgeop(ctx: EdgeopContext) { this.visitChildren(ctx); }
@@ -61,7 +62,14 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
       this.addHighlight(terminal, 'keyword');
     }
   }
-  visitRexpr(ctx: RexprContext) { this.visitChildren(ctx); }
+  visitRexpr(ctx: RexprContext) { 
+    const id = ctx.ID();
+    if(id != undefined) {
+      this.addHighlight(id, 'struct');
+    }
+    else 
+      this.visitChildren(ctx); 
+  }
   
   visit(tree: ParseTree): void {
     tree.accept(this);
@@ -89,19 +97,19 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   // 注意，当语法更新时，需要同步更新
   static getTokenType(num: number): string {
     
-    assert(num < 22);
+    assert(num < 21);
     // '=' '->' '--' ':'
     if(num == 4 || num >=8 && num <= 10) { return 'operator';}
     // 'strict' 给个 decorator
-    else if(num == 12) return 'interface';
+    else if(num == 11) return 'interface';
     // 'graph' 'subgraph' 'digraph' 'node' 'edge'
-    else if(num >= 13 && num <= 17 ) return 'class';
+    else if(num >= 12 && num <= 16 ) return 'function';
     // number
-    else if(num == 18) return 'number'; 
+    else if(num == 17) return 'number'; 
     // string
-    else if(num == 19) return 'string';
+    else if(num == 18) return 'string';
     // ID
-    else if(num == 20) return 'parameter';
+    else if(num == 19) return 'parameter';
 
     // 由于 HTML_STRING有多行，因此和注释一起渲染。
     else

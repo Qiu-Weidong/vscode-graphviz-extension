@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-// import textDocuments from './textDocuments';
 import { ExtensionContext } from 'vscode';
 import { DotSemanticTokensProvider } from './provider/DotSemanticTokensProvider';
+import { DotColorProvider } from './provider/DotColorProvider';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -15,6 +15,9 @@ function registerProviders(_context: ExtensionContext) {
   // 语法高亮
   const dotSemanticTokensProvider = new DotSemanticTokensProvider();
   vscode.languages.registerDocumentSemanticTokensProvider('dot', dotSemanticTokensProvider, dotSemanticTokensProvider.legend);
+
+  const dotColorProvider = new DotColorProvider();
+  vscode.languages.registerColorProvider('dot', dotColorProvider);
 
   // const legend = new vscode.SemanticTokensLegend([
   //   'namespace', 'class', 'enum', 'interface', 'struct',
