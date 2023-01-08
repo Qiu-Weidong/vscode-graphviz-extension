@@ -22,38 +22,35 @@ export class DotColorVisitor implements DotVisitor<void> {
   visitStmt(ctx: StmtContext) { this.visitChildren(ctx); }
   visitAttr_stmt(ctx: Attr_stmtContext) { ctx.attr_list().accept(this); }
   visitAttr_list(ctx: Attr_listContext) { this.visitChildren(ctx); }
-  visitA_list(ctx: A_listContext) {
-    this.visitChildren(ctx);
-  }
-  visitAssign_stmt(ctx: Assign_stmtContext) { 
+  visitA_list(ctx: A_listContext) { this.visitChildren(ctx); }
+  visitAssign_stmt(ctx: Assign_stmtContext) {
     let attr_name = ctx.lexpr().ID()?.symbol.text || ctx.lexpr().STRING()?.symbol.text || '';
-    if(attr_name.startsWith('"') && attr_name.endsWith('"')) {
+
+    if (attr_name.startsWith('"') && attr_name.endsWith('"')) {
       // 删去引号
-      attr_name = attr_name.slice(1, attr_name.length-1);
+      attr_name = attr_name.slice(1, attr_name.length - 1);
     }
-    if(attr_name == 'bgcolor' || attr_name == 'fillcolor' || attr_name == 'color') {
+
+    if (attr_name == 'bgcolor' ||
+      attr_name == 'fillcolor' ||
+      attr_name == 'color' ||
+      attr_name == 'fontcolor' ||
+      attr_name == 'labelfontcolor' ||
+      attr_name == 'pencolor') {
       // 提供颜色, 颜色只能是 ID 或者 STRING
       const symbol = ctx.rexpr().ID()?.symbol || ctx.rexpr().STRING()?.symbol;
-      if(symbol != undefined) {
-        const range = new Range(
-          new Position(symbol.line-1, symbol.charPositionInLine),
-          new Position(symbol.line-1, symbol.charPositionInLine+(symbol.text?.length||0))
-        );
-        let colorname = symbol.text || '';
-        // 删去引号
-        if(colorname.startsWith('"') && colorname.endsWith('"')) colorname = colorname.slice(1, colorname.length-1);
-        
+      function stringToColor(colorname: string): Color {
         let color = new Color(0, 0, 0, 0);
         // 判断是否是 16 进制形式
-        if(colorname.startsWith('#')) {
+        if (colorname.startsWith('#')) {
           // 将 16 进制形式转换位 vscode.Color #xx xx xx xx
           colorname = colorname.slice(1).trim();
           let red = 0, green = 0, blue = 0, alpha = 1;
-          if(colorname.length == 6 || colorname.length == 8) {
+          if (colorname.length == 6 || colorname.length == 8) {
             red = parseInt(colorname.slice(0, 2), 16) / 255;
             green = parseInt(colorname.slice(2, 4), 16) / 255;
             blue = parseInt(colorname.slice(4, 6), 16) / 255;
-            if(colorname.length == 8) {
+            if (colorname.length == 8) {
               alpha = parseInt(colorname.slice(6, 8), 16) / 255;
             }
             color = new Color(red, green, blue, alpha);
@@ -62,9 +59,36 @@ export class DotColorVisitor implements DotVisitor<void> {
         else {
           color = colors.get(colorname) || new Color(0, 0, 0, 0);
         }
-        
+        return color;
+      }
 
-        this.colorInformation.push(new ColorInformation(range, color));
+      if (symbol != undefined) {
+        let colorname = symbol.text || '';
+
+        let offset = symbol.charPositionInLine;
+        // 删去引号, 注意 offset也要加一
+        if (colorname.startsWith('"') && colorname.endsWith('"')) { offset++; colorname = colorname.slice(1, colorname.length - 1); }
+        const colornames = colorname.split(':');
+        if (colornames.length > 1) {
+          for(const colorname of colornames) {
+            const range = new Range(
+              new Position(symbol.line-1, offset),
+              new Position(symbol.line-1, offset+colorname.length)
+            );
+            offset += colorname.length + 1;
+            const color = stringToColor(colorname.trim());
+            this.colorInformation.push(new ColorInformation(range, color));
+          }
+        }
+        else {
+          const range = new Range(
+            new Position(symbol.line - 1, symbol.charPositionInLine),
+            new Position(symbol.line - 1, symbol.charPositionInLine + (symbol.text?.length || 0))
+          );
+          const color = stringToColor(colorname);
+          this.colorInformation.push(new ColorInformation(range, color));
+        }
+
       }
     }
   }
@@ -91,7 +115,7 @@ export class DotColorVisitor implements DotVisitor<void> {
       node.getChild(i).accept(this);
   }
 
-  visitTerminal(node: TerminalNode): void {
+  visitTerminal(_node: TerminalNode): void {
     // 遍历到终结符
   }
 

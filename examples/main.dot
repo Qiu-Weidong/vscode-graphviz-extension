@@ -15,7 +15,7 @@ digraph {
         subgraph cluster_0 {
             style=filled;
             color="#5c0e0e58";
-            node [style=filled,color="#600c0cff"];
+            node [style=filled,color="#2b16edff"];
             a0 -> a1 -> a2 -> a3;
             label = "process #1";
 	    }
