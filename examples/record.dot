@@ -1,14 +1,10 @@
-digraph {
-  hello -> world;
+strict digraph {
+  erab;
+  rib;
+  acrt;
 
-  world -> shift;
-
-  vex [shape=record, label="<head> | <tail>"];
-
-  node [shape=record, label="<l1> | <l2>"];
-
-  n;
-
-  n:l1:s -> u;
-
+  erab -> rib -> acrt -> acrt;
+  
 }
+
+

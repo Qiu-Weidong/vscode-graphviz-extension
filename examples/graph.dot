@@ -26,6 +26,8 @@ strict digraph {
 
   node [];
 
+  bgcolor = blanchedalmond;
+
 }
 
 

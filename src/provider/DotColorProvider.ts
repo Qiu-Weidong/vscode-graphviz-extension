@@ -10,7 +10,10 @@ export class DotColorProvider implements DocumentColorProvider {
     let result: ColorInformation[] = [];
     let visitor = new DotColorVisitor(result);
     let tree = textDocuments.getTree(document);
-    tree.accept(visitor);
+    try {
+      tree.accept(visitor);
+    } catch(e) {}
+    
 
     return result;
   }

@@ -33,12 +33,6 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   }
   visitStmt_list(ctx: Stmt_listContext) { this.visitChildren(ctx); }
   visitStmt(ctx: StmtContext) { 
-    // let lexpr = ctx.lexpr();
-    // if(lexpr != undefined) {
-    //   const lexpr_terminal = lexpr.ID() || lexpr.STRING();
-    //   if(lexpr_terminal != undefined)
-    //     this.addHighlight(lexpr_terminal, 'keyword');
-    // }
     this.visitChildren(ctx); 
   }
   visitAttr_stmt(ctx: Attr_stmtContext) { this.visitChildren(ctx); }

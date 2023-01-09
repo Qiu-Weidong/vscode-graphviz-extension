@@ -195,7 +195,16 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
   // edgeRHS: ( edgeop ( node_id | subgraph))+;
-  visitEdgeRHS(ctx: EdgeRHSContext) { }
+  visitEdgeRHS(ctx: EdgeRHSContext) { 
+    // this.visitChildren(ctx);
+    for(const node_id of ctx.node_id()) {
+      if(this.positionInContext(node_id)) node_id.accept(this);
+    }
+
+    for(const subgraph of ctx.subgraph()) {
+      if(this.positionInContext(subgraph)) subgraph.accept(this);
+    }
+  }
 
 
   visitEdgeop(ctx: EdgeopContext) {

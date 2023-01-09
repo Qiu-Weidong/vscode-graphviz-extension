@@ -14,7 +14,9 @@ export class DotCompletionItemProvider implements CompletionItemProvider {
     let result: CompletionItem[] = [];
     const visitor = new DotCompletionItemVisitor(position, result, textDocuments.getNodes(document));
     const tree = textDocuments.getTree(document);
-    tree.accept(visitor);
+    try {
+      tree.accept(visitor);
+    } catch(e) {}
     
     return result;
   }

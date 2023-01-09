@@ -30,7 +30,9 @@ export class DotSemanticTokensProvider implements DocumentSemanticTokensProvider
 
     const tree = textDocuments.getTree(document);
     const visitor = new DotSemanticTokensVisitor(builder);
-    tree.accept(visitor);
+    try {
+      tree.accept(visitor);
+    } catch(e) {}
 
     const tokens = textDocuments.getTokens(document);
     for (const token of tokens.getTokens()) {
