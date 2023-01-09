@@ -21,10 +21,10 @@ strict digraph {
     bgcolor = green;
   };
   
-  // node []
+  edge []
+  hello [label];
 
-  // hello:nw:e;
-
+  node [];
 
 }
 

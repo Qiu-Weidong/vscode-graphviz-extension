@@ -11,6 +11,7 @@ import { attributes, attributeValue } from "./Attribute";
 
 export class DotCompletionItemVisitor implements DotVisitor<void> {
   private readonly position: Position;
+  private readonly nodes: Map<string, string[]>;
   private completionItems: CompletionItem[];
 
 
@@ -23,10 +24,11 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   // graph,subgraph,cluster, edge, node, node_attr, edge_attr, graph_attr, cluster_attr, subgraph_attr
   private scope: string;
 
-  constructor(position: Position, completionItems: CompletionItem[]) {
+  constructor(position: Position, completionItems: CompletionItem[], nodes: Map<string, string[]>) {
     this.position = position;
     this.completionItems = completionItems;
     this.scope = 'none';
+    this.nodes = nodes;
 
     this.node_attrs = attributes.filter(item => item.usedby.includes('Nodes')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
     this.edge_attrs = attributes.filter(item => item.usedby.includes('Edges')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
@@ -157,8 +159,11 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
       // 首先获取属性名称
       const token = ctx.lexpr().ID() || ctx.lexpr().STRING();
       if (token != undefined) {
-        const attr_name = token.symbol.text || '';
+        let attr_name = token.symbol.text || '';
+        if (attr_name.startsWith('"') && attr_name.endsWith('"')) attr_name = attr_name.slice(1, attr_name.length - 1);
         // 根据属性名称提示
+        this.completeAttrValue(attr_name);
+
       }
     }
 
@@ -230,6 +235,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
         // 此时可以确定一定是在编辑 nodeid 。
         if (this.positionInContext(ids[0])) {
           // 正在编辑节点名称，提示节点名称即可
+          this.completeNodeNames();
         }
         else if (this.positionInContext(compass_pt)) {
           // 正在编辑 compass_pt, 提示 compass_pt 即可。
@@ -237,6 +243,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
         }
       }
       else {
+        // 可能在编辑 节点名 也可能在编辑关键字 也可能在编辑 属性
         let nodeCompletion = new CompletionItem('node', CompletionItemKind.Class);
         this.completionItems.push(nodeCompletion);
         this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Class));
@@ -245,6 +252,9 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
         // 提示可能的属性名
         this.completeAttrName();
+
+        // 提示节点名称
+        this.completeNodeNames();
       }
 
     }
@@ -252,11 +262,15 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
       // 这时才可以确定是 node id，此时正在编辑 port，那么对 port进行提示。
       if (this.positionInContext(ids[0])) {
         // 正在编辑节点名称，对节点名称进行提示
+        this.completeNodeNames();
       }
       else if (this.positionInContext(ids[1])) {
-        // 正在编辑 port，对 port 进行提示, 注意，需要同时对 compass_pt 进行提示。
+        // 正在编辑 port 对 port 进行提示, 注意，需要同时对 compass_pt 进行提示。
+
         let name = ids[0].ID()?.symbol.text || ids[0].NUMBER()?.symbol.text || ids[0].STRING()?.symbol.text || '';
         if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
+
+        this.completePort(name);
         // 根据 节点名称提示 port 和 compass_pt
         this.completeCompassPt();
       }
@@ -346,5 +360,30 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.completionItems.push(new CompletionItem('nw', CompletionItemKind.Constant));
     this.completionItems.push(new CompletionItem('sw', CompletionItemKind.Constant));
     this.completionItems.push(new CompletionItem('_', CompletionItemKind.Constant));
+  }
+
+  completeNodeNames(): void {
+    for (const node_name of this.nodes.keys()) {
+      this.completionItems.push(new CompletionItem(node_name, CompletionItemKind.Variable));
+    }
+  }
+
+  completeAttrValue(attr_name: string): void {
+    const attr = attributes.find(item => item.name == attr_name);
+    if (attr != undefined) {
+      for (const ty of attr.type) {
+        const values = attributeValue.get(ty) || [];
+
+        for(const value of values) {
+          this.completionItems.push(new CompletionItem(value, CompletionItemKind.Constant));
+        }
+      }
+    }
+  }
+
+  completePort(node_name: string): void {
+    this.nodes.get(node_name)?.forEach(value => this.completionItems.push(
+      new CompletionItem(value, CompletionItemKind.Variable)
+    ));
   }
 }

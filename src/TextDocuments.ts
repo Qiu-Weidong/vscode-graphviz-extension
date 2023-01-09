@@ -3,6 +3,7 @@ import { DotParser } from './dot/DotParser';
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { Uri, TextDocument } from 'vscode';
 import { ParseTree } from 'antlr4ts/tree/ParseTree';
+import { NodeVisitor } from './provider/NodeVisitor';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
@@ -10,9 +11,10 @@ type value = {
   tokens: CommonTokenStream,
   tree: ParseTree,
   
-  nodes: Set<string>
+  // 节点名称， port列表
+  nodes: Map<string, string[]>
 };
-// let tree: ParseTree;
+
 
 class TextDocuments {
 
@@ -21,13 +23,6 @@ class TextDocuments {
   constructor() {
     this.documents = new Map();
   }
-
-  // public addDocument(document: TextDocument): void {
-  //   // 适用于第一次打开文档
-  //   if (this.documents.has(document.uri)) return;
-
-  //   this.updateDocument(document);
-  // }
 
   public removeDocument(document: TextDocument): void {
     if (!this.documents.has(document.uri)) return;
@@ -42,14 +37,23 @@ class TextDocuments {
 
     const inputStream = CharStreams.fromString(document.getText());
     const lexer = new DotLexer(inputStream);
-    // lexer.removeErrorListeners();
+    lexer.removeErrorListeners();
 
     const tokens = new CommonTokenStream(lexer);
     const parser = new DotParser(tokens);
-    // parser.removeErrorListeners();
+    parser.removeErrorListeners();
     const tree = parser.graph_list();
 
-    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes: new Set() });
+    // 解析节点以及对应的 port 。
+    let nodes: Map<string, string[]> = new Map();
+    const visitor = new NodeVisitor(nodes);
+    try {
+      tree.accept(visitor);
+    }
+    catch(err) {}
+    
+
+    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {
@@ -62,6 +66,12 @@ class TextDocuments {
     if(! this.documents.has(document.uri)) this.updateDocument(document);
     const result = this.documents.get(document.uri) as value;
     return result.tree;
+  }
+
+  public getNodes(document: TextDocument): Map<string, string[]> {
+    if(! this.documents.has(document.uri)) this.updateDocument(document);
+    const result = this.documents.get(document.uri) as value;
+    return result.nodes;
   }
 
   public contains(document: TextDocument) : boolean {

@@ -1,0 +1,14 @@
+digraph {
+  hello -> world;
+
+  world -> shift;
+
+  vex [shape=record, label="<head> | <tail>"];
+
+  node [shape=record, label="<l1> | <l2>"];
+
+  n;
+
+  n:l1:s -> u;
+
+}

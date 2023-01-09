@@ -6,6 +6,17 @@ import { DotCompletionItemProvider } from './provider/DotCompletionItemProvider'
 
 
 export function activate(context: vscode.ExtensionContext) {
+  // 在这里研究一下正则表达式
+  // const label = '<label1> xxxxx <label2> xxxx <label3> ....';
+  // const re = /<.*?>/g ;
+  // let match = re.exec(label);
+  // while(match) {
+  //   console.log(match);
+  //   match = re.exec(label);
+  // }
+  
+
+
   // 注册 provider
   registerProviders(context);
 }
