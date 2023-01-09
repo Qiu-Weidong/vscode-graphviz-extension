@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { ExtensionContext } from 'vscode';
 import { DotSemanticTokensProvider } from './provider/DotSemanticTokensProvider';
 import { DotColorProvider } from './provider/DotColorProvider';
+import { DotCompletionItemProvider } from './provider/DotCompletionItemProvider';
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -11,13 +12,22 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 // 注册 provider
-function registerProviders(_context: ExtensionContext) {
+function registerProviders(context: ExtensionContext) {
   // 语法高亮
   const dotSemanticTokensProvider = new DotSemanticTokensProvider();
-  vscode.languages.registerDocumentSemanticTokensProvider('dot', dotSemanticTokensProvider, dotSemanticTokensProvider.legend);
+  context.subscriptions.push(
+    vscode.languages.registerDocumentSemanticTokensProvider('dot', dotSemanticTokensProvider, dotSemanticTokensProvider.legend)
+  );
 
   const dotColorProvider = new DotColorProvider();
-  vscode.languages.registerColorProvider('dot', dotColorProvider);
+  context.subscriptions.push(
+    vscode.languages.registerColorProvider('dot', dotColorProvider)
+  );
+
+  const dotCompletionItemProvider = new DotCompletionItemProvider();
+  context.subscriptions.push(
+    vscode.languages.registerCompletionItemProvider('dot', dotCompletionItemProvider, '=', ':', '[', '"')
+  );
 
   // const legend = new vscode.SemanticTokensLegend([
   //   'namespace', 'class', 'enum', 'interface', 'struct',
@@ -47,5 +57,11 @@ function registerProviders(_context: ExtensionContext) {
   // }
   // vscode.languages.registerDocumentSemanticTokensProvider('dot', provider, legend);
 
-
+  // const arrows = "box|polygon|ellipse|oval|circle|point|egg|triangle|plaintext|plain|diamond|trapezium|parallelogram|house|pentagon|hexagon|septagon|octagon|doublecircle|doubleoctagon|tripleoctagon|invtriangle|invtrapezium|invhouse|Mdiamond|Msquare|Mcircle|rect|rectangle|square|star|none|underline|cylinder|note|tab|folder|box3d|component|promoter|cds|terminator|utr|primersite|restrictionsite|fivepoverhang|threepoverhang|noverhang|assembly|signature|insulator|ribosite|rnastab|proteasesite|proteinstab|rpromoter|rarrow|larrow|lpromoter";
+  // const array = arrows.split('|');
+  // console.log(array);
 }
+
+/**
+
+ */

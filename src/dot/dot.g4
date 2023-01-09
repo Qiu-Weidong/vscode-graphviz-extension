@@ -38,7 +38,7 @@ node_id: id port?;
 port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 
 compass_pt: (
-		| ID
+		ID
     | STRING
 	);
 

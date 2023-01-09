@@ -1,0 +1,7 @@
+digraph {
+  hello [shape=record label="<n> north | <s> south | <w> west | <c> center"];
+
+  hello:n:s -> world;
+  // 如果 port 和 compass同名，则优先匹配 port。
+  hello:e -> abc:c;
+}

@@ -1,17 +1,18 @@
 import { DotLexer } from './dot/DotLexer';
-import { DotParser, Graph_listContext } from './dot/DotParser';
+import { DotParser } from './dot/DotParser';
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { Uri, TextDocument } from 'vscode';
+import { ParseTree } from 'antlr4ts/tree/ParseTree';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
   content: string,
   tokens: CommonTokenStream,
-  tree: Graph_listContext,
+  tree: ParseTree,
   
   nodes: Set<string>
 };
-
+// let tree: ParseTree;
 
 class TextDocuments {
 
@@ -57,7 +58,7 @@ class TextDocuments {
     return result?.tokens;
   }
 
-  public getTree(document: TextDocument): Graph_listContext {
+  public getTree(document: TextDocument): ParseTree {
     if(! this.documents.has(document.uri)) this.updateDocument(document);
     const result = this.documents.get(document.uri) as value;
     return result.tree;

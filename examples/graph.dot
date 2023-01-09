@@ -1,8 +1,5 @@
 digraph {
-  a -> b;
-  e -> d;
-
-  x [color="#17576960"];
-  y [shape=box];
-  fillcolor = "#133b62ff:#982b2b49:#e0a5a500:#620f53ff:#ce2929ff:#86ce9eff";
+  hello:id:w;
+  hello:s;
+  
 }
