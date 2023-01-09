@@ -11,11 +11,11 @@ graph: STRICT? ( GRAPH | DIGRAPH) id? '{' stmt_list '}';
 stmt_list: ( stmt ';'?)*;
 
 stmt:
-	node_stmt
-	| edge_stmt
-	| attr_stmt
-	| assign_stmt
-	| subgraph;
+	node_stmt       // node_id attr_list?
+	| edge_stmt     // (node_id | subgraph) edgeRHS attr_list?
+	| attr_stmt     // (NODE | GRAPH | EDGE) attr_list
+	| assign_stmt   // lexpr '=' rexpr
+	| subgraph;     // 'subgraph' '{' 
 
 attr_stmt: ( GRAPH | NODE | EDGE) attr_list;
 
@@ -33,7 +33,7 @@ edgeop: '->' | '--';
 
 node_stmt: node_id attr_list?;
 
-node_id: id port?;
+node_id: id (':' id)? (':' compass_pt)?;
 
 port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 

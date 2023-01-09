@@ -3,7 +3,7 @@
 
 // Attribute Type 类型名称，取值范围使用一个正则表达式来校验
 // 共 33 种类型 178中属性
-const attributes = [
+export const attributes = [
   { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `A string in the xdot format specifying an arbitrary background.`, },
   { name: "area", usedby: ['Nodes', 'Clusters'], type: ['double'], description: `Indicates the preferred area for a node or empty cluster. patchwork only.`, },
   { name: "arrowhead", usedby: ['Edges'], type: ['arrowType'], description: `Style of arrowhead on the head node of an edge.`, },
@@ -238,7 +238,7 @@ const attributes = [
   { name: "z", usedby: ['Nodes'], type: ['double'], description: `Z-coordinate value for 3D layouts and displays.`, },
 ];
 
-const attributeValue = new Map([
+export const attributeValue = new Map([
   ['bool', ['true', 'false']],
   ['arrowType', ['normal', 'inv', 'dot', 'invdot', 'odot', 'invodot', 'none', 'tee',
     'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
