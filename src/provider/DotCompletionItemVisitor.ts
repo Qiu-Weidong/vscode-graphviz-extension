@@ -20,7 +20,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   private readonly cluster_attrs: CompletionItem[];
   private readonly subgraph_attrs: CompletionItem[];
   private readonly graph_attrs: CompletionItem[];
-  // private readonly attribute_values: Map<string, CompletionItem[]>;
 
   // graph,subgraph,cluster, edge, node, node_attr, edge_attr, graph_attr, cluster_attr, subgraph_attr
   private scope: string;
@@ -61,7 +60,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
   positionInContext(ctx: ParserRuleContext): boolean {
-    // if(! ctx) return false;
     const start = ctx.start;
     const stop = ctx.stop;
     if (stop == undefined) return false;
@@ -87,9 +85,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   visitGraph_list(ctx: Graph_listContext) {
     if (ctx.graph().length <= 0) {
       // 暂时还没有定义 graph
-      this.completionItems.push(new CompletionItem('strict', CompletionItemKind.Keyword));
-      this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Keyword));
-      this.completionItems.push(new CompletionItem('digraph', CompletionItemKind.Keyword));
+      this.completeGraph(true);
     }
     else {
       // 已经定义了 graph，则直接向下访问
@@ -103,8 +99,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   visitGraph(ctx: GraphContext) {
     if (!ctx.DIGRAPH() && !ctx.GRAPH()) {
       //  如果还没有写 digraph 和 graph 这连个关键字，那么就提示这两个关键字
-      this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Keyword));
-      this.completionItems.push(new CompletionItem('digraph', CompletionItemKind.Keyword));
+      this.completeGraph(false);
     }
     else if (this.positionInContext(ctx.stmt_list())) {
       // 如果正在编辑 stmt_list， 那么就继续，id 不提示
@@ -212,10 +207,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
 
-  visitEdgeop(ctx: EdgeopContext) {
-    this.completionItems.push(new CompletionItem('--', CompletionItemKind.Operator));
-    this.completionItems.push(new CompletionItem('->', CompletionItemKind.Operator));
-  }
+  visitEdgeop(ctx: EdgeopContext) { }
 
   // node_id attr_list?
   visitNode_stmt(ctx: Node_stmtContext) {
@@ -265,7 +257,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
 
         // 提示节点名称
-        if(this.positionInContext(ids[0]))
+        if (this.positionInContext(ids[0]))
           this.completeNodeNames();
       }
 
@@ -398,4 +390,11 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.completionItems.push(new CompletionItem('edge', CompletionItemKind.Class));
     this.completionItems.push(new CompletionItem('subgraph', CompletionItemKind.Class));
   }
+
+  completeGraph(strict: boolean) {
+    this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Keyword));
+    this.completionItems.push(new CompletionItem('digraph', CompletionItemKind.Keyword));
+    if (strict) this.completionItems.push(new CompletionItem('strict', CompletionItemKind.Keyword));
+  }
+
 }

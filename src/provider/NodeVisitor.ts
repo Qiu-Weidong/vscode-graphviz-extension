@@ -27,9 +27,13 @@ export class NodeVisitor implements DotVisitor<void> {
   }
 
 
-  visitGraph_list(ctx: Graph_listContext) { this.visitChildren(ctx); }
+  visitGraph_list(ctx: Graph_listContext) {  
+    for(const graph of ctx.graph()) graph.accept(this);
+  }
   visitGraph(ctx: GraphContext) { ctx.stmt_list().accept(this); }
-  visitStmt_list(ctx: Stmt_listContext) { this.visitChildren(ctx); }
+  visitStmt_list(ctx: Stmt_listContext) { 
+    for(const stmt of ctx.stmt()) stmt.accept(this);
+  }
   visitStmt(ctx: StmtContext) { this.visitChildren(ctx); }
 
   visitAttr_stmt(ctx: Attr_stmtContext) {
@@ -135,7 +139,11 @@ export class NodeVisitor implements DotVisitor<void> {
   visitNode_id(ctx: Node_idContext) { }
   visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
-  visitSubgraph(ctx: SubgraphContext) { }
+  
+  visitSubgraph(ctx: SubgraphContext) { 
+    ctx.stmt_list().accept(this);
+  }
+  
   visitId(ctx: IdContext) { }
   visitLexpr(ctx: LexprContext) { }
   visitRexpr(ctx: RexprContext) { }

@@ -53,7 +53,7 @@ export class DotFormattingEditVisitor implements DotVisitor<string> {
     return result; 
   }
   visitStmt(ctx: StmtContext): string { 
-    if(ctx.subgraph()) return ctx.subgraph()?.accept(this) || ';';
+    if(ctx.subgraph()) return `\n${this.retraction}` + ctx.subgraph()?.accept(this) + '\n';
     return this.visitChildren(ctx) + ';'; 
   }
 
