@@ -6,9 +6,15 @@ import { DotCompletionItemProvider } from './provider/DotCompletionItemProvider'
 import { DotHoverProvider } from './provider/DotHoverProvider';
 import { DotFormattingEditProvider } from './provider/DotFormattingEditProvider';
 import { DotSymbolProvider } from './provider/DotSymbolProvider';
+import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
 
 
 export function activate(context: vscode.ExtensionContext) {
+  vscode.commands.registerCommand("graphviz.generate", (args: any) => {
+		vscode.window.showInformationMessage(`CodeLens action clicked with args=${args}`);
+    // 生成预览图的代码放在这里。
+	});
+
   // 注册 provider
   registerProviders(context);
 }
@@ -47,6 +53,12 @@ function registerProviders(context: ExtensionContext) {
     vscode.languages.registerDocumentSymbolProvider('dot', dotSymbolProvider),
     vscode.languages.registerReferenceProvider('dot', dotSymbolProvider),
     vscode.languages.registerRenameProvider('dot', dotSymbolProvider)
+  );
+
+
+  const dotCodeLensProvider = new DotCodeLensProvider();
+  context.subscriptions.push(
+    vscode.languages.registerCodeLensProvider('dot', dotCodeLensProvider)
   );
 
 }

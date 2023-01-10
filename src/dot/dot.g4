@@ -31,10 +31,8 @@ edgeRHS: ( edgeop ( node_id | subgraph))+;
 
 edgeop: '->' | '--';
 
-node_stmt: node_id attr_list?;
-
-node_id: id (':' id)? (':' compass_pt)?;
-
+node_stmt: node_id attr_list?;  
+node_id: id (':' id)? (':' compass_pt)?; 
 port: ':' id ( ':' compass_pt)? | ':' compass_pt;
 
 compass_pt: (

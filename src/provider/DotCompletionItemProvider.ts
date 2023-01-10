@@ -20,9 +20,9 @@ export class DotCompletionItemProvider implements CompletionItemProvider {
     
     return result;
   }
-  resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
-    throw new Error("Method not implemented.");
-  }
+  // resolveCompletionItem?(item: CompletionItem, token: CancellationToken): ProviderResult<CompletionItem> {
+  //   throw new Error("Method not implemented.");
+  // }
 
 }
 
