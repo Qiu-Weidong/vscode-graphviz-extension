@@ -10,36 +10,48 @@ export class DotPreviewer {
   static panel: WebviewPanel | undefined;
 
   private currentContent: string;
+  private name: string;
 
-  constructor() { this.currentContent = ''; }
+  constructor() { this.currentContent = ''; this.name = ''; }
 
   preview(name: string, content: string) {
+
+
+    if (content.trim() != this.currentContent) {
+      this.currentContent = content.trim();
+      this.name = name.trim();
+
+      if (DotPreviewer.panel != undefined) {
+        if (DotPreviewer.panel.visible)
+          this.update();
+
+        DotPreviewer.panel.reveal();
+      }
+
+    }
+
+
+
     if (DotPreviewer.panel == undefined) {
       // 如果还没有 panel ，则创建一个新的 panel
       DotPreviewer.panel = window.createWebviewPanel(
         'preview', name, ViewColumn.Beside
       );
       DotPreviewer.panel.onDidChangeViewState((e) => {
-        if (DotPreviewer.panel?.visible) this.update(name, content);
+        if (DotPreviewer.panel?.visible) this.update();
+      });
+
+      DotPreviewer.panel.onDidDispose(() => {
+        DotPreviewer.panel?.dispose();
+        DotPreviewer.panel = undefined;
       });
     }
-
-    else {
-      const column = window.activeTextEditor?.viewColumn;
-      DotPreviewer.panel.reveal(column);
-      // 更新 panel 。
-      if(DotPreviewer.panel.visible)
-        this.update(name, content);
-    }
-
-
   }
 
 
-  update(name: string, content: string) {
-    if (content.trim() == this.currentContent) return;
+  update() {
 
-    viz.renderString(content).then((result: any) => {
+    viz.renderString(this.currentContent).then((result: any) => {
       const webview = DotPreviewer.panel?.webview;
       if (webview) {
         webview.html = `<!DOCTYPE html>
@@ -48,7 +60,7 @@ export class DotPreviewer {
                           <meta charset="UTF-8">
                           <meta http-equiv="X-UA-Compatible" content="IE=edge">
                           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                          <title>${name}</title>
+                          <title>${this.name}</title>
                         </head>
                         <body>
                           <div>${result}</div>
