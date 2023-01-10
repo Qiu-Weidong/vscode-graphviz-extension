@@ -1,1 +1,17 @@
-digraph { node [ fillcolor = "#123456" ] ; hello hello -> w ; no ; no -> rex [ ] ; hello -> world ; fuck [ ] ; subgraph { uu -> vv [ color = "#123456:#123434:#124213" ] ; node [ ] } } 
+digraph {
+  node [fillcolor="#123456"];
+  hello;
+  hello -> w;
+  no;
+  no -> rex;
+  hello -> world;
+  fuck;
+  
+  subgraph {
+    uu -> vv [color="#123456:#123434:#124213"];
+    node [];
+
+  }
+
+
+}

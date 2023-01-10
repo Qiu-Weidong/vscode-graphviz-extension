@@ -19,7 +19,7 @@ strict digraph {
     bgcolor="green";
 
   }
-  edge;
+  edge [];
   hello [label="hello world"];
   node [shape="circle"];
   bgcolor="blanchedalmond";

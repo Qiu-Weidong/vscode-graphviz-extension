@@ -1,9 +1,12 @@
 import { DotLexer } from './dot/DotLexer';
 import { DotParser } from './dot/DotParser';
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
-import { Uri, TextDocument } from 'vscode';
+import { Uri, TextDocument, Diagnostic } from 'vscode';
 import { ParseTree } from 'antlr4ts/tree/ParseTree';
 import { NodeVisitor } from './provider/NodeVisitor';
+import { DiagnosticCollection } from 'vscode';
+import { languages } from 'vscode';
+import { DotDiagnosticListener } from './DotDiagnosticListener';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
@@ -19,9 +22,11 @@ type value = {
 class TextDocuments {
 
   private documents: Map<Uri, value>;
+  private diangostics: DiagnosticCollection;
 
   constructor() {
     this.documents = new Map();
+    this.diangostics = languages.createDiagnosticCollection();
   }
 
   public removeDocument(document: TextDocument): void {
@@ -34,16 +39,22 @@ class TextDocuments {
     if(this.documents.get(document.uri)?.content == document.getText()) {
       return;
     }
-
+    
+    let diagnostics: Diagnostic[] = [];
+    const diagnosticListener = new DotDiagnosticListener(diagnostics);
     const inputStream = CharStreams.fromString(document.getText());
     const lexer = new DotLexer(inputStream);
     lexer.removeErrorListeners();
+    lexer.addErrorListener(diagnosticListener);
 
     const tokens = new CommonTokenStream(lexer);
     const parser = new DotParser(tokens);
     parser.removeErrorListeners();
+    parser.addErrorListener(diagnosticListener);
+
     const tree = parser.graph_list();
 
+    
     // 解析节点以及对应的 port 。
     let nodes: Map<string, string[]> = new Map();
     const visitor = new NodeVisitor(nodes);
@@ -51,8 +62,10 @@ class TextDocuments {
       tree.accept(visitor);
     }
     catch(err) {}
-    
 
+    // 检查属性是否正确，使用 warning 。
+    
+    this.diangostics.set(document.uri, diagnostics);
     this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes });
   }
 
