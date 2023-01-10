@@ -7,25 +7,25 @@ import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_st
 import { DotVisitor } from "../dot/DotVisitor";
 
 
-export class DotCodeLensVisitor implements DotVisitor<void> {
+export class DotCodeLensVisitor implements DotVisitor<string> {
   private codelens: CodeLens[];
 
   constructor() { this.codelens = []; }
-
-  public getCodeLens(): CodeLens[] {
-    return this.codelens;
-  }
-  
-  visitGraph_list(ctx: Graph_listContext): void {
+  visitGraph_list(ctx: Graph_listContext): string {
     for (const graph of ctx.graph()) {
-      graph.accept(this);
+      graph.accept<string>(this);
     }
+    return '';
   }
 
-  visitGraph(ctx: GraphContext): void {
+  visitGraph(ctx: GraphContext): string {
+    const result = this.visitChildren(ctx);
+
     // Generate
     const graph = ctx.DIGRAPH()?.symbol || ctx.GRAPH()?.symbol;
-    const label = 'Generate';
+    let name = ctx.id()?.ID()?.symbol.text || ctx.id()?.NUMBER()?.text || ctx.id()?.STRING()?.text || '';
+    if(name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length-1);
+    const label = 'Preview' + (name ? ` ${name}` : '');
     if (graph) {
       const range = new Range(
         new Position(graph.line - 1, 0),
@@ -38,41 +38,60 @@ export class DotCodeLensVisitor implements DotVisitor<void> {
           {
             title: label,
             command: 'graphviz.generate',
-            arguments: [ctx.text]
+            arguments: [{ title: name, content: result }]
           }
         )
       );
     }
+    // console.log(result);
+    return result;
   }
-  visitStmt_list?: ((ctx: Stmt_listContext) => void) | undefined;
-  visitStmt?: ((ctx: StmtContext) => void) | undefined;
-  visitAttr_stmt?: ((ctx: Attr_stmtContext) => void) | undefined;
-  visitAttr_list?: ((ctx: Attr_listContext) => void) | undefined;
-  visitA_list?: ((ctx: A_listContext) => void) | undefined;
-  visitAssign_stmt?: ((ctx: Assign_stmtContext) => void) | undefined;
-  visitEdge_stmt?: ((ctx: Edge_stmtContext) => void) | undefined;
-  visitEdgeRHS?: ((ctx: EdgeRHSContext) => void) | undefined;
-  visitEdgeop?: ((ctx: EdgeopContext) => void) | undefined;
-  visitNode_stmt?: ((ctx: Node_stmtContext) => void) | undefined;
-  visitNode_id?: ((ctx: Node_idContext) => void) | undefined;
-  visitPort?: ((ctx: PortContext) => void) | undefined;
-  visitCompass_pt?: ((ctx: Compass_ptContext) => void) | undefined;
-  visitSubgraph?: ((ctx: SubgraphContext) => void) | undefined;
-  visitId?: ((ctx: IdContext) => void) | undefined;
-  visitLexpr?: ((ctx: LexprContext) => void) | undefined;
-  visitRexpr?: ((ctx: RexprContext) => void) | undefined;
-  visit(tree: ParseTree): void {
-    throw new Error("Method not implemented.");
+  
+  visitStmt_list: ((ctx: Stmt_listContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitStmt: ((ctx: StmtContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitAttr_stmt: ((ctx: Attr_stmtContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitAttr_list: ((ctx: Attr_listContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitA_list: ((ctx: A_listContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitAssign_stmt: ((ctx: Assign_stmtContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitEdge_stmt: ((ctx: Edge_stmtContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitEdgeRHS: ((ctx: EdgeRHSContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitEdgeop: ((ctx: EdgeopContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitNode_stmt: ((ctx: Node_stmtContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitNode_id: ((ctx: Node_idContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitPort: ((ctx: PortContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitCompass_pt: ((ctx: Compass_ptContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitSubgraph: ((ctx: SubgraphContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitId: ((ctx: IdContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitLexpr: ((ctx: LexprContext) => string) = (ctx) => this.visitChildren(ctx);
+  visitRexpr: ((ctx: RexprContext) => string) = (ctx) => this.visitChildren(ctx);
+  visit(tree: ParseTree): string {
+    return tree.accept(this);
   }
-  visitChildren(node: RuleNode): void {
-    throw new Error("Method not implemented.");
+
+  visitChildren(node: RuleNode): string {
+    let result = '';
+    for (let i = 0; i < node.childCount; i++) {
+      const subcontent = node.getChild(i).accept(this).trim();
+      result += subcontent + ' ';
+    }
+    return result;
   }
-  visitTerminal(node: TerminalNode): void {
-    throw new Error("Method not implemented.");
+  visitTerminal(node: TerminalNode): string {
+    return node.symbol.text || '';
   }
-  visitErrorNode(node: ErrorNode): void {
-    throw new Error("Method not implemented.");
+  visitErrorNode(node: ErrorNode): string {
+    return this.visitTerminal(node);
   }
+
+  public getCodeLens(): CodeLens[] {
+    return this.codelens;
+  }
+  
+
+
+
+  
+  
 
 }
 

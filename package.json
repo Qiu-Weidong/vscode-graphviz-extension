@@ -28,20 +28,20 @@
 				"configuration": "./dot.configuration.json"
 			}
 		],
-    "grammars": [
-      {
-        "language": "dot",
-        "scopeName": "source.dot",
-        "path": "./syntaxes/dot.tmLanguage"
-      }
-    ]
+		"grammars": [
+			{
+				"language": "dot",
+				"scopeName": "source.dot",
+				"path": "./syntaxes/dot.tmLanguage"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
-    "antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot"
+		"antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
@@ -53,6 +53,7 @@
 		"typescript": "^4.8.4"
 	},
 	"dependencies": {
-		"antlr4ts": "^0.5.0-alpha.4"
+		"antlr4ts": "^0.5.0-alpha.4",
+		"viz.js": "^2.1.2"
 	}
 }
