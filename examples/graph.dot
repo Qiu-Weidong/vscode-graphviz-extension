@@ -1,1 +1,27 @@
-strict digraph { subgraph cluster_001 { a -> b ; subgraph cluster_002 { bgcolor = yellow ; c -> d ; } subgraph cluster_000 { bgcolor = blue e -> f ; } bgcolor = red ; } ; subgraph cluster_004 { g -> h ; bgcolor = green ; } ; edge [ ] hello [ label = "hello world" ] ; node [ shape = "circle" ] ; bgcolor = blanchedalmond ; } 
+strict digraph {
+  subgraph cluster_001 {
+    a -> b;
+    subgraph cluster_002 {
+      bgcolor="yellow";
+      c -> d;
+
+    }
+    subgraph cluster_000 {
+      bgcolor="blue";
+      e -> f;
+
+    }
+    bgcolor="red";
+
+  }
+  subgraph cluster_004 {
+    g -> h;
+    bgcolor="green";
+
+  }
+  edge;
+  hello [label="hello world"];
+  node [shape="circle"];
+  bgcolor="blanchedalmond";
+
+}

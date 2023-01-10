@@ -27,7 +27,14 @@
 				],
 				"configuration": "./dot.configuration.json"
 			}
-		]
+		],
+    "grammars": [
+      {
+        "language": "dot",
+        "scopeName": "source.dot",
+        "path": "./syntaxes/dot.tmLanguage"
+      }
+    ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

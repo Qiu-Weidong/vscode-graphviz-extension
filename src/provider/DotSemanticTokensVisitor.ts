@@ -59,7 +59,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   visitRexpr(ctx: RexprContext) { 
     const id = ctx.ID();
     if(id != undefined) {
-      this.addHighlight(id, 'struct');
+      this.addHighlight(id, 'label');
     }
     else 
       this.visitChildren(ctx); 

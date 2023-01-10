@@ -1,0 +1,8 @@
+strict digraph debug {
+  node [shape="record", label="<h1> | <h2> | <h3> | <h4>"];
+  hello -> world;
+  hello;
+
+  graph [bgcolor=antiquewhite];
+
+}
