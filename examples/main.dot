@@ -1,35 +1,23 @@
 digraph {
-    a -> b;
-    c -> d;
-    
-    fillcolor = "#d8787800";
-    fillcolor = "#93210a";
-    fillcolor = "#c37b33cc";
-    
-
-    fillcolor = "#123456";
-    
+  a -> b;
+  c -> d;
+  fillcolor="#123456";
+  subgraph cluster_0 {
+    style="filled";
+    color="lightblue";
+    node [style="filled", color="white"];
+    a0 -> a1 -> a2 -> a3;
+    label="process #1";
     subgraph cluster_0 {
-		style=filled;
-		color=lightgrey;
-		node [style=filled,color=white];
-		a0 -> a1 -> a2 -> a3;
-		label = "process #1";
+      style="filled";
+      color="#5c0e0e58";
+      node [style="filled", color="#2b16edff"];
+      a0 -> a1 -> a2 -> a3;
+      label="process #1";
 
-        subgraph cluster_0 {
-            style=filled;
-            color="#5c0e0e58";
-            node [style=filled,color="#2b16edff"];
-            a0 -> a1 -> a2 -> a3;
-            label = "process #1";
-	    }
-	}
+    }
 
-    "这里" -> "和这里";
-    
-    // fillcolor="#142614";
-    /*
-    多行注释好像不行
-    */
-    
+  }
+  "这里" -> "和这里" [arrowhead="open", arrowtail="box"];
+
 }

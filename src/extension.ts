@@ -3,20 +3,11 @@ import { ExtensionContext } from 'vscode';
 import { DotSemanticTokensProvider } from './provider/DotSemanticTokensProvider';
 import { DotColorProvider } from './provider/DotColorProvider';
 import { DotCompletionItemProvider } from './provider/DotCompletionItemProvider';
+import { DotHoverProvider } from './provider/DotHoverProvider';
+import { DotFormattingEditProvider } from './provider/DotFormattingEditProvider';
 
 
 export function activate(context: vscode.ExtensionContext) {
-  // 在这里研究一下正则表达式
-  // const label = '<label1> xxxxx <label2> xxxx <label3> ....';
-  // const re = /<.*?>/g ;
-  // let match = re.exec(label);
-  // while(match) {
-  //   console.log(match);
-  //   match = re.exec(label);
-  // }
-  
-
-
   // 注册 provider
   registerProviders(context);
 }
@@ -38,6 +29,16 @@ function registerProviders(context: ExtensionContext) {
   const dotCompletionItemProvider = new DotCompletionItemProvider();
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider('dot', dotCompletionItemProvider, '=', ':', '[', '"')
+  );
+
+  const dotHoverProvider = new DotHoverProvider();
+  context.subscriptions.push(
+    vscode.languages.registerHoverProvider('dot', dotHoverProvider)
+  );
+
+  const dotFormattingEditProvider = new DotFormattingEditProvider();
+  context.subscriptions.push(
+    vscode.languages.registerDocumentFormattingEditProvider('dot', dotFormattingEditProvider)
   );
 
   // const legend = new vscode.SemanticTokensLegend([

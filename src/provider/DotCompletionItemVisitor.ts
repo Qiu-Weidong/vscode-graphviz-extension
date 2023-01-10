@@ -20,6 +20,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   private readonly cluster_attrs: CompletionItem[];
   private readonly subgraph_attrs: CompletionItem[];
   private readonly graph_attrs: CompletionItem[];
+  // private readonly attribute_values: Map<string, CompletionItem[]>;
 
   // graph,subgraph,cluster, edge, node, node_attr, edge_attr, graph_attr, cluster_attr, subgraph_attr
   private scope: string;
@@ -30,12 +31,37 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.scope = 'none';
     this.nodes = nodes;
 
-    this.node_attrs = attributes.filter(item => item.usedby.includes('Nodes')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
-    this.edge_attrs = attributes.filter(item => item.usedby.includes('Edges')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
-    this.cluster_attrs = attributes.filter(item => item.usedby.includes('Clusters')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
-    this.graph_attrs = attributes.filter(item => item.usedby.includes('Graphs')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
-    this.subgraph_attrs = attributes.filter(item => item.usedby.includes('Subgraphs')).map(item => new CompletionItem(item.name, CompletionItemKind.Property));
+    this.node_attrs = attributes.filter(item => item.usedby.includes('Nodes')).map(
+      item => {
+        let result = new CompletionItem(item.name, CompletionItemKind.Property);
+        result.documentation = item.description;
+        return result;
+      }
+    );
+    this.edge_attrs = attributes.filter(item => item.usedby.includes('Edges')).map(item => {
+      let result = new CompletionItem(item.name, CompletionItemKind.Property);
+      result.documentation = item.description;
+      return result;
+    });
+    this.cluster_attrs = attributes.filter(item => item.usedby.includes('Clusters')).map(item => {
+      let result = new CompletionItem(item.name, CompletionItemKind.Property);
+      result.documentation = item.description;
+      return result;
+    });
+    this.graph_attrs = attributes.filter(item => item.usedby.includes('Graphs')).map(item => {
+      let result = new CompletionItem(item.name, CompletionItemKind.Property);
+      result.documentation = item.description;
+      return result;
+    });
+    this.subgraph_attrs = attributes.filter(item => item.usedby.includes('Subgraphs')).map(item => {
+      let result = new CompletionItem(item.name, CompletionItemKind.Property);
+      result.documentation = item.description;
+      return result;
+    });
 
+    // 初始化 attribute_values
+    // this.attribute_values = new Map();
+    // attributeValue.get('color')
   }
 
   positionInContext(ctx: ParserRuleContext): boolean {
@@ -107,10 +133,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
     if (!ctx.EDGE() && !ctx.GRAPH() && !ctx.NODE()) {
       // 按理说不会到达这里
-      this.completionItems.push(new CompletionItem('node', CompletionItemKind.Property));
-      this.completionItems.push(new CompletionItem('edge', CompletionItemKind.Property));
-      this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Property));
-      console.error('never reached');
     }
     else if (this.positionInContext(ctx.attr_list())) {
       // 正在编辑 attr_list;
@@ -134,20 +156,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // assign_stmt: lexpr '=' rexpr ;
   visitAssign_stmt(ctx: Assign_stmtContext) {
     if (this.positionInContext(ctx.lexpr())) {
@@ -163,7 +171,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
         if (attr_name.startsWith('"') && attr_name.endsWith('"')) attr_name = attr_name.slice(1, attr_name.length - 1);
         // 根据属性名称提示
         this.completeAttrValue(attr_name);
-
       }
     }
 
@@ -195,23 +202,23 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
   // edgeRHS: ( edgeop ( node_id | subgraph))+;
-  visitEdgeRHS(ctx: EdgeRHSContext) { 
-    // this.visitChildren(ctx);
-    for(const node_id of ctx.node_id()) {
-      if(this.positionInContext(node_id)) node_id.accept(this);
+  visitEdgeRHS(ctx: EdgeRHSContext) {
+    for (const op of ctx.edgeop()) {
+      if (this.positionInContext(op)) op.accept(this);
+    }
+    for (const node_id of ctx.node_id()) {
+      if (this.positionInContext(node_id)) node_id.accept(this);
     }
 
-    for(const subgraph of ctx.subgraph()) {
-      if(this.positionInContext(subgraph)) subgraph.accept(this);
+    for (const subgraph of ctx.subgraph()) {
+      if (this.positionInContext(subgraph)) subgraph.accept(this);
     }
   }
 
 
   visitEdgeop(ctx: EdgeopContext) {
-    if (this.positionInContext(ctx)) {
-      this.completionItems.push(new CompletionItem('--', CompletionItemKind.Operator));
-      this.completionItems.push(new CompletionItem('->', CompletionItemKind.Operator));
-    }
+    this.completionItems.push(new CompletionItem('--', CompletionItemKind.Operator));
+    this.completionItems.push(new CompletionItem('->', CompletionItemKind.Operator));
   }
 
   // node_id attr_list?
@@ -253,14 +260,13 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
       }
       else {
         // 可能在编辑 节点名 也可能在编辑关键字 也可能在编辑 属性
-        let nodeCompletion = new CompletionItem('node', CompletionItemKind.Class);
-        this.completionItems.push(nodeCompletion);
-        this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Class));
-        this.completionItems.push(new CompletionItem('edge', CompletionItemKind.Class));
-        this.completionItems.push(new CompletionItem('subgraph', CompletionItemKind.Class));
+        if (!this.scope.startsWith('edge')) {
+          // 提示可能的属性名
+          this.completeAttrName();// 注意，这个时候判断一下有没有引号
+          if (!ids[0].STRING())
+            this.completeKeyword();
+        }
 
-        // 提示可能的属性名
-        this.completeAttrName();
 
         // 提示节点名称
         this.completeNodeNames();
@@ -381,9 +387,10 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     const attr = attributes.find(item => item.name == attr_name);
     if (attr != undefined) {
       for (const ty of attr.type) {
+
         const values = attributeValue.get(ty) || [];
 
-        for(const value of values) {
+        for (const value of values) {
           this.completionItems.push(new CompletionItem(value, CompletionItemKind.Constant));
         }
       }
@@ -394,5 +401,13 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.nodes.get(node_name)?.forEach(value => this.completionItems.push(
       new CompletionItem(value, CompletionItemKind.Variable)
     ));
+  }
+
+  completeKeyword() {
+    let nodeCompletion = new CompletionItem('node', CompletionItemKind.Class);
+    this.completionItems.push(nodeCompletion);
+    this.completionItems.push(new CompletionItem('graph', CompletionItemKind.Class));
+    this.completionItems.push(new CompletionItem('edge', CompletionItemKind.Class));
+    this.completionItems.push(new CompletionItem('subgraph', CompletionItemKind.Class));
   }
 }

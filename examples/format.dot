@@ -1,0 +1,4 @@
+strict digraph format {
+  a -> b 
+
+}
