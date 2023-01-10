@@ -34,34 +34,30 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.node_attrs = attributes.filter(item => item.usedby.includes('Nodes')).map(
       item => {
         let result = new CompletionItem(item.name, CompletionItemKind.Property);
-        result.documentation = item.description;
+        result.detail = item.description;
         return result;
       }
     );
     this.edge_attrs = attributes.filter(item => item.usedby.includes('Edges')).map(item => {
       let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.documentation = item.description;
+      result.detail = item.description;
       return result;
     });
     this.cluster_attrs = attributes.filter(item => item.usedby.includes('Clusters')).map(item => {
       let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.documentation = item.description;
+      result.detail = item.description;
       return result;
     });
     this.graph_attrs = attributes.filter(item => item.usedby.includes('Graphs')).map(item => {
       let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.documentation = item.description;
+      result.detail = item.description;
       return result;
     });
     this.subgraph_attrs = attributes.filter(item => item.usedby.includes('Subgraphs')).map(item => {
       let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.documentation = item.description;
+      result.detail = item.description;
       return result;
     });
-
-    // 初始化 attribute_values
-    // this.attribute_values = new Map();
-    // attributeValue.get('color')
   }
 
   positionInContext(ctx: ParserRuleContext): boolean {
@@ -269,7 +265,8 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
 
         // 提示节点名称
-        this.completeNodeNames();
+        if(this.positionInContext(ids[0]))
+          this.completeNodeNames();
       }
 
     }
@@ -329,15 +326,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
   visitTerminal(node: TerminalNode): void {
-    // if (node.symbol.line - 1 == this.position.line
-    //   && node.symbol.text
-    //   && node.symbol.charPositionInLine <= this.position.character
-    //   && node.symbol.charPositionInLine + (node.symbol.text?.length || 0) >= this.position.character) {
-    //   // 终结符在当前位置
-    //   this.visitStack.push(node.symbol.text);
-    //   console.log(this.visitStack, node.symbol.type);
-    // }
-
   }
 
   visitErrorNode(node: ErrorNode): void {
