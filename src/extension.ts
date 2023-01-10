@@ -17,8 +17,6 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const name: string = args.title ? args.title : 'graphviz';
     const content: string = args.content;
-    // console.info(content);
-
     // 生成预览图的代码放在这里。
 
     viz.renderString(content).then((result: any) => {
@@ -46,6 +44,17 @@ export function activate(context: vscode.ExtensionContext) {
 
   // 注册 provider
   registerProviders(context);
+
+  // 看不懂，直接抄过来的。
+  if (vscode.window.registerWebviewPanelSerializer) {
+		vscode.window.registerWebviewPanelSerializer('preview', {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+				console.log(`Got state: ${state}`);
+        const column = vscode.window.activeTextEditor?.viewColumn;
+        webviewPanel.reveal(column);
+			}
+		});
+	}
 }
 
 
