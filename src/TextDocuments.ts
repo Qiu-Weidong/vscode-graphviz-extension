@@ -7,6 +7,7 @@ import { NodeVisitor } from './provider/NodeVisitor';
 import { DiagnosticCollection } from 'vscode';
 import { languages } from 'vscode';
 import { DotDiagnosticListener } from './DotDiagnosticListener';
+import { DocumentSymbol } from 'vscode';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
 type value = {
@@ -15,7 +16,8 @@ type value = {
   tree: ParseTree,
   
   // 节点名称， port列表
-  nodes: Map<string, string[]>
+  nodes: Map<string, string[]>,
+  symbols: DocumentSymbol[]
 };
 
 
@@ -57,7 +59,8 @@ class TextDocuments {
     
     // 解析节点以及对应的 port 。
     let nodes: Map<string, string[]> = new Map();
-    const visitor = new NodeVisitor(nodes);
+    const symbols : DocumentSymbol[] = [];
+    const visitor = new NodeVisitor(nodes, symbols);
     try {
       tree.accept(visitor);
     }
@@ -66,7 +69,7 @@ class TextDocuments {
     // 检查属性是否正确，使用 warning 。
     
     this.diangostics.set(document.uri, diagnostics);
-    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes });
+    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes, symbols });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {
@@ -85,6 +88,12 @@ class TextDocuments {
     if(! this.documents.has(document.uri)) this.updateDocument(document);
     const result = this.documents.get(document.uri) as value;
     return result.nodes;
+  }
+
+  public getSymbols(document: TextDocument): DocumentSymbol[] {
+    if(! this.documents.has(document.uri)) this.updateDocument(document);
+    const result = this.documents.get(document.uri) as value;
+    return result.symbols;
   }
 
   public contains(document: TextDocument) : boolean {

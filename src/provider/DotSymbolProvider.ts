@@ -8,8 +8,19 @@ export class DotSymbolProvider implements
   RenameProvider,
   ReferenceProvider {
 
-  provideReferences(document: TextDocument, position: Position, context: ReferenceContext, token: CancellationToken): ProviderResult<Location[]> {
-    throw new Error("Method not implemented.");
+  provideReferences(
+    document: TextDocument, position: Position, context: ReferenceContext, token: CancellationToken
+  ): ProviderResult<Location[]> {
+    // 只提供 node 的引用
+    textDocuments.updateDocument(document);
+    const symbols = textDocuments.getSymbols(document);
+    const symbol = symbols.find(symbol => symbol.range.contains(position));
+    if(! symbol)
+      throw new Error("no Symbol at this positon");
+    const locations = symbols.filter(item => item.name == symbol.name && item.detail == symbol.detail).map(item => 
+      new Location(document.uri, item.range)
+    );
+    return locations;
   }
 
   provideRenameEdits(document: TextDocument, position: Position, newName: string, token: CancellationToken): ProviderResult<WorkspaceEdit> {
@@ -22,15 +33,7 @@ export class DotSymbolProvider implements
 
   provideDocumentSymbols(document: TextDocument, token: CancellationToken): ProviderResult<SymbolInformation[] | DocumentSymbol[]> {
     textDocuments.updateDocument(document);
-    // 提供 node 名称
-    /**
-     * ports: [{ name: 'port名称', node: '所属节点'}]
-     * graphs: ['图的名称'];
-     * subgraphs: ['subgraph和cluster的名称']
-     * nodes: [{}]
-     */
-
-    throw new Error("Method not implemented.");
+    return textDocuments.getSymbols(document);
   }
 
 }

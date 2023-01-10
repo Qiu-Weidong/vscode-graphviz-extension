@@ -1,4 +1,4 @@
-digraph {
+digraph mygraph {
   node [fillcolor="#123456"];
   hello;
   hello -> w;
@@ -7,11 +7,13 @@ digraph {
   hello -> world;
   fuck;
   
-  subgraph {
+  subgraph mygraph {
     uu -> vv [color="#123456:#123434:#124213"];
     node [];
 
   }
+
+  "world" -> "hello";
 
 
 }

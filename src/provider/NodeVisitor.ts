@@ -8,31 +8,81 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-
+import { DocumentSymbol, Position, Range, SymbolKind } from "vscode";
 
 
 export class NodeVisitor implements DotVisitor<void> {
+  // 先不管 port，先把 node、graph、和subgraph处理了
+  private symbols: DocumentSymbol[];
+  // private selectedRange: Range | undefined;
 
   private nodes: Map<string, string[]>;
   private defaultPorts: string[];
   private currentNodeName: string | undefined;
   private isRecord: boolean;
   private currentPorts: string[];
-  constructor(nodes: Map<string, string[]>) {
+  constructor(nodes: Map<string, string[]>, symbols: DocumentSymbol[]) {
     this.nodes = nodes;
+    this.symbols = symbols;
+    // this.selectedRange = undefined;
+
     this.defaultPorts = [];
     this.currentNodeName = undefined;
     this.isRecord = false;
     this.currentPorts = [];
   }
 
-
-  visitGraph_list(ctx: Graph_listContext) {  
-    for(const graph of ctx.graph()) graph.accept(this);
+  getStringFromId(id: IdContext): string {
+    let result = id.ID()?.symbol.text || id.STRING()?.symbol.text || id.NUMBER()?.symbol.text || '';
+    if (result.startsWith('"') && result.endsWith('"')) result = result.slice(1, result.length - 1);
+    return result;
   }
-  visitGraph(ctx: GraphContext) { ctx.stmt_list().accept(this); }
-  visitStmt_list(ctx: Stmt_listContext) { 
-    for(const stmt of ctx.stmt()) stmt.accept(this);
+
+  getRangeFromId(id: IdContext): Range | undefined {
+    let symbol = id.ID()?.symbol || id.STRING()?.symbol || id.NUMBER()?.symbol;
+    if (symbol) {
+      return new Range(
+        new Position(symbol.line - 1, symbol.charPositionInLine),
+        new Position(symbol.line - 1, symbol.charPositionInLine + (symbol.text?.length || 0))
+      );
+    }
+    return undefined;
+  }
+
+  addSymbol(id: IdContext, detail: string) {
+    const range = this.getRangeFromId(id);
+    if (range)
+      this.symbols.push(
+        new DocumentSymbol(this.getStringFromId(id), detail, SymbolKind.Variable,
+          range, range,
+        ));
+
+  }
+
+  visitGraph_list(ctx: Graph_listContext) {
+    for (const graph of ctx.graph()) graph.accept(this);
+  }
+  visitGraph(ctx: GraphContext) {
+    // 将 selectRange 置为整个 graph
+    // const start = ctx.start;
+    // const stop = ctx.stop;
+    // if(stop) {
+    //   this.selectedRange = new Range(
+    //     new Position(start.line-1, start.charPositionInLine),
+    //     new Position(stop.line-1, stop.charPositionInLine + (stop.text?.length || 0))
+    //   );
+    // }
+
+    const id = ctx.id();
+    if (id) {
+      this.addSymbol(id, 'Graph');
+    }
+    ctx.stmt_list().accept(this);
+  }
+
+
+  visitStmt_list(ctx: Stmt_listContext) {
+    for (const stmt of ctx.stmt()) stmt.accept(this);
   }
   visitStmt(ctx: StmtContext) { this.visitChildren(ctx); }
 
@@ -73,7 +123,7 @@ export class NodeVisitor implements DotVisitor<void> {
       let match = re.exec(value);
       while (match) {
         let label = match[0];
-        if(label.startsWith('<') && label.endsWith('>')) label = label.slice(1, label.length-1);
+        if (label.startsWith('<') && label.endsWith('>')) label = label.slice(1, label.length - 1);
         this.currentPorts.push(label);
         match = re.exec(value);
       }
@@ -84,6 +134,7 @@ export class NodeVisitor implements DotVisitor<void> {
     const id = ctx.node_id()?.id()[0];
 
     if (id == undefined) return;
+    this.addSymbol(id, 'Node');
     let name = id.ID()?.symbol.text || id.NUMBER()?.symbol.text || id.STRING()?.symbol.text || '';
     if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
 
@@ -99,6 +150,8 @@ export class NodeVisitor implements DotVisitor<void> {
   visitEdgeRHS(ctx: EdgeRHSContext) {
     for (const node_id of ctx.node_id()) {
       const id = node_id.id()[0];
+      if (id) this.addSymbol(id, 'Node');
+
       let name = id.ID()?.symbol.text || id.NUMBER()?.symbol.text || id.STRING()?.symbol.text || '';
       if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
 
@@ -114,6 +167,7 @@ export class NodeVisitor implements DotVisitor<void> {
 
   visitNode_stmt(ctx: Node_stmtContext) {
     const id = ctx.node_id().id()[0];
+    if (id) this.addSymbol(id, 'Node');
     let name = id.ID()?.symbol.text || id.NUMBER()?.symbol.text || id.STRING()?.symbol.text || '';
     if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
 
@@ -139,11 +193,13 @@ export class NodeVisitor implements DotVisitor<void> {
   visitNode_id(ctx: Node_idContext) { }
   visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
-  
-  visitSubgraph(ctx: SubgraphContext) { 
+
+  visitSubgraph(ctx: SubgraphContext) {
+    const id = ctx.id();
+    if (id) this.addSymbol(id, 'Subgraph');
     ctx.stmt_list().accept(this);
   }
-  
+
   visitId(ctx: IdContext) { }
   visitLexpr(ctx: LexprContext) { }
   visitRexpr(ctx: RexprContext) { }
