@@ -37,14 +37,15 @@ class TextDocuments {
   }
 
   public updateDocument(document: TextDocument): void {
+    const documentText = document.getText().trim() + '\n'; // 注意一定要加上一个换行，否则最后一行如果是注释的话会报错。
     // 通过检查文本内容是否改变来更新语法树等信息。
-    if(this.documents.get(document.uri)?.content == document.getText()) {
+    if(this.documents.get(document.uri)?.content == documentText) {
       return;
     }
     
     let diagnostics: Diagnostic[] = [];
     const diagnosticListener = new DotDiagnosticListener(diagnostics);
-    const inputStream = CharStreams.fromString(document.getText());
+    const inputStream = CharStreams.fromString(documentText);
     const lexer = new DotLexer(inputStream);
     lexer.removeErrorListeners();
     lexer.addErrorListener(diagnosticListener);
@@ -69,7 +70,7 @@ class TextDocuments {
     // 检查属性是否正确，使用 warning 。
     
     this.diangostics.set(document.uri, diagnostics);
-    this.documents.set(document.uri, { tokens, tree, content: document.getText(), nodes, symbols });
+    this.documents.set(document.uri, { tokens, tree, content: documentText, nodes, symbols });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {
