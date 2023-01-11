@@ -10,7 +10,7 @@ import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
 import { DotPreviewer } from './DotPreviewer';
 
 export function activate(context: vscode.ExtensionContext) {
-  const previewer = new DotPreviewer();
+  const previewer = new DotPreviewer(context.extensionUri);
 
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const name: string = args.title ? args.title : 'graphviz';

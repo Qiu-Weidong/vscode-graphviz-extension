@@ -1,1 +1,5 @@
-digraph G {Hello->World}
+digraph G{
+  Hello -> World;
+  
+  bgcolor="transparent";
+}
