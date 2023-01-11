@@ -2,7 +2,7 @@ digraph "unix" {
 	graph [	fontname = "Helvetica-Oblique",
 		fontsize = 36,
 		label = "\n\n\n\nObject Oriented Graphs\nStephen North, 3/19/93",
-		size = "6,6" ];
+		];
 	node [	shape = polygon,
 		sides = 4,
 		distortion = "0.0",
