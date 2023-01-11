@@ -27,6 +27,7 @@ export class DotPreviewer {
 
         // 记得将 panel 设置为 undefined
         DotPreviewer.panel = undefined;
+        this.currentContent = '';
       });  
     }
 
