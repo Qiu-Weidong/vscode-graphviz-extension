@@ -13,7 +13,7 @@ strict digraph {
   };
 
   // 这是一条注释
-  queue [shape="record", label="<h3> <h4> <h5>"] [fontname="arial"];
+  queue [shape="record", label="<h3> head | <h4> woo | <h5> foo"] [fontname="arial"];
   erab -> terminal -> queue;
   queue:h3 -> queue:h4:s;
 

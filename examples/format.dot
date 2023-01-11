@@ -1,4 +1,9 @@
-strict digraph format {
-  a -> b 
+
+
+
+
+
+strict digraph format{
+  a -> b;
 
 }

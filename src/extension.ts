@@ -79,6 +79,3 @@ function registerProviders(context: ExtensionContext) {
 
 }
 
-/**
-
- */
