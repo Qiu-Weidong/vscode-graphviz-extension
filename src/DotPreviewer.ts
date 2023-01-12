@@ -1,4 +1,5 @@
-import { Uri, ViewColumn, WebviewPanel, window } from "vscode";
+import { TextEncoder } from "util";
+import { Uri, ViewColumn, WebviewPanel, window, workspace } from "vscode";
 
 const Viz = require("viz.js");
 const { Module, render } = require('viz.js/full.render.js');
@@ -30,7 +31,7 @@ export class DotPreviewer {
 
     else {
       // 渲染之。
-      if(! this.engine) {
+      if (!this.engine) {
         window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"], {
           title: 'choose a engine, dot is default',
           placeHolder: 'choose a engine, dot is default'
@@ -143,7 +144,7 @@ export class DotPreviewer {
   }
 
   render(name: string, content: string, engine: string) {
-    if(DotPreviewer.panel != undefined) {
+    if (DotPreviewer.panel != undefined) {
       DotPreviewer.panel.webview.html = `wait...`;
     }
 
@@ -192,6 +193,40 @@ export class DotPreviewer {
     });
   }
 
+  // save(filename: string, )
+  static save(name: string, content: string) {
+    window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"], {
+      title: 'choose a engine, dot is default',
+      placeHolder: 'choose a engine, dot is default'
+    }).then(engine => {
+
+      window.showSaveDialog({
+        filters: { 'images': ['svg'] },
+        // saveLabel: 'export'
+      }).then(uri => {
+        if (uri) {
+          viz.renderString(content, { engine }).then((data: string) => {
+            try {
+              workspace.fs.writeFile(uri, new TextEncoder().encode(data));
+            }
+            catch (err) {
+              window.showErrorMessage(`${err}`);
+            }
+            finally {
+              window.showInformationMessage(`save to file ${uri.toString()}`);
+            }
+          }).catch((err: any) => window.showErrorMessage(`${err}`));
+        }
+        else {
+          window.showErrorMessage(`fail to save graph ${name}`);
+        }
+      });
+
+
+    });
+  
+  
+  }
 }
 
 

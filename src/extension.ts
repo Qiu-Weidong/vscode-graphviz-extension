@@ -20,9 +20,9 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.commands.registerCommand("graphviz.export", (args: any) => {
-    // const name: string = args.title ? args.title : 'graphviz';
-    // const content: string = args.content;
-    
+    const name: string = args.title ? args.title : 'graphviz';
+    const content: string = args.content;
+    DotPreviewer.save(name, content);
   });
 
   // 注册 provider
