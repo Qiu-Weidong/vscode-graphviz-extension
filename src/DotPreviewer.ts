@@ -10,10 +10,12 @@ export class DotPreviewer {
   static panel: WebviewPanel | undefined;
   private currentContent: string = '';
   private uri: Uri;
+  private engine: string | undefined;
 
   constructor(uri: Uri) {
     this.uri = uri
     this.currentContent = '';
+    this.engine = undefined;
   }
 
   preview(name: string, content: string) {
@@ -28,44 +30,16 @@ export class DotPreviewer {
 
     else {
       // 渲染之。
-      viz.renderString(content).then((result: string) => {
-        
-        this.currentContent = content;
-        const html = this.getHTML(name, content);
-
-        // 如果没有 panel 则创建之。
-        if (DotPreviewer.panel == undefined) {
-
-          // 如果还没有 panel ，则创建一个新的 panel
-          DotPreviewer.panel = window.createWebviewPanel(
-            'preview', name, ViewColumn.Beside, {
-              enableScripts: true,
-              localResourceRoots: [
-                Uri.joinPath(this.uri, 'asset')
-              ]
-          }
-          );
-
-          DotPreviewer.panel.onDidDispose(() => {
-            DotPreviewer.panel?.dispose();
-
-            // 记得将 panel 设置为 undefined
-            DotPreviewer.panel = undefined;
-            this.currentContent = '';
-          });
-
-          // 创建图标
-          DotPreviewer.panel.iconPath = Uri.joinPath(this.uri, 'asset', 'icon.png');
-        }
-
-        DotPreviewer.panel.title = name;
-        DotPreviewer.panel.webview.html = html;
-
-        if (!DotPreviewer.panel.visible) DotPreviewer.panel.reveal();
-      }).catch((err: any) => {
-        window.showErrorMessage(`${err}`);
-        viz = new Viz({ Module, render });
-      });
+      if(! this.engine) {
+        window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"], {
+          title: 'choose a engine, dot is default',
+          placeHolder: 'choose a engine, dot is default'
+        }).then(engine => {
+          this.engine = engine || 'dot';
+          this.render(name, content, this.engine);
+        })
+      }
+      else this.render(name, content, this.engine);
     }
 
   }
@@ -82,16 +56,22 @@ export class DotPreviewer {
     </head>
     
     <body>
+      <div id="toolbar-container" style="position: fixed; width: 100%; background-color: darkred; z-index: 99;">
+      <vscode-button id="toolbar" appearance="icon" aria-label="Save Graph">
+                <span class="codicon codicon-save"></span>
+      </vscode-button>
+      </div>
       <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
       ${content}
       </div>
     
       <script>
+        const vscode = acquireVsCodeApi();
         const svg = document.getElementsByTagName('svg')[0];
     
     
         svg.onload = () => {
-    
+          vscode.postMessage('来自 panel 的消息');
           const container = document.getElementById('container');
           let scale = 1.0, maxScale = 4, minScale = 0.5;
           let isPointerdown = false, lastPointermove = { x: 0, y: 0 };
@@ -160,6 +140,56 @@ export class DotPreviewer {
     </body>
     
     </html>`;
+  }
+
+  render(name: string, content: string, engine: string) {
+    if(DotPreviewer.panel != undefined) {
+      DotPreviewer.panel.webview.html = `wait...`;
+    }
+
+    viz.renderString(content, { engine }).then((result: string) => {
+
+      this.currentContent = content;
+      const html = this.getHTML(name, result);
+
+      // 如果没有 panel 则创建之。
+      if (DotPreviewer.panel == undefined) {
+
+        // 如果还没有 panel ，则创建一个新的 panel
+        DotPreviewer.panel = window.createWebviewPanel(
+          'preview', name, ViewColumn.Beside, {
+          enableScripts: true,
+          localResourceRoots: [
+            Uri.joinPath(this.uri, 'asset')
+          ]
+        }
+        );
+
+        DotPreviewer.panel.onDidDispose(() => {
+          DotPreviewer.panel?.dispose();
+
+          // 记得将 panel 设置为 undefined
+          DotPreviewer.panel = undefined;
+          this.currentContent = '';
+          this.engine = undefined;
+        });
+
+        DotPreviewer.panel.webview.onDidReceiveMessage((e: any) => {
+          console.log('receive from panel: ', e);
+        });
+
+        // 创建图标
+        DotPreviewer.panel.iconPath = Uri.joinPath(this.uri, 'asset', 'icon.png');
+      }
+
+      DotPreviewer.panel.title = name;
+      DotPreviewer.panel.webview.html = html;
+
+      if (!DotPreviewer.panel.visible) DotPreviewer.panel.reveal();
+    }).catch((err: any) => {
+      window.showErrorMessage(`${err}`);
+      viz = new Viz({ Module, render });
+    });
   }
 
 }

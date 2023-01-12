@@ -15,8 +15,14 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const name: string = args.title ? args.title : 'graphviz';
     const content: string = args.content;
-    
     previewer.preview(name, content);
+    
+  });
+
+  vscode.commands.registerCommand("graphviz.export", (args: any) => {
+    // const name: string = args.title ? args.title : 'graphviz';
+    // const content: string = args.content;
+    
   });
 
   // 注册 provider
@@ -27,8 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.registerWebviewPanelSerializer('preview', {
 			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
 				console.log(`Got state: ${state}`);
-        // const column = vscode.window.activeTextEditor?.viewColumn;
-        // webviewPanel.reveal(column);
         webviewPanel.reveal();
 			}
 		});

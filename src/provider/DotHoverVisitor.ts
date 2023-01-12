@@ -44,7 +44,6 @@ export class DotHoverVisitor implements DotVisitor<void> {
     }
   }
   visitGraph(ctx: GraphContext) {
-    this.visitChildren(ctx);
     const stmt_list = ctx.stmt_list();
     if (this.positionInContext(stmt_list)) stmt_list.accept(this);
   }

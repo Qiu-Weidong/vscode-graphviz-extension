@@ -25,20 +25,34 @@ export class DotCodeLensVisitor implements DotVisitor<string> {
     const graph = ctx.DIGRAPH()?.symbol || ctx.GRAPH()?.symbol;
     let name = ctx.id()?.ID()?.symbol.text || ctx.id()?.NUMBER()?.text || ctx.id()?.STRING()?.text || '';
     if(name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length-1);
-    const label = '$(open-preview) Preview' + (name ? ` ${name}` : '');
+    const preview = `$(open-preview) Preview ${name}`.trim();
+    const save = `$(save) Export ${name}`.trim();
     if (graph) {
       const range = new Range(
         new Position(graph.line - 1, 0),
-        new Position(graph.line - 1, label.length)
+        new Position(graph.line - 1, preview.length)
+      );
+
+      const range2 = new Range(
+        new Position(graph.line - 1, preview.length+1),
+        new Position(graph.line-1, preview.length+1 + save.length)
       );
 
       this.codelens.push(
         new CodeLens(
           range,
           {
-            title: label,
+            title: preview,
             command: 'graphviz.generate',
             arguments: [{ title: name, content: result }]
+          }
+        ),
+        new CodeLens(
+          range2, 
+          {
+            title: save,
+            command: 'graphviz.export',
+            arguments: [{ title:name, content: result }]
           }
         )
       );
