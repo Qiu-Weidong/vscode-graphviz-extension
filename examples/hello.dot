@@ -1,5 +1,12 @@
+
+
+
+
 digraph G{
   Hello -> World;
   
-  bgcolor="transparent";
+  bgcolor="transparent:blue";
 }
+
+
+

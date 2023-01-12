@@ -1,4 +1,5 @@
 graph happiness {
+	bgcolor="transparent";
 	labelloc="t"
 	label="Mind map of Happiness.\nTwopi radial graph."
 	fontname="URW Chancery L, Apple Chancery, Comic Sans MS, cursive"

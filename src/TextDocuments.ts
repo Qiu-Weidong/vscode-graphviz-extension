@@ -37,7 +37,7 @@ class TextDocuments {
   }
 
   public updateDocument(document: TextDocument): void {
-    const documentText = document.getText().trim() + '\n'; // 注意一定要加上一个换行，否则最后一行如果是注释的话会报错。
+    const documentText = document.getText().trimEnd() + '\n'; // 注意一定要加上一个换行，否则最后一行如果是注释的话会报错。
     // 通过检查文本内容是否改变来更新语法树等信息。
     if(this.documents.get(document.uri)?.content == documentText) {
       return;

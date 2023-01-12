@@ -25,7 +25,7 @@ export class DotCodeLensVisitor implements DotVisitor<string> {
     const graph = ctx.DIGRAPH()?.symbol || ctx.GRAPH()?.symbol;
     let name = ctx.id()?.ID()?.symbol.text || ctx.id()?.NUMBER()?.text || ctx.id()?.STRING()?.text || '';
     if(name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length-1);
-    const label = 'Preview' + (name ? ` ${name}` : '');
+    const label = '$(open-preview) Preview' + (name ? ` ${name}` : '');
     if (graph) {
       const range = new Range(
         new Position(graph.line - 1, 0),
