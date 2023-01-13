@@ -47,7 +47,7 @@ export class DotPreviewPanel {
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
 
-    if(content) {
+    if (content) {
       this._render(title, content, extensionUri);
     }
     else {
@@ -98,7 +98,7 @@ export class DotPreviewPanel {
   }
 
   public static async save(title: string, content: string) {
-    const engine = await window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"],{
+    const engine = await window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"], {
       title: 'choose a engine, dot is default',
       placeHolder: 'choose a engine, dot is default'
     }) || 'dot';
@@ -110,14 +110,14 @@ export class DotPreviewPanel {
       filters: { 'images': [format] }
     });
 
-    if(uri) {
-      let result: string ;
+    if (uri) {
+      let result: string;
       try {
         result = await viz.renderString(content, { engine, format });
         workspace.fs.writeFile(uri, new TextEncoder().encode(result));
         window.showInformationMessage(`save to file ${uri.toString()}`);
-      } 
-      catch(err) {
+      }
+      catch (err) {
         window.showErrorMessage(`${err}`);
       }
     }
@@ -134,7 +134,7 @@ export class DotPreviewPanel {
       this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, svg);
       this._panel.title = title;
 
-      if(! this._panel.visible) this._panel.reveal();
+      if (!this._panel.visible) this._panel.reveal();
 
     }).catch((err: any) => {
       window.showErrorMessage(`${err}`);
@@ -187,8 +187,9 @@ export class DotPreviewPanel {
       Uri.joinPath(extensionUri, 'media', 'main.js')
     );
     // 使用 图标
-    const codiconsUri = webview.asWebviewUri(Uri.joinPath(extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
-
+    const codiconsUri = webview.asWebviewUri(
+      Uri.joinPath(extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
+    );
     // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
     return /*html*/`
       <!DOCTYPE html>
@@ -202,15 +203,21 @@ export class DotPreviewPanel {
           <link href="${codiconsUri}" rel="stylesheet" />
           <title>${title}</title>
         </head>
-        <body style="display: flex; flex-flow: column; min-height: 96vh;">
-        <div id="toolbar" style="width: 100%; z-index: 99;">
+        <body>
+        <div id="toolbar" style="width: 100%; z-index: 99; position: fixed">
           <vscode-button appearance="icon" aria-label="save">
             <span class="codicon codicon-check"></span>
           </vscode-button>
           <vscode-button autofocus>Button Text</vscode-button>
+          <vscode-dropdown>
+            <span slot="indicator" class="codicon codicon-settings"></span>
+            <vscode-option>Option Label #1</vscode-option>
+            <vscode-option>Option Label #2</vscode-option>
+            <vscode-option>Option Label #3</vscode-option>
+          </vscode-dropdown>
         </div>
 
-        <div id="container" style="display: flex;justify-content: center; align-items: center; flex: 1;">
+        <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
         ${svg}
         </div>
         </body>
