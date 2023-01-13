@@ -5,17 +5,7 @@ const { Module, render } = require('viz.js/full.render.js');
 
 let viz = new Viz({ Module, render });
 
-
-/**
- * This class manages the state and behavior of HelloWorld webview panels.
- *
- * It contains all the data and methods for:
- *
- * - Creating and rendering HelloWorld webview panels
- * - Properly cleaning up and disposing of webview resources when the panel is closed
- * - Setting the HTML (and by proxy CSS/JavaScript) content of the webview panel
- * - Setting message listeners so data can be passed between the webview and extension
- */
+// 将 panel 和文件对应起来
 export class DotPreviewPanel {
   public static currentPanel: DotPreviewPanel | undefined;
   private readonly _panel: WebviewPanel;
@@ -205,15 +195,24 @@ export class DotPreviewPanel {
         </head>
         <body>
         <div id="toolbar" style="width: 100%; z-index: 99; position: fixed">
-          <vscode-button appearance="icon" aria-label="save">
-            <span class="codicon codicon-check"></span>
+          <vscode-button appearance="icon" aria-label="back">
+            <span class="codicon codicon-arrow-small-left"></span>
           </vscode-button>
-          <vscode-button autofocus>Button Text</vscode-button>
+          <vscode-button appearance="icon" aria-label="refresh">
+            <span class="codicon codicon-refresh"></span>
+          </vscode-button>
+          <vscode-button appearance="icon" aria-label="save">
+            <span class="codicon codicon-save"></span>
+          </vscode-button>
+          
+          <!-- "dot", "circo", "fdp", "neato", "osage", "twopi" -->
           <vscode-dropdown>
-            <span slot="indicator" class="codicon codicon-settings"></span>
-            <vscode-option>Option Label #1</vscode-option>
-            <vscode-option>Option Label #2</vscode-option>
-            <vscode-option>Option Label #3</vscode-option>
+            <vscode-option>dot</vscode-option>
+            <vscode-option>circo</vscode-option>
+            <vscode-option>fdp</vscode-option>
+            <vscode-option>neato</vscode-option>
+            <vscode-option selected>osage</vscode-option>
+            <vscode-option>twopi</vscode-option>
           </vscode-dropdown>
         </div>
 
@@ -226,7 +225,9 @@ export class DotPreviewPanel {
   }
 
   private _getWebviewWaitingContent(webview: Webview, extensionUri: Uri, title: string) {
-    const imgUri = webview.asWebviewUri(Uri.joinPath(extensionUri, 'media', 'images', 'loader2.gif'));
+    const toolkitUri = webview.asWebviewUri(
+      Uri.joinPath(extensionUri, 'node_modules', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.js')
+    );
     return /*html*/ `
     <!DOCTYPE html>
       <html lang="en">
@@ -234,12 +235,14 @@ export class DotPreviewPanel {
           <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <script type="module" src="${toolkitUri}"></script>
           <title>${title}</title>
         </head>
         <body>
         <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
-          
-          <img src="${imgUri}" />
+          <div>
+          <vscode-progress-ring></vscode-progress-ring>
+          </div>
         </div>
         </body>
       </html>

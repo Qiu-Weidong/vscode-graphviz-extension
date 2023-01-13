@@ -8,6 +8,8 @@ window.addEventListener("load", main);
 
 // Main function that gets executed once the webview DOM loads
 function main() {
+  // 刚load的时候发一条消息，告诉vscode页面已经加载。
+
   // const howdyButton = document.getElementById("howdy");
   // howdyButton.addEventListener("click", handleHowdyClick);
 
@@ -78,10 +80,6 @@ function main() {
     }
 
   });
-
-
-
-
 }
 
 // Callback function that is executed when the howdy button is clicked
