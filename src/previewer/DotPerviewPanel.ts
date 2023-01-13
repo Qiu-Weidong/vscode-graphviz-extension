@@ -28,7 +28,7 @@ export class DotPreviewPanel {
     // the panel or when the panel is closed programmatically)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
-    // Set the HTML content for the webview panel
+    // 将状态设置为 waiting
     this._panel.webview.html = this._getWebviewWaitingContent(this._panel.webview, extensionUri, title);
 
     // 设置图标
@@ -107,7 +107,7 @@ export class DotPreviewPanel {
    * @returns A template string literal containing the HTML that should be
    * rendered within the webview panel
    */
-  private _getWebviewContent(webview: Webview, extensionUri: Uri) {
+  private _getWebviewContent(webview: Webview, extensionUri: Uri, title: string, svg: string) {
     // 找到 toolkit.js ， 还要 asWebviewUri
     const toolkitUri = webview.asWebviewUri(
       Uri.joinPath(extensionUri, 'node_modules', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.js')
@@ -127,7 +127,7 @@ export class DotPreviewPanel {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <script type="module" src="${toolkitUri}"></script>
           <script type="module" src="${mainUri}"></script>
-          <title>Hello World</title>
+          <title>${title}</title>
         </head>
         <body>
           <h1>Hello World!</h1>
@@ -138,11 +138,7 @@ export class DotPreviewPanel {
   }
 
   private _getWebviewWaitingContent(webview: Webview, extensionUri: Uri, title: string) {
-    // 找到 toolkit.js ， 还要 asWebviewUri
-    const toolkitUri = webview.asWebviewUri(
-      Uri.joinPath(extensionUri, 'node_modules', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.js')
-    );
-
+    const imgUri = webview.asWebviewUri(Uri.joinPath(extensionUri, 'media', 'images', 'loader2.gif'));
     return /*html*/ `
     <!DOCTYPE html>
       <html lang="en">
@@ -150,12 +146,13 @@ export class DotPreviewPanel {
           <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <script type="module" src="${toolkitUri}"></script>
           <title>${title}</title>
         </head>
         <body>
-          <h1>Please Wait</h1>
-          <vscode-button id="howdy">Howdy!</vscode-button>
+        <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
+          
+          <img src="${imgUri}" />
+        </div>
         </body>
       </html>
     `;
