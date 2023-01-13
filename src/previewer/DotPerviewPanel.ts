@@ -1,4 +1,5 @@
-import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
+import { TextEncoder } from "util";
+import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn, workspace } from "vscode";
 const Viz = require("viz.js");
 const { Module, render } = require('viz.js/full.render.js');
 
@@ -96,7 +97,30 @@ export class DotPreviewPanel {
     }
   }
 
-  public static save(title: string, content: string) {
+  public static async save(title: string, content: string) {
+    const engine = await window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"],{
+      title: 'choose a engine, dot is default',
+      placeHolder: 'choose a engine, dot is default'
+    }) || 'dot';
+    const format = await window.showQuickPick(["svg", "dot", "xdot", "plain", "plain-ext", "ps", "ps2", "json", "json0"], {
+      title: 'choose a format, svg is default',
+      placeHolder: 'choose a format, svg is default'
+    }) || 'svg';
+    const uri = await window.showSaveDialog({
+      filters: { 'images': [format] }
+    });
+
+    if(uri) {
+      let result: string ;
+      try {
+        result = await viz.renderString(content, { engine, format });
+        workspace.fs.writeFile(uri, new TextEncoder().encode(result));
+        window.showInformationMessage(`save to file ${uri.toString()}`);
+      } 
+      catch(err) {
+        window.showErrorMessage(`${err}`);
+      }
+    }
 
   }
 
