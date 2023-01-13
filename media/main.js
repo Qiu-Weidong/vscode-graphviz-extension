@@ -8,8 +8,80 @@ window.addEventListener("load", main);
 
 // Main function that gets executed once the webview DOM loads
 function main() {
-  const howdyButton = document.getElementById("howdy");
-  howdyButton.addEventListener("click", handleHowdyClick);
+  // const howdyButton = document.getElementById("howdy");
+  // howdyButton.addEventListener("click", handleHowdyClick);
+
+  const container = document.getElementById('container');
+  const svg = container.getElementsByTagName('svg')[0];
+
+  let scale = 1.0, maxScale = 4, minScale = 0.5;
+  let isPointerdown = false, lastPointermove = { x: 0, y: 0 };
+  let x = 0, y = 0;
+
+  // 直接将它的尺寸设置为 container 大小即可。
+  svg.style.width = container.clientWidth + 'px';
+  svg.style.height = container.clientHeight + 'px';
+  document.body.onresize = () => {
+    svg.style.width = container.clientWidth + 'px';
+    svg.style.height = container.clientHeight + 'px';
+  }
+
+  // 绑定滚轮缩放
+  container.addEventListener('wheel', (e) => {
+    let ratio = 1.1;
+    // 缩小
+    if (e.deltaY > 0) {
+      ratio = 1 / 1.1;
+    }
+    scale *= ratio;
+    if (scale > maxScale) scale = maxScale;
+    else if (scale < minScale) scale = minScale;
+
+    // scale 后面不要有空格 translateX 里面一定要有单位
+    const transform = `translateX(${x}px) translateY(${y}px) scale(${scale})`;
+    svg.style.transform = transform;
+
+    // 预防执行默认的行为
+    e.preventDefault();
+  });
+
+  // 绑定拖拽功能
+  svg.addEventListener('pointerdown', (e) => {
+    if (e.button == 0) {
+      isPointerdown = true;
+      svg.setPointerCapture(e.pointerId);
+      lastPointermove = { x: e.clientX, y: e.clientY };
+      e.preventDefault();
+    }
+  });
+
+  svg.addEventListener('pointerup', (e) => {
+    if (e.button == 0) {
+      isPointerdown = false;
+      e.preventDefault();
+    }
+
+  });
+
+  svg.addEventListener('pointermove', (e) => {
+    if (isPointerdown) {
+      const current = { x: e.clientX, y: e.clientY };
+      const dx = current.x - lastPointermove.x;
+      const dy = current.y - lastPointermove.y;
+      lastPointermove = { x: current.x, y: current.y };
+      x += dx; y += dy;
+
+      const transform = `translateX(${x}px) translateY(${y}px) scale(${scale})`;
+      svg.style.transform = transform;
+
+      e.preventDefault();
+    }
+
+  });
+
+
+
+
 }
 
 // Callback function that is executed when the howdy button is clicked
@@ -50,3 +122,4 @@ function handleHowdyClick() {
     text: "Hey there partner! 🤠",
   });
 }
+

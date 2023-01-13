@@ -7,23 +7,20 @@ import { DotHoverProvider } from './provider/DotHoverProvider';
 import { DotFormattingEditProvider } from './provider/DotFormattingEditProvider';
 import { DotSymbolProvider } from './provider/DotSymbolProvider';
 import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
-// import { DotPreviewer } from './DotPreviewer';
 import { DotPreviewPanel } from './previewer/DotPerviewPanel';
 
 export function activate(context: vscode.ExtensionContext) {
-  // const previewer = new DotPreviewer(context.extensionUri);
 
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const title: string = args.title ? args.title : 'graphviz';
     const content: string = args.content;
-    // previewer.preview(name, content);
-    DotPreviewPanel.render(context.extensionUri, title, content);
+    DotPreviewPanel.preview(context.extensionUri, title, content);
   });
 
   vscode.commands.registerCommand("graphviz.export", (args: any) => {
-    const name: string = args.title ? args.title : 'graphviz';
+    const title: string = args.title ? args.title : 'graphviz';
     const content: string = args.content;
-    // DotPreviewer.save(name, content);
+    DotPreviewPanel.save(title, content);
   });
 
   // 注册 provider

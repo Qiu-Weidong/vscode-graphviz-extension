@@ -1,4 +1,9 @@
 import { Disposable, Webview, WebviewPanel, window, Uri, ViewColumn } from "vscode";
+const Viz = require("viz.js");
+const { Module, render } = require('viz.js/full.render.js');
+
+let viz = new Viz({ Module, render });
+
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -15,27 +20,38 @@ export class DotPreviewPanel {
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];
 
+  private _currentContent: string;
+  private _engine: string;
+
   /**
    * The DotPreviewPanel class private constructor (called only from the render method).
    *
    * @param panel A reference to the webview panel
    * @param extensionUri The URI of the directory containing the extension
    */
-  private constructor(panel: WebviewPanel, extensionUri: Uri, title: string) {
+  private constructor(panel: WebviewPanel, extensionUri: Uri, title: string, engine: string, content?: string) {
     this._panel = panel;
 
     // Set an event listener to listen for when the panel is disposed (i.e. when the user closes
     // the panel or when the panel is closed programmatically)
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
-    // 将状态设置为 waiting
-    this._panel.webview.html = this._getWebviewWaitingContent(this._panel.webview, extensionUri, title);
-
     // 设置图标
     this._panel.iconPath = Uri.joinPath(extensionUri, 'media', 'icon.png');
 
+    this._currentContent = '';
+
+    this._engine = engine;
+
     // Set an event listener to listen for messages passed from the webview context
     this._setWebviewMessageListener(this._panel.webview);
+
+    if(content) {
+      this._render(title, content, extensionUri);
+    }
+    else {
+      this._panel.webview.html = this._getWebviewWaitingContent(this._panel.webview, extensionUri, title);
+    }
   }
 
   /**
@@ -44,15 +60,18 @@ export class DotPreviewPanel {
    *
    * @param extensionUri The URI of the directory containing the extension.
    */
-  public static render(extensionUri: Uri, title: string, content: string) {
-    if (DotPreviewPanel.currentPanel) {
-      // 这里需要先判断渲染内容是否改变。
+  public static async preview(extensionUri: Uri, title: string, content: string) {
+    content = content.trim();
+    title = title.trim();
 
+    if (!DotPreviewPanel.currentPanel) {
+      // 选择引擎，创建的时候就要选择引擎
+      const engine = await window.showQuickPick(["dot", "circo", "fdp", "neato", "osage", "twopi"], {
+        title: 'choose a engine, dot is default',
+        placeHolder: 'choose a engine, dot is default'
+      });
 
-      // If the webview panel already exists reveal it
-      DotPreviewPanel.currentPanel._panel.reveal(ViewColumn.One);
-    } else {
-      // If a webview panel does not already exist create and show a new one
+      // 创建 panel
       const panel = window.createWebviewPanel(
         // Panel view type
         "preview",
@@ -66,14 +85,41 @@ export class DotPreviewPanel {
           enableScripts: true,
         }
       );
-
       // 设置 currentPanel
-      DotPreviewPanel.currentPanel = new DotPreviewPanel(panel, extensionUri, title);
+      DotPreviewPanel.currentPanel = new DotPreviewPanel(panel, extensionUri, title, engine || 'dot');
+    }
+
+    // 这里已经确定创建了 panel。
+    if (DotPreviewPanel.currentPanel._currentContent != content) {
+      // 重新渲染
+      DotPreviewPanel.currentPanel._render(title, content, extensionUri);
     }
   }
 
   public static save(title: string, content: string) {
 
+  }
+
+  private _render(title: string, content: string, extensionUri: Uri) {
+    // 首先将内容设置为 waiting
+    this._panel.webview.html = this._getWebviewWaitingContent(this._panel.webview, extensionUri, title);
+
+
+    viz.renderString(content, { engine: this._engine || 'dot' }).then((svg: string) => {
+      this._currentContent = content;
+      this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, svg);
+      this._panel.title = title;
+
+      if(! this._panel.visible) this._panel.reveal();
+
+    }).catch((err: any) => {
+      window.showErrorMessage(`${err}`);
+      viz = new Viz({ Module, render });
+
+      this._currentContent = '';
+      this._panel.webview.html = this._getWebviewErrorContent(this._panel.webview, extensionUri, title, err);
+      this._panel.title = title;
+    });
   }
 
   /**
@@ -130,8 +176,9 @@ export class DotPreviewPanel {
           <title>${title}</title>
         </head>
         <body>
-          <h1>Hello World!</h1>
-          <vscode-button id="howdy">Howdy!</vscode-button>
+        <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
+        ${svg}
+        </div>
         </body>
       </html>
     `;
@@ -152,6 +199,25 @@ export class DotPreviewPanel {
         <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
           
           <img src="${imgUri}" />
+        </div>
+        </body>
+      </html>
+    `;
+  }
+
+  private _getWebviewErrorContent(webview: Webview, extensionUri: Uri, title: string, err: string) {
+    return /*html*/ `
+    <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${title}</title>
+        </head>
+        <body>
+        <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
+          ${err}
         </div>
         </body>
       </html>
