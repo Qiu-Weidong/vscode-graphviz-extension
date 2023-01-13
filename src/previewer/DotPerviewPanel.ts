@@ -186,6 +186,8 @@ export class DotPreviewPanel {
     const mainUri = webview.asWebviewUri(
       Uri.joinPath(extensionUri, 'media', 'main.js')
     );
+    // 使用 图标
+    const codiconsUri = webview.asWebviewUri(Uri.joinPath(extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
 
     // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
     return /*html*/`
@@ -197,10 +199,18 @@ export class DotPreviewPanel {
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <script type="module" src="${toolkitUri}"></script>
           <script type="module" src="${mainUri}"></script>
+          <link href="${codiconsUri}" rel="stylesheet" />
           <title>${title}</title>
         </head>
-        <body>
-        <div id="container" style="display: flex;justify-content: center; align-items: center; height: 100vh">
+        <body style="display: flex; flex-flow: column; min-height: 96vh;">
+        <div id="toolbar" style="width: 100%; z-index: 99;">
+          <vscode-button appearance="icon" aria-label="save">
+            <span class="codicon codicon-check"></span>
+          </vscode-button>
+          <vscode-button autofocus>Button Text</vscode-button>
+        </div>
+
+        <div id="container" style="display: flex;justify-content: center; align-items: center; flex: 1;">
         ${svg}
         </div>
         </body>
