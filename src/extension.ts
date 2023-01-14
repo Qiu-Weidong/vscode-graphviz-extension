@@ -7,16 +7,16 @@ import { DotHoverProvider } from './provider/DotHoverProvider';
 import { DotFormattingEditProvider } from './provider/DotFormattingEditProvider';
 import { DotSymbolProvider } from './provider/DotSymbolProvider';
 import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
-import { DotPreviewer } from './previewer/DotPreviewer';
+import { DotPreviewPanel } from './previewer/DotPreviewer';
 
 export function activate(context: vscode.ExtensionContext) {
-  const previewer = new DotPreviewer(context.extensionUri);
 
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const title: string = args.title || 'graphviz';
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
     if(document) {
-      previewer.preview(title, document);
+      // previewer.preview(title, document);
+      DotPreviewPanel.preview( context.extensionUri, title, document);
     }
   });
 

@@ -21,7 +21,7 @@ function main() {
   selector.onchange = (e) => {
     vscode.postMessage({
       command: 'switch-engine',
-      param: e.target.value
+      text: e.target.value
     });
     console.log('触发了下拉菜单', e.target.value);
   }

@@ -6,36 +6,23 @@ let viz = new Viz({ Module, render });
 
 
 
-export class DotPreviewer {
-  private _panels: Map<Uri, DotPreviewPanel>;
-  private _extensionUri: Uri;
+// export class DotPreviewer {
+//   private _panels: Map<Uri, DotPreviewPanel>;
+//   private _extensionUri: Uri;
 
-  constructor(extensionUri: Uri) {
-    this._panels = new Map();
-    this._extensionUri = extensionUri;
-  }
+//   constructor(extensionUri: Uri) {
+//     this._panels = new Map();
+//     this._extensionUri = extensionUri;
+//   }
 
-
-  public preview(title: string, document: TextDocument) {
-    let panel = this._panels.get(document.uri);
-    if(! panel) {
-      panel = new DotPreviewPanel(this._extensionUri, document.uri, title);
-      this._panels.set(document.uri, panel);
-      panel.render(title, document.getText(), this._extensionUri);
-    }
-    else {
-      panel.render(title, document.getText(), this._extensionUri);
-    }
-    
-  }
-
-}
+// }
 
 
 
 
 
 export class DotPreviewPanel {
+  // 所有的 panel
   private static _panels: Map<Uri, DotPreviewPanel> = new Map() ;
 
   private _disposables: Disposable[] = [];
@@ -62,7 +49,7 @@ export class DotPreviewPanel {
   public dispose() {
     this._panel.dispose();
     DotPreviewPanel._panels.delete(this._documentUri);
-    
+
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
       if (disposable) {
@@ -78,7 +65,7 @@ export class DotPreviewPanel {
         const text = message.text;
 
         switch (command) {
-          case "hello":
+          case "switch-engine":
             window.showInformationMessage(text);
             break;
         }
@@ -159,6 +146,16 @@ export class DotPreviewPanel {
       this._panel.title = title;
     });
 
+  }
+
+
+  public static preview(extensionUri: Uri, title: string, document: TextDocument) {
+    let panel = DotPreviewPanel._panels.get(document.uri);
+    if(! panel) {
+      panel = new DotPreviewPanel(extensionUri, document.uri, title);
+      DotPreviewPanel._panels.set(document.uri, panel);
+    }
+    panel.render(title, document.getText(), extensionUri);
   }
 
 }
