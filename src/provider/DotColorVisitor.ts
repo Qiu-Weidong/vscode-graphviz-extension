@@ -271,6 +271,7 @@ const colors: Map<string, Color> = new Map([
   ["whitesmoke", new Color(0.9607843137254902, 0.9607843137254902, 0.9607843137254902, 1)],
   ["yellowgreen", new Color(0.6039215686274509, 0.803921568627451, 0.19607843137254902, 1)],
   ["rebeccapurple", new Color(0.4, 0.2, 0.6, 1)],
+  ["transparent", new Color(0, 0, 0, 0)]
 ]);
 
 

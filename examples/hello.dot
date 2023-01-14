@@ -5,10 +5,7 @@
 digraph G{
 
   Hello -> World ;
-  bgcolor="transparent:blue: green: yellow";
-
-  node [shape="hexagon", color=lightgoldenrodyellow];
-  // edge [color=darkorchid];
+  bgcolor="transparent:darkgreen:crimson";
 }
 
 
