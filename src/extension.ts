@@ -40,6 +40,11 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}
+
+
+  vscode.workspace.onDidOpenTextDocument(document => {
+    DotPreviewPanel.updateDocument(document);
+  })
 }
 
 
