@@ -23,7 +23,7 @@ type value = {
 
 class TextDocuments {
 
-  private documents: Map<Uri, value>;
+  private documents: Map<string, value>;
   private diangostics: DiagnosticCollection;
 
   constructor() {
@@ -32,14 +32,14 @@ class TextDocuments {
   }
 
   public removeDocument(document: TextDocument): void {
-    if (!this.documents.has(document.uri)) return;
-    this.documents.delete(document.uri);
+    if (!this.documents.has(document.uri.toString())) return;
+    this.documents.delete(document.uri.toString());
   }
 
   public updateDocument(document: TextDocument): void {
     const documentText = document.getText().trimEnd() + '\n'; // 注意一定要加上一个换行，否则最后一行如果是注释的话会报错。
     // 通过检查文本内容是否改变来更新语法树等信息。
-    if(this.documents.get(document.uri)?.content == documentText) {
+    if(this.documents.get(document.uri.toString())?.content == documentText) {
       return;
     }
     
@@ -70,35 +70,35 @@ class TextDocuments {
     // 检查属性是否正确，使用 warning 。
     
     this.diangostics.set(document.uri, diagnostics);
-    this.documents.set(document.uri, { tokens, tree, content: documentText, nodes, symbols });
+    this.documents.set(document.uri.toString(), { tokens, tree, content: documentText, nodes, symbols });
   }
 
   public getTokens(document: TextDocument): CommonTokenStream {
-    if(! this.documents.has(document.uri)) this.updateDocument(document);
-    const result = this.documents.get(document.uri) as value;
+    if(! this.documents.has(document.uri.toString())) this.updateDocument(document);
+    const result = this.documents.get(document.uri.toString()) as value;
     return result?.tokens;
   }
 
   public getTree(document: TextDocument): ParseTree {
-    if(! this.documents.has(document.uri)) this.updateDocument(document);
-    const result = this.documents.get(document.uri) as value;
+    if(! this.documents.has(document.uri.toString())) this.updateDocument(document);
+    const result = this.documents.get(document.uri.toString()) as value;
     return result.tree;
   }
 
   public getNodes(document: TextDocument): Map<string, string[]> {
-    if(! this.documents.has(document.uri)) this.updateDocument(document);
-    const result = this.documents.get(document.uri) as value;
+    if(! this.documents.has(document.uri.toString())) this.updateDocument(document);
+    const result = this.documents.get(document.uri.toString()) as value;
     return result.nodes;
   }
 
   public getSymbols(document: TextDocument): DocumentSymbol[] {
-    if(! this.documents.has(document.uri)) this.updateDocument(document);
-    const result = this.documents.get(document.uri) as value;
+    if(! this.documents.has(document.uri.toString())) this.updateDocument(document);
+    const result = this.documents.get(document.uri.toString()) as value;
     return result.symbols;
   }
 
   public contains(document: TextDocument) : boolean {
-    return this.documents.has(document.uri);
+    return this.documents.has(document.uri.toString());
   }
 
 }

@@ -1,5 +1,7 @@
 // 所有属性
 
+import { CompletionItem, CompletionItemKind, MarkdownString, SnippetString, Uri } from "vscode";
+
 
 // Attribute Type 类型名称，取值范围使用一个正则表达式来校验
 // 共 33 种类型 178中属性
@@ -87,10 +89,10 @@ export const attributes = [
   }, { name: "label", usedby: ['Edges', 'Nodes', 'Graphs', 'Clusters'], type: ['lblString'], description: `Text label attached to objects.`, }, {
     name: "label_scheme", usedby: ['Graphs'], type: ['int'], description: `Whether to treat a node whose name has the form |edgelabel|* as a special node representing an edge label..\n sfdp only.`,
   }, { name: "labelangle", usedby: ['Edges'], type: ['double'], description: `The angle (in degrees) in polar coordinates of the head & tail edge labels..`, },
-  { name: "labeldistance", usedby: ['Edges'], type: ['double'], description: `Scaling factor for the distance of headlabel / taillabel from the head / tail nodes..`, }, 
-  { name: "labelfloat", usedby: ['Edges'], type: ['bool'], description: `If true, allows edge labels to be less constrained in position.`, }, 
-  { name: "labelfontcolor", usedby: ['Edges'], type: ['color'], description: `Color used for headlabel and taillabel..`, }, 
-  { name: "labelfontname", usedby: ['Edges'], type: ['string'], description: `Font for headlabel and taillabel.`, }, 
+  { name: "labeldistance", usedby: ['Edges'], type: ['double'], description: `Scaling factor for the distance of headlabel / taillabel from the head / tail nodes..`, },
+  { name: "labelfloat", usedby: ['Edges'], type: ['bool'], description: `If true, allows edge labels to be less constrained in position.`, },
+  { name: "labelfontcolor", usedby: ['Edges'], type: ['color'], description: `Color used for headlabel and taillabel..`, },
+  { name: "labelfontname", usedby: ['Edges'], type: ['string'], description: `Font for headlabel and taillabel.`, },
   { name: "labelfontsize", usedby: ['Edges'], type: ['double'], description: `Font size of headlabel and taillabel.`, }, {
     name: "labelhref", usedby: ['Edges'], type: ['escString'], description: `Synonym for labelURL.\n map, svg only.`,
   }, { name: "labeljust", usedby: ['Graphs', 'Clusters'], type: ['string'], description: `Justification for graph & cluster labels.`, },
@@ -101,9 +103,9 @@ export const attributes = [
   }, {
     name: "labelURL", usedby: ['Edges'], type: ['escString'], description: `If defined, labelURL is the link used for the label of an edge.\n map, svg only.`,
   }, { name: "landscape", usedby: ['Graphs'], type: ['bool'], description: `If true, the graph is rendered in landscape mode.`, },
-  { name: "layer", usedby: ['Edges', 'Nodes', 'Clusters'], type: ['layerRange'], description: `Specifies layers in which the node, edge or cluster is present.`, }, 
-  { name: "layerlistsep", usedby: ['Graphs'], type: ['string'], description: `The separator characters used to split attributes of type layerRange into a list of ranges..`, }, 
-  { name: "layers", usedby: ['Graphs'], type: ['layerList'], description: `A linearly ordered list of layer names attached to the graph.`, }, 
+  { name: "layer", usedby: ['Edges', 'Nodes', 'Clusters'], type: ['layerRange'], description: `Specifies layers in which the node, edge or cluster is present.`, },
+  { name: "layerlistsep", usedby: ['Graphs'], type: ['string'], description: `The separator characters used to split attributes of type layerRange into a list of ranges..`, },
+  { name: "layers", usedby: ['Graphs'], type: ['layerList'], description: `A linearly ordered list of layer names attached to the graph.`, },
   { name: "layerselect", usedby: ['Graphs'], type: ['layerRange'], description: `Selects a list of layers to be emitted.`, }, {
     name: "layersep", usedby: ['Graphs'], type: ['string'], description: `The separator characters for splitting the layers attribute into a list of layer names..`,
   }, { name: "layout", usedby: ['Graphs'], type: ['string'], description: `Which layout engine to use.`, }, {
@@ -294,4 +296,288 @@ export const attributeValue = new Map([
   ['smoothType', ['none', 'avg_dist', 'graph_dist', 'power_dist', 'rng', 'spring', 'triangle']],
 ]);
 
+// 采用单例模式
+export class Attribute {
+  private static extensionUri: Uri;
+  private static instance: Attribute | undefined = undefined;
+  public static getInstance(): Attribute {
+    if (Attribute.instance) return Attribute.instance;
+    return new Attribute();
+  }
 
+  public static setExtensionUri(extensionUri: Uri) {
+    Attribute.extensionUri = extensionUri;
+  }
+
+  private readonly node_attrs: CompletionItem[];
+  private readonly edge_attrs: CompletionItem[];
+  private readonly cluster_attrs: CompletionItem[];
+  private readonly subgraph_attrs: CompletionItem[];
+  private readonly graph_attrs: CompletionItem[];
+  private attrMap: Map<string, CompletionItem[]>;
+
+  private constructor() {
+    this.node_attrs = this._filterAttribute('Nodes');
+    this.edge_attrs = this._filterAttribute('Edges');
+    this.cluster_attrs = this._filterAttribute('Clusters');
+    this.graph_attrs = this._filterAttribute('Graphs');
+    this.subgraph_attrs = this._filterAttribute('Subgraphs');
+
+    this.attrMap = new Map();
+    this.attrMap.set('bool', this._getBoolValue());
+    this.attrMap.set('arrowType', this._getArrowTypeValue());
+    this.attrMap.set('clusterMode', this._getClusterModeValue());
+    this.attrMap.set('color', this._getColorValue());
+    this.attrMap.set('dirType', this._getDirTypeValue());
+    this.attrMap.set('outputMode', this._getOutputModeValue());
+    this.attrMap.set('packMode', this._getPackModeValue());
+    this.attrMap.set('pagedir', this._getPagedirValue());
+    this.attrMap.set('quadType', this._getQuadTypeValue());
+    this.attrMap.set('rankdir', this._getRankdirValue());
+    this.attrMap.set('rankType', this._getRankTypeValue());
+    this.attrMap.set('shape', this._getShapeValue());
+    this.attrMap.set('smoothType', this._getSmoothValue());
+  }
+
+
+  public provideValueOfAttribute(attrName: string): CompletionItem[] {
+    const attr = attributes.find(item => item.name == attrName);
+    let result: CompletionItem[] = [];
+    if(attr) {
+      for(const ty of attr.type) {
+        result.push(...(this.attrMap.get(ty)||[]));
+      }
+    }
+    return result;
+  }
+
+  public provideSubgraphAttribute() {
+    return this.subgraph_attrs;
+  }
+
+  public providegraphAttribute() {
+    return this.graph_attrs;
+  }
+
+  public provideEdgeAttribute() {
+    return this.edge_attrs;
+  }
+
+  public provideNodeAttribute() {
+    return this.node_attrs;
+  }
+
+  public provideClusterAttribute() {
+    return this.cluster_attrs;
+  }
+
+  private _filterAttribute(attr: string) {
+    return attributes.filter(item => item.usedby.includes(attr)).map(
+      item => {
+        let result = new CompletionItem(item.name, CompletionItemKind.Property);
+        result.detail = item.description;
+        if(item.type.length == 1 && item.type.includes('string')) {
+          result.insertText = new SnippetString(`${item.name} = "$1"`);
+        }
+        return result;
+      }
+    );
+  }
+
+  private _getBoolValue(): CompletionItem[] {
+    return ['true', 'false'].map(
+      value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.detail = `Boolean; true or false.`;
+        return ret;
+      }
+    );
+  }
+
+  private _getArrowTypeValue(): CompletionItem[] {
+    return ['normal', 'inv', 'dot', 'invdot', 'odot', 'invodot', 'none', 'tee',
+    'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
+    'open', 'halfopen', 'vee'].map(value => {
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = new MarkdownString(`![img](${Uri.joinPath(
+        Attribute.extensionUri, 'asset', 'arrowType', value + '.gif')})`
+      );
+      ret.detail = `Edge arrowhead shape`;
+      return ret;
+    });
+  }
+
+  private _getClusterModeValue(): CompletionItem[] {
+    return ['local', 'global', 'none'].map(
+      value => new CompletionItem(value, CompletionItemKind.Constant)
+    );
+  }
+
+  private _getColorValue(): CompletionItem[] {
+    return ['silver', 'gray', 'white', 'maroon', 'red', 'purple', 'fuchsia', 'green',
+      'lime', 'olive', 'yellow', 'navy', 'blue', 'teal', 'aqua', 'orange', 'aliceblue',
+      'antiquewhite', 'aquamarine', 'azure', 'beige', 'bisque', 'blanchedalmond', 'blueviolet',
+      'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue',
+      'cornsilk', 'crimson', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen',
+      'darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid',
+      'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey',
+      'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue',
+      'firebrick', 'floralwhite', 'forestgreen', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod',
+      'greenyellow', 'grey', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki',
+      'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral',
+      'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgreen', 'lightgrey', 'lightpink',
+      'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey',
+      'lightsteelblue', 'lightyellow', 'limegreen', 'linen', 'mediumaquamarine', 'mediumblue',
+      'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen',
+      'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin',
+      'navajowhite', 'oldlace', 'olivedrab', 'orangered', 'orchid', 'palegoldenrod', 'palegreen',
+      'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum',
+      'powderblue', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen',
+      'seashell', 'sienna', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen',
+      'steelblue', 'tan', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'whitesmoke',
+      'yellowgreen', 'rebeccapurple'
+    ].map(value => {
+      return new CompletionItem(value, CompletionItemKind.Color);
+    });
+  }
+
+  private _getDirTypeValue(): CompletionItem[] {
+    return ['forward', 'back', 'both', 'none'].map(value => {
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = new MarkdownString(`![](${Uri.joinPath(
+        Attribute.extensionUri, 'asset', 'dirType', value + '.gif'
+      )})`);
+      ret.detail = `Edge arrow direction type`;
+      return ret;
+    });
+  }
+
+  private _getOutputModeValue(): CompletionItem[] {
+    const pairs = [
+      {
+        name: 'breadthfirst',
+        detail: `The default "breadthfirst" is the simplest, but when the graph layout does not avoid edge-node overlap, this mode will sometimes have edges drawn over nodes and sometimes on top of nodes.`
+      },{
+        name: 'nodesfirst',
+        detail: `If the mode "nodesfirst" is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.`
+      },{
+        name: 'edgesfirst',
+        detail: `On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing "edgesfirst".`
+      }
+    ];
+
+    return pairs.map(item => {
+      const ret = new CompletionItem(item.name, CompletionItemKind.Constant);
+      ret.documentation = item.detail;
+      ret.detail = `The order in which nodes and edges are drawn in output.`;
+      return ret;
+    });
+  }
+
+  private _getPackModeValue(): CompletionItem[] {
+    const ret = [
+      new CompletionItem('none', CompletionItemKind.Constant),
+      new CompletionItem('clust', CompletionItemKind.Constant),
+      new CompletionItem('graph', CompletionItemKind.Constant),
+      new CompletionItem('array(_flags)?(%d)?', CompletionItemKind.Constant)
+    ];
+    ret.forEach(item => {
+      item.detail = `How closely to pack together graph components`;
+      item.documentation = documentation;});
+
+    const documentation = `The modes "node", "clust" or "graph" specify that the components should be packed together tightly, using the specified granularity. A value of "node" causes packing at the node and edge level, with no overlapping of these objects. This produces a layout with the least area, but it also allows interleaving, where a node of one component may lie between two nodes in another component. A value of "graph" does a packing using the bounding box of the component. Thus, there will be a rectangular region around a component free of elements of any other component. A value of "clust" guarantees that top-level clusters are kept intact. What effect a value has also depends on the layout algorithm. For example, neato does not support clusters, so a value of "clust" will have the same effect as the default "node" value.
+
+    The mode "array(_flag)?(%d)?" indicates that the components should be packed at the graph level into an array of graphs. By default, the components are in row-major order, with the number of columns roughly the square root of the number of components. If the optional flags contains 'c', then column-major order is used. Finally, if the optional integer suffix is used, this specifies the number of columns for row-major or the number of rows for column-major. Thus, the mode "array_c4" indicates array packing, with 4 rows, starting in the upper left and going down the first column, then down the second column, etc., until all components are used.
+
+    If a graph is smaller than the array cell it occupies, it is centered by default. The optional flags may contain 't', 'b', 'l', or 'r', indicating that the graphs should be aligned along the top, bottom, left or right, respectively.
+    
+    If the optional flags contains 'u', this causes the insertion order of elements in the array to be determined by user-supplied values. Each component can specify its sort value by a non-negative integer using the sortv attribute. Components are inserted in order, starting with the one with the smallest sort value. If no sort value is specified, zero is used.
+    `;
+    return ret;
+  }
+
+  private _getPagedirValue(): CompletionItem[] {
+    const ret = ['BL', 'BR', 'TL', 'TR', 'RB', 'RT', 'LB', 'LT'];
+    const documentation = `These specify the 8 row or column major orders for traversing a rectangular array, the first character corresponding to the major order and the second to the minor order. Thus, for "BL", the major order is from bottom to top, and the minor order is from left to right. This means the bottom row is traversed first, from left to right, then the next row up, from left to right, and so on, until the topmost row is traversed.`;
+    return ret.map(value => {
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = documentation;
+      ret.detail = `Page Direction`;
+      return ret;
+    });
+  }
+
+  private _getQuadTypeValue(): CompletionItem[] {
+    const documentation = `Using "fast" gives about a 2-4 times overall speedup compared with "normal", though layout quality can suffer a little.`;
+    return ['normal', 'fast', 'none'].map(value => {
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = documentation;
+      return ret;
+    });
+  }
+
+  private _getRankdirValue(): CompletionItem[] {
+    const documentation = `Corresponding to directed graphs drawn from top to bottom, from left to right, from bottom to top, and from right to left, respectively.`;
+    return ['normal', 'fast', 'none'].map(value => {
+      const ret= new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = documentation;
+      ret.detail = `Direction to draw directed graphs (one rank at a time)`;
+      return ret;
+    });
+  }
+
+  private _getRankTypeValue(): CompletionItem[] {
+    const detail = `Rank constraints on the nodes in a subgraph`;
+    return ['same', 'min', 'source', 'max', 'sink'].map(value => {
+      const ret= new CompletionItem(value, CompletionItemKind.Constant);
+      ret.detail = detail;
+      return ret;
+    })
+  }
+
+  private _getShapeValue(): CompletionItem[] {
+    const result = ['box', 'polygon', 'ellipse', 'oval', 'circle', 'point', 'egg',
+    'triangle', 'plaintext', 'plain', 'diamond', 'trapezium', 'parallelogram',
+    'house', 'pentagon', 'hexagon', 'septagon', 'octagon', 'doublecircle',
+    'doubleoctagon', 'tripleoctagon', 'invtriangle', 'invtrapezium',
+    'invhouse', 'Mdiamond', 'Msquare', 'Mcircle', 'rect', 'rectangle',
+    'square', 'star', 'none', 'underline', 'cylinder', 'note', 'tab',
+    'folder', 'box3d', 'component', 'promoter', 'cds', 'terminator',
+    'utr', 'primersite', 'restrictionsite', 'fivepoverhang', 'threepoverhang',
+    'noverhang', 'assembly', 'signature', 'insulator', 'ribosite', 'rnastab',
+    'proteasesite', 'proteinstab', 'rpromoter', 'rarrow', 'larrow', 'lpromoter'].map(value => {
+      const ret= new CompletionItem(value, CompletionItemKind.Constant);
+      ret.documentation = new MarkdownString(`![](${
+        Uri.joinPath(Attribute.extensionUri, 'asset', 'shape', value + '.gif')
+      })`);
+      ret.detail = `the shape of a node`;
+      return ret;
+    });
+
+    const record = new CompletionItem('record', CompletionItemKind.Constant);
+    record.detail = `Record-based Nodes`;
+    record.documentation = new MarkdownString(`
+    As an example of a record node, the dot input:
+    \`\`\`dot
+    digraph structs {
+      node [shape=record];
+      struct1 [label="<f0> left|<f1> mid&#92; dle|<f2> right"];
+      struct2 [label="<f0> one|<f1> two"];
+      struct3 [label="hello&#92;nworld |{ b |{c|<here> d|e}| f}| g | h"];
+      struct1:f1 -> struct2:f0;
+      struct1:f2 -> struct3:here;
+  }
+    \`\`\`
+    `);
+    result.push(record);
+    // 补充一个record
+    return result;
+  }
+
+  private _getSmoothValue(): CompletionItem[] {
+    return ['none', 'avg_dist', 'graph_dist', 'power_dist', 'rng', 'spring', 'triangle'].map(
+      value => new CompletionItem(value, CompletionItemKind.Constant)
+    );
+  }
+
+};

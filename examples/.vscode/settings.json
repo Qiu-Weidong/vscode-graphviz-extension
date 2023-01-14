@@ -1,6 +1,5 @@
 {
     "graphviz": {
-        "fuck": "fuck you",
-        "shit": 3
+      "multiPanel": false
     }
 }

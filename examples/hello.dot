@@ -4,8 +4,7 @@
 
 digraph G{
   Hello -> World;
-  
-  bgcolor="transparent:blue";
+  bgcolor="transparent:blue: green: yellow";
 }
 
 

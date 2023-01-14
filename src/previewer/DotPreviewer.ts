@@ -9,6 +9,7 @@ let viz = new Viz({ Module, render });
 export class DotPreviewPanel {
   // 所有的 panel, 不要用 uri 做主键
   private static _panels: Map<string, DotPreviewPanel> = new Map();
+  private static _uniquePanel: DotPreviewPanel | undefined = undefined;
   public static extensionUri: Uri;
 
   private _disposables: Disposable[] = [];
@@ -39,6 +40,8 @@ export class DotPreviewPanel {
   }
 
   public dispose() {
+    if(this == DotPreviewPanel._uniquePanel) DotPreviewPanel._uniquePanel = undefined;
+
     this._panel.dispose();
     DotPreviewPanel._panels.delete(this._document.uri.toString());
 
@@ -165,6 +168,19 @@ export class DotPreviewPanel {
   }
 
 
+
+  public static previewInUniquePanel(document: TextDocument) {
+    if(! DotPreviewPanel._uniquePanel) {
+      DotPreviewPanel._uniquePanel = new DotPreviewPanel(document, 'graphviz');
+      DotPreviewPanel._uniquePanel._render();
+    }
+    else {
+      const panel = DotPreviewPanel._uniquePanel;
+      panel._history.push({document: panel._document, engine: panel._engine});
+      panel._document = document;
+      panel._render();
+    }
+  }
 
 
   // 将 panel 和 document 关联起来。

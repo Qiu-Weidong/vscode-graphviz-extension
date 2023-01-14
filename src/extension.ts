@@ -13,15 +13,21 @@ export function activate(context: vscode.ExtensionContext) {
   DotPreviewPanel.extensionUri = context.extensionUri;
   
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
+    
     const title: string = args.title || 'graphviz';
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
     if(document) {
-      DotPreviewPanel.preview( title, document);
+      const settings = vscode.workspace.getConfiguration('graphviz');
+      if(settings.get<boolean>('multiPanel')) {
+        DotPreviewPanel.preview( title, document);
+      }
+      else {
+        DotPreviewPanel.previewInUniquePanel(document);
+      }
     }
   });
 
   vscode.commands.registerCommand("graphviz.export", (args: any) => {
-    const title: string = args.title ? args.title : 'graphviz';
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
     if(document) {
       DotPreviewPanel.save(document);
