@@ -6,20 +6,13 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { CompletionItem, CompletionItemKind, Position, MarkdownString } from "vscode";
 import { Assign_stmtContext, Attr_listContext, Attr_stmtContext, A_listContext, Compass_ptContext, EdgeopContext, EdgeRHSContext, Edge_stmtContext, GraphContext, Graph_listContext, IdContext, LexprContext, Node_idContext, Node_stmtContext, PortContext, RexprContext, StmtContext, Stmt_listContext, SubgraphContext } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
-import { attributes, attributeValue } from "./Attribute";
+import { Attribute } from "./Attribute";
 
 
 export class DotCompletionItemVisitor implements DotVisitor<void> {
   private readonly position: Position;
   private readonly nodes: Map<string, string[]>;
   private completionItems: CompletionItem[];
-
-
-  private readonly node_attrs: CompletionItem[];
-  private readonly edge_attrs: CompletionItem[];
-  private readonly cluster_attrs: CompletionItem[];
-  private readonly subgraph_attrs: CompletionItem[];
-  private readonly graph_attrs: CompletionItem[];
 
   // graph,subgraph,cluster, edge, node, node_attr, edge_attr, graph_attr, cluster_attr, subgraph_attr
   private scope: string;
@@ -30,33 +23,6 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     this.scope = 'none';
     this.nodes = nodes;
 
-    this.node_attrs = attributes.filter(item => item.usedby.includes('Nodes')).map(
-      item => {
-        let result = new CompletionItem(item.name, CompletionItemKind.Property);
-        result.detail = item.description;
-        return result;
-      }
-    );
-    this.edge_attrs = attributes.filter(item => item.usedby.includes('Edges')).map(item => {
-      let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.detail = item.description;
-      return result;
-    });
-    this.cluster_attrs = attributes.filter(item => item.usedby.includes('Clusters')).map(item => {
-      let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.detail = item.description;
-      return result;
-    });
-    this.graph_attrs = attributes.filter(item => item.usedby.includes('Graphs')).map(item => {
-      let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.detail = item.description;
-      return result;
-    });
-    this.subgraph_attrs = attributes.filter(item => item.usedby.includes('Subgraphs')).map(item => {
-      let result = new CompletionItem(item.name, CompletionItemKind.Property);
-      result.detail = item.description;
-      return result;
-    });
   }
 
   positionInContext(ctx: ParserRuleContext): boolean {
@@ -327,20 +293,21 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
 
   completeAttrName(): void {
+    const attribute = Attribute.getInstance();
     if (this.scope.includes('subgraph')) {
-      this.completionItems.push(...this.subgraph_attrs);
+      this.completionItems.push(...attribute.provideSubgraphAttribute());
     }
     else if (this.scope.includes('graph')) {
-      this.completionItems.push(...this.graph_attrs);
+      this.completionItems.push(...attribute.providegraphAttribute());
     }
     else if (this.scope.includes('cluster')) {
-      this.completionItems.push(...this.cluster_attrs);
+      this.completionItems.push(...attribute.provideClusterAttribute());
     }
     else if (this.scope.includes('node')) {
-      this.completionItems.push(...this.node_attrs);
+      this.completionItems.push(...attribute.provideNodeAttribute());
     }
     else if (this.scope.includes('edge')) {
-      this.completionItems.push(...this.edge_attrs);
+      this.completionItems.push(...attribute.provideEdgeAttribute());
     }
   }
 
@@ -364,17 +331,8 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   }
 
   completeAttrValue(attr_name: string): void {
-    const attr = attributes.find(item => item.name == attr_name);
-    if (attr != undefined) {
-      for (const ty of attr.type) {
-
-        const values = attributeValue.get(ty) || [];
-
-        for (const value of values) {
-          this.completionItems.push(new CompletionItem(value, CompletionItemKind.Constant));
-        }
-      }
-    }
+    const completions = Attribute.getInstance().provideValueOfAttribute(attr_name);
+    this.completionItems.push(...completions);
   }
 
   completePort(node_name: string): void {

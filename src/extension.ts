@@ -8,9 +8,11 @@ import { DotFormattingEditProvider } from './provider/DotFormattingEditProvider'
 import { DotSymbolProvider } from './provider/DotSymbolProvider';
 import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
 import { DotPreviewPanel } from './previewer/DotPreviewer';
+import { Attribute } from './provider/Attribute';
 
 export function activate(context: vscode.ExtensionContext) {
   DotPreviewPanel.extensionUri = context.extensionUri;
+  Attribute.setExtensionUri(context.extensionUri);
   
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     

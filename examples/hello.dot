@@ -3,8 +3,12 @@
 
 
 digraph G{
-  Hello -> World;
+
+  Hello -> World ;
   bgcolor="transparent:blue: green: yellow";
+
+  node [shape="hexagon", color=lightgoldenrodyellow];
+  // edge [color=darkorchid];
 }
 
 

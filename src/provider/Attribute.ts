@@ -5,7 +5,7 @@ import { CompletionItem, CompletionItemKind, MarkdownString, SnippetString, Uri 
 
 // Attribute Type 类型名称，取值范围使用一个正则表达式来校验
 // 共 33 种类型 178中属性
-export const attributes = [
+const attributes = [
   { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `A string in the xdot format specifying an arbitrary background.`, },
   { name: "area", usedby: ['Nodes', 'Clusters'], type: ['double'], description: `Indicates the preferred area for a node or empty cluster.\n patchwork only.`, },
   { name: "arrowhead", usedby: ['Edges'], type: ['arrowType'], description: `Style of arrowhead on the head node of an edge.`, },
@@ -247,62 +247,19 @@ export const attributes = [
   { name: "z", usedby: ['Nodes'], type: ['double'], description: `Z-coordinate value for 3D layouts and displays.`, },
 ];
 
-export const attributeValue = new Map([
-  ['bool', ['true', 'false']],
-  ['arrowType', ['normal', 'inv', 'dot', 'invdot', 'odot', 'invodot', 'none', 'tee',
-    'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
-    'open', 'halfopen', 'vee']],
-  ['clusterMode', ['local', 'global', 'none']],
-  ['color', ['silver', 'gray', 'white', 'maroon', 'red', 'purple', 'fuchsia', 'green',
-    'lime', 'olive', 'yellow', 'navy', 'blue', 'teal', 'aqua', 'orange', 'aliceblue',
-    'antiquewhite', 'aquamarine', 'azure', 'beige', 'bisque', 'blanchedalmond', 'blueviolet',
-    'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue',
-    'cornsilk', 'crimson', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen',
-    'darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid',
-    'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey',
-    'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue',
-    'firebrick', 'floralwhite', 'forestgreen', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod',
-    'greenyellow', 'grey', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki',
-    'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral',
-    'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgreen', 'lightgrey', 'lightpink',
-    'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey',
-    'lightsteelblue', 'lightyellow', 'limegreen', 'linen', 'mediumaquamarine', 'mediumblue',
-    'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen',
-    'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin',
-    'navajowhite', 'oldlace', 'olivedrab', 'orangered', 'orchid', 'palegoldenrod', 'palegreen',
-    'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum',
-    'powderblue', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen',
-    'seashell', 'sienna', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen',
-    'steelblue', 'tan', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'whitesmoke',
-    'yellowgreen', 'rebeccapurple'
-  ]],
-  ['dirType', ['forward', 'back', 'both', 'none']],
-  ['outputMode', ['breadthfirst', 'nodesfirst', 'edgesfirst']],
-  ['packMode', ['none', 'clust', 'graph', 'array(_flags)?(%d)?']],
-  ['pagedir', ['BL', 'BR', 'TL', 'TR', 'RB', 'RT', 'LB', 'LT']],
-  ['quadType', ['normal', 'fast', 'none']],
-  ['rankdir', ['TB', 'LR', 'BT', 'RL']],
-  ['rankType', ['same', 'min', 'source', 'max', 'sink']],
-  ['shape', ['box', 'polygon', 'ellipse', 'oval', 'circle', 'point', 'egg',
-    'triangle', 'plaintext', 'plain', 'diamond', 'trapezium', 'parallelogram',
-    'house', 'pentagon', 'hexagon', 'septagon', 'octagon', 'doublecircle',
-    'doubleoctagon', 'tripleoctagon', 'invtriangle', 'invtrapezium',
-    'invhouse', 'Mdiamond', 'Msquare', 'Mcircle', 'rect', 'rectangle',
-    'square', 'star', 'none', 'underline', 'cylinder', 'note', 'tab',
-    'folder', 'box3d', 'component', 'promoter', 'cds', 'terminator', 'record',
-    'utr', 'primersite', 'restrictionsite', 'fivepoverhang', 'threepoverhang',
-    'noverhang', 'assembly', 'signature', 'insulator', 'ribosite', 'rnastab',
-    'proteasesite', 'proteinstab', 'rpromoter', 'rarrow', 'larrow', 'lpromoter']],
-  ['smoothType', ['none', 'avg_dist', 'graph_dist', 'power_dist', 'rng', 'spring', 'triangle']],
-]);
 
 // 采用单例模式
 export class Attribute {
   private static extensionUri: Uri;
   private static instance: Attribute | undefined = undefined;
+
   public static getInstance(): Attribute {
-    if (Attribute.instance) return Attribute.instance;
-    return new Attribute();
+    if (!Attribute.instance)
+    {
+      Attribute.instance = new Attribute();
+    }
+      
+    return Attribute.instance;
   }
 
   public static setExtensionUri(extensionUri: Uri) {
@@ -343,9 +300,9 @@ export class Attribute {
   public provideValueOfAttribute(attrName: string): CompletionItem[] {
     const attr = attributes.find(item => item.name == attrName);
     let result: CompletionItem[] = [];
-    if(attr) {
-      for(const ty of attr.type) {
-        result.push(...(this.attrMap.get(ty)||[]));
+    if (attr) {
+      for (const ty of attr.type) {
+        result.push(...(this.attrMap.get(ty) || []));
       }
     }
     return result;
@@ -376,7 +333,7 @@ export class Attribute {
       item => {
         let result = new CompletionItem(item.name, CompletionItemKind.Property);
         result.detail = item.description;
-        if(item.type.length == 1 && item.type.includes('string')) {
+        if (item.type.length == 1 && item.type.includes('string')) {
           result.insertText = new SnippetString(`${item.name} = "$1"`);
         }
         return result;
@@ -396,15 +353,15 @@ export class Attribute {
 
   private _getArrowTypeValue(): CompletionItem[] {
     return ['normal', 'inv', 'dot', 'invdot', 'odot', 'invodot', 'none', 'tee',
-    'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
-    'open', 'halfopen', 'vee'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = new MarkdownString(`![img](${Uri.joinPath(
-        Attribute.extensionUri, 'asset', 'arrowType', value + '.gif')})`
-      );
-      ret.detail = `Edge arrowhead shape`;
-      return ret;
-    });
+      'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
+      'open', 'halfopen', 'vee'].map(value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(
+          Attribute.extensionUri, 'asset', 'arrowType', value + '.gif')})`
+        );
+        ret.detail = `Edge arrowhead shape`;
+        return ret;
+      });
   }
 
   private _getClusterModeValue(): CompletionItem[] {
@@ -437,7 +394,10 @@ export class Attribute {
       'steelblue', 'tan', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'whitesmoke',
       'yellowgreen', 'rebeccapurple'
     ].map(value => {
-      return new CompletionItem(value, CompletionItemKind.Color);
+      const ret = new CompletionItem(value, CompletionItemKind.Color);
+      ret.detail = value;
+      ret.documentation = '#654321';
+      return ret;
     });
   }
 
@@ -457,10 +417,10 @@ export class Attribute {
       {
         name: 'breadthfirst',
         detail: `The default "breadthfirst" is the simplest, but when the graph layout does not avoid edge-node overlap, this mode will sometimes have edges drawn over nodes and sometimes on top of nodes.`
-      },{
+      }, {
         name: 'nodesfirst',
         detail: `If the mode "nodesfirst" is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.`
-      },{
+      }, {
         name: 'edgesfirst',
         detail: `On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing "edgesfirst".`
       }
@@ -475,16 +435,6 @@ export class Attribute {
   }
 
   private _getPackModeValue(): CompletionItem[] {
-    const ret = [
-      new CompletionItem('none', CompletionItemKind.Constant),
-      new CompletionItem('clust', CompletionItemKind.Constant),
-      new CompletionItem('graph', CompletionItemKind.Constant),
-      new CompletionItem('array(_flags)?(%d)?', CompletionItemKind.Constant)
-    ];
-    ret.forEach(item => {
-      item.detail = `How closely to pack together graph components`;
-      item.documentation = documentation;});
-
     const documentation = `The modes "node", "clust" or "graph" specify that the components should be packed together tightly, using the specified granularity. A value of "node" causes packing at the node and edge level, with no overlapping of these objects. This produces a layout with the least area, but it also allows interleaving, where a node of one component may lie between two nodes in another component. A value of "graph" does a packing using the bounding box of the component. Thus, there will be a rectangular region around a component free of elements of any other component. A value of "clust" guarantees that top-level clusters are kept intact. What effect a value has also depends on the layout algorithm. For example, neato does not support clusters, so a value of "clust" will have the same effect as the default "node" value.
 
     The mode "array(_flag)?(%d)?" indicates that the components should be packed at the graph level into an array of graphs. By default, the components are in row-major order, with the number of columns roughly the square root of the number of components. If the optional flags contains 'c', then column-major order is used. Finally, if the optional integer suffix is used, this specifies the number of columns for row-major or the number of rows for column-major. Thus, the mode "array_c4" indicates array packing, with 4 rows, starting in the upper left and going down the first column, then down the second column, etc., until all components are used.
@@ -493,6 +443,18 @@ export class Attribute {
     
     If the optional flags contains 'u', this causes the insertion order of elements in the array to be determined by user-supplied values. Each component can specify its sort value by a non-negative integer using the sortv attribute. Components are inserted in order, starting with the one with the smallest sort value. If no sort value is specified, zero is used.
     `;
+    const ret = [
+      new CompletionItem('none', CompletionItemKind.Constant),
+      new CompletionItem('clust', CompletionItemKind.Constant),
+      new CompletionItem('graph', CompletionItemKind.Constant),
+      new CompletionItem('array(_flags)?(%d)?', CompletionItemKind.Constant)
+    ];
+    ret.forEach(item => {
+      item.detail = `How closely to pack together graph components`;
+      item.documentation = documentation;
+    });
+
+    
     return ret;
   }
 
@@ -519,7 +481,7 @@ export class Attribute {
   private _getRankdirValue(): CompletionItem[] {
     const documentation = `Corresponding to directed graphs drawn from top to bottom, from left to right, from bottom to top, and from right to left, respectively.`;
     return ['normal', 'fast', 'none'].map(value => {
-      const ret= new CompletionItem(value, CompletionItemKind.Constant);
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
       ret.documentation = documentation;
       ret.detail = `Direction to draw directed graphs (one rank at a time)`;
       return ret;
@@ -529,7 +491,7 @@ export class Attribute {
   private _getRankTypeValue(): CompletionItem[] {
     const detail = `Rank constraints on the nodes in a subgraph`;
     return ['same', 'min', 'source', 'max', 'sink'].map(value => {
-      const ret= new CompletionItem(value, CompletionItemKind.Constant);
+      const ret = new CompletionItem(value, CompletionItemKind.Constant);
       ret.detail = detail;
       return ret;
     })
@@ -537,22 +499,21 @@ export class Attribute {
 
   private _getShapeValue(): CompletionItem[] {
     const result = ['box', 'polygon', 'ellipse', 'oval', 'circle', 'point', 'egg',
-    'triangle', 'plaintext', 'plain', 'diamond', 'trapezium', 'parallelogram',
-    'house', 'pentagon', 'hexagon', 'septagon', 'octagon', 'doublecircle',
-    'doubleoctagon', 'tripleoctagon', 'invtriangle', 'invtrapezium',
-    'invhouse', 'Mdiamond', 'Msquare', 'Mcircle', 'rect', 'rectangle',
-    'square', 'star', 'none', 'underline', 'cylinder', 'note', 'tab',
-    'folder', 'box3d', 'component', 'promoter', 'cds', 'terminator',
-    'utr', 'primersite', 'restrictionsite', 'fivepoverhang', 'threepoverhang',
-    'noverhang', 'assembly', 'signature', 'insulator', 'ribosite', 'rnastab',
-    'proteasesite', 'proteinstab', 'rpromoter', 'rarrow', 'larrow', 'lpromoter'].map(value => {
-      const ret= new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = new MarkdownString(`![](${
-        Uri.joinPath(Attribute.extensionUri, 'asset', 'shape', value + '.gif')
-      })`);
-      ret.detail = `the shape of a node`;
-      return ret;
-    });
+      'triangle', 'plaintext', 'plain', 'diamond', 'trapezium', 'parallelogram',
+      'house', 'pentagon', 'hexagon', 'septagon', 'octagon', 'doublecircle',
+      'doubleoctagon', 'tripleoctagon', 'invtriangle', 'invtrapezium',
+      'invhouse', 'Mdiamond', 'Msquare', 'Mcircle', 'rect', 'rectangle',
+      'square', 'star', 'none', 'underline', 'cylinder', 'note', 'tab',
+      'folder', 'box3d', 'component', 'promoter', 'cds', 'terminator',
+      'utr', 'primersite', 'restrictionsite', 'fivepoverhang', 'threepoverhang',
+      'noverhang', 'assembly', 'signature', 'insulator', 'ribosite', 'rnastab',
+      'proteasesite', 'proteinstab', 'rpromoter', 'rarrow', 'larrow', 'lpromoter'].map(value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.documentation = new MarkdownString(`![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'shape', value + '.gif')
+          })`);
+        ret.detail = `the shape of a node`;
+        return ret;
+      });
 
     const record = new CompletionItem('record', CompletionItemKind.Constant);
     record.detail = `Record-based Nodes`;

@@ -124,6 +124,7 @@ export class DotColorVisitor implements DotVisitor<void> {
     this.visitTerminal(node);
   }
 }
+
 const colors: Map<string, Color> = new Map([
   ["silver", new Color(0.7529411764705882, 0.7529411764705882, 0.7529411764705882, 1)],
   ["gray", new Color(0.5019607843137255, 0.5019607843137255, 0.5019607843137255, 1)],
