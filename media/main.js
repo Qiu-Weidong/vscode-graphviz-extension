@@ -23,7 +23,19 @@ function main() {
       command: 'switch-engine',
       text: e.target.value
     });
-    console.log('触发了下拉菜单', e.target.value);
+  }
+
+  // 返回
+  document.getElementById('back').onclick = () => {
+    vscode.postMessage({ command: 'back' });
+  }
+
+  document.getElementById('refresh').onclick = () => {
+    vscode.postMessage({ command: 'refresh' });
+  }
+
+  document.getElementById('save').onclick = () => {
+    vscode.postMessage({ command: 'save' });
   }
 
 }

@@ -9,86 +9,86 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 282.5832)">
 <title>%0</title>
 <polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-282.5832 986,-282.5832 986,4 -4,4"/>
-<g id="clust2" class="cluster">
-<title>cluster_2</title>
-<polygon fill="none" stroke="#000000" points="8,-8 8,-140.6599 974,-140.6599 974,-8 8,-8"/>
-<text text-anchor="middle" x="491" y="-124.0599" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">Radial Angle Variations (white to black gradient)</text>
-</g>
 <g id="clust1" class="cluster">
 <title>cluster_1</title>
 <polygon fill="none" stroke="#000000" points="57,-148.6599 57,-270.5832 925,-270.5832 925,-148.6599 57,-148.6599"/>
 <text text-anchor="middle" x="491" y="-253.9832" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">Linear Angle Variations (white to black gradient)</text>
 </g>
+<g id="clust2" class="cluster">
+<title>cluster_2</title>
+<polygon fill="none" stroke="#000000" points="8,-8 8,-140.6599 974,-140.6599 974,-8 8,-8"/>
+<text text-anchor="middle" x="491" y="-124.0599" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">Radial Angle Variations (white to black gradient)</text>
+</g>
 <!-- n9 -->
 <g id="node1" class="node">
 <title>n9</title>
 <defs>
-<linearGradient id="l_9" gradientUnits="userSpaceOnUse" x1="835.3766" y1="-197.2215" x2="916.6234" y2="-197.2215" >
+<linearGradient id="l_18" gradientUnits="userSpaceOnUse" x1="835.3766" y1="-197.2215" x2="916.6234" y2="-197.2215" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_9)" stroke="#000000" cx="876" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_18)" stroke="#000000" cx="876" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="876" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n9:360</text>
 </g>
 <!-- n8 -->
 <g id="node2" class="node">
 <title>n8</title>
 <defs>
-<linearGradient id="l_10" gradientUnits="userSpaceOnUse" x1="748.2749" y1="-225.9466" x2="805.7251" y2="-168.4965" >
+<linearGradient id="l_19" gradientUnits="userSpaceOnUse" x1="748.2749" y1="-225.9466" x2="805.7251" y2="-168.4965" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_10)" stroke="#000000" cx="777" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_19)" stroke="#000000" cx="777" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="777" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n8:315</text>
 </g>
 <!-- n7 -->
 <g id="node3" class="node">
 <title>n7</title>
 <defs>
-<linearGradient id="l_11" gradientUnits="userSpaceOnUse" x1="678" y1="-237.8449" x2="678" y2="-156.5981" >
+<linearGradient id="l_20" gradientUnits="userSpaceOnUse" x1="678" y1="-237.8449" x2="678" y2="-156.5981" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_11)" stroke="#000000" cx="678" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_20)" stroke="#000000" cx="678" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="678" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n7:270</text>
 </g>
 <!-- n6 -->
 <g id="node4" class="node">
 <title>n6</title>
 <defs>
-<linearGradient id="l_12" gradientUnits="userSpaceOnUse" x1="607.7251" y1="-225.9466" x2="550.2749" y2="-168.4965" >
+<linearGradient id="l_21" gradientUnits="userSpaceOnUse" x1="607.7251" y1="-225.9466" x2="550.2749" y2="-168.4965" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_12)" stroke="#000000" cx="579" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_21)" stroke="#000000" cx="579" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="579" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n6:225</text>
 </g>
 <!-- n5 -->
 <g id="node5" class="node">
 <title>n5</title>
 <defs>
-<linearGradient id="l_13" gradientUnits="userSpaceOnUse" x1="520.6234" y1="-197.2215" x2="439.3766" y2="-197.2215" >
+<linearGradient id="l_22" gradientUnits="userSpaceOnUse" x1="520.6234" y1="-197.2215" x2="439.3766" y2="-197.2215" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_13)" stroke="#000000" cx="480" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_22)" stroke="#000000" cx="480" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="480" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n5:180</text>
 </g>
 <!-- n14 -->
 <g id="node14" class="node">
 <title>n14</title>
 <defs>
-<radialGradient id="r_9" cx="50%" cy="50%" r="75%" fx="0%" fy="49%">
+<radialGradient id="r_18" cx="50%" cy="50%" r="75%" fx="0%" fy="49%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_9)" stroke="#000000" cx="480" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_18)" stroke="#000000" cx="480" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="480" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n14:180</text>
 </g>
 <!-- n5&#45;&gt;n14 -->
@@ -101,144 +101,144 @@
 <g id="node6" class="node">
 <title>n4</title>
 <defs>
-<linearGradient id="l_14" gradientUnits="userSpaceOnUse" x1="409.7251" y1="-168.4965" x2="352.2749" y2="-225.9466" >
+<linearGradient id="l_23" gradientUnits="userSpaceOnUse" x1="409.7251" y1="-168.4965" x2="352.2749" y2="-225.9466" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_14)" stroke="#000000" cx="381" cy="-197.2215" rx="40.6234" ry="40.6234"/>
+<ellipse fill="url(#l_23)" stroke="#000000" cx="381" cy="-197.2215" rx="40.6234" ry="40.6234"/>
 <text text-anchor="middle" x="381" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n4:135</text>
 </g>
 <!-- n3 -->
 <g id="node7" class="node">
 <title>n3</title>
 <defs>
-<linearGradient id="l_15" gradientUnits="userSpaceOnUse" x1="285" y1="-159.4671" x2="285" y2="-234.976" >
+<linearGradient id="l_24" gradientUnits="userSpaceOnUse" x1="285" y1="-159.4671" x2="285" y2="-234.976" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_15)" stroke="#000000" cx="285" cy="-197.2215" rx="37.7544" ry="37.7544"/>
+<ellipse fill="url(#l_24)" stroke="#000000" cx="285" cy="-197.2215" rx="37.7544" ry="37.7544"/>
 <text text-anchor="middle" x="285" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n3:90 </text>
 </g>
 <!-- n2 -->
 <g id="node8" class="node">
 <title>n2</title>
 <defs>
-<linearGradient id="l_16" gradientUnits="userSpaceOnUse" x1="164.3036" y1="-170.5251" x2="217.6964" y2="-223.918" >
+<linearGradient id="l_25" gradientUnits="userSpaceOnUse" x1="164.3036" y1="-170.5251" x2="217.6964" y2="-223.918" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_16)" stroke="#000000" cx="191" cy="-197.2215" rx="37.7544" ry="37.7544"/>
+<ellipse fill="url(#l_25)" stroke="#000000" cx="191" cy="-197.2215" rx="37.7544" ry="37.7544"/>
 <text text-anchor="middle" x="191" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n2:45 </text>
 </g>
 <!-- n1 -->
 <g id="node9" class="node">
 <title>n1</title>
 <defs>
-<linearGradient id="l_17" gradientUnits="userSpaceOnUse" x1="64.6142" y1="-197.2215" x2="135.3858" y2="-197.2215" >
+<linearGradient id="l_26" gradientUnits="userSpaceOnUse" x1="64.6142" y1="-197.2215" x2="135.3858" y2="-197.2215" >
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </linearGradient>
 </defs>
-<ellipse fill="url(#l_17)" stroke="#000000" cx="100" cy="-197.2215" rx="35.3858" ry="35.3858"/>
+<ellipse fill="url(#l_26)" stroke="#000000" cx="100" cy="-197.2215" rx="35.3858" ry="35.3858"/>
 <text text-anchor="middle" x="100" y="-193.0215" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n1:0 &#160;</text>
 </g>
 <!-- n18 -->
 <g id="node10" class="node">
 <title>n18</title>
 <defs>
-<radialGradient id="r_10" cx="50%" cy="50%" r="75%" fx="100%" fy="50%">
+<radialGradient id="r_19" cx="50%" cy="50%" r="75%" fx="100%" fy="50%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_10)" stroke="#000000" cx="920" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_19)" stroke="#000000" cx="920" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="920" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n18:360</text>
 </g>
 <!-- n17 -->
 <g id="node11" class="node">
 <title>n17</title>
 <defs>
-<radialGradient id="r_11" cx="50%" cy="50%" r="75%" fx="85%" fy="85%">
+<radialGradient id="r_20" cx="50%" cy="50%" r="75%" fx="85%" fy="85%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_11)" stroke="#000000" cx="810" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_20)" stroke="#000000" cx="810" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="810" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n17:315</text>
 </g>
 <!-- n16 -->
 <g id="node12" class="node">
 <title>n16</title>
 <defs>
-<radialGradient id="r_12" cx="50%" cy="50%" r="75%" fx="49%" fy="100%">
+<radialGradient id="r_21" cx="50%" cy="50%" r="75%" fx="49%" fy="100%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_12)" stroke="#000000" cx="700" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_21)" stroke="#000000" cx="700" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="700" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n16:270</text>
 </g>
 <!-- n15 -->
 <g id="node13" class="node">
 <title>n15</title>
 <defs>
-<radialGradient id="r_13" cx="50%" cy="50%" r="75%" fx="14%" fy="85%">
+<radialGradient id="r_22" cx="50%" cy="50%" r="75%" fx="14%" fy="85%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_13)" stroke="#000000" cx="590" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_22)" stroke="#000000" cx="590" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="590" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n15:225</text>
 </g>
 <!-- n13 -->
 <g id="node15" class="node">
 <title>n13</title>
 <defs>
-<radialGradient id="r_14" cx="50%" cy="50%" r="75%" fx="14%" fy="14%">
+<radialGradient id="r_23" cx="50%" cy="50%" r="75%" fx="14%" fy="14%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_14)" stroke="#000000" cx="370" cy="-61.9299" rx="45.86" ry="45.86"/>
+<ellipse fill="url(#r_23)" stroke="#000000" cx="370" cy="-61.9299" rx="45.86" ry="45.86"/>
 <text text-anchor="middle" x="370" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n13:135</text>
 </g>
 <!-- n12 -->
 <g id="node16" class="node">
 <title>n12</title>
 <defs>
-<radialGradient id="r_15" cx="50%" cy="50%" r="75%" fx="50%" fy="0%">
+<radialGradient id="r_24" cx="50%" cy="50%" r="75%" fx="50%" fy="0%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_15)" stroke="#000000" cx="263" cy="-61.9299" rx="43.492" ry="43.492"/>
+<ellipse fill="url(#r_24)" stroke="#000000" cx="263" cy="-61.9299" rx="43.492" ry="43.492"/>
 <text text-anchor="middle" x="263" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n12:90 </text>
 </g>
 <!-- n11 -->
 <g id="node17" class="node">
 <title>n11</title>
 <defs>
-<radialGradient id="r_16" cx="50%" cy="50%" r="75%" fx="85%" fy="14%">
+<radialGradient id="r_25" cx="50%" cy="50%" r="75%" fx="85%" fy="14%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_16)" stroke="#000000" cx="159" cy="-61.9299" rx="43.492" ry="43.492"/>
+<ellipse fill="url(#r_25)" stroke="#000000" cx="159" cy="-61.9299" rx="43.492" ry="43.492"/>
 <text text-anchor="middle" x="159" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n11:45 </text>
 </g>
 <!-- n10 -->
 <g id="node18" class="node">
 <title>n10</title>
 <defs>
-<radialGradient id="r_17" cx="50%" cy="50%" r="75%" fx="50%" fy="50%">
+<radialGradient id="r_26" cx="50%" cy="50%" r="75%" fx="50%" fy="50%">
 <stop offset="0" style="stop-color:#ffffff;stop-opacity:1.;"/>
 <stop offset="1" style="stop-color:#000000;stop-opacity:1.;"/>
 </radialGradient>
 </defs>
-<ellipse fill="url(#r_17)" stroke="#000000" cx="57" cy="-61.9299" rx="40.6215" ry="40.6215"/>
+<ellipse fill="url(#r_26)" stroke="#000000" cx="57" cy="-61.9299" rx="40.6215" ry="40.6215"/>
 <text text-anchor="middle" x="57" y="-57.7299" font-family="Helvetica,Arial,sans-serif" font-size="14.00" fill="#000000">n10:0 &#160;</text>
 </g>
 </g>

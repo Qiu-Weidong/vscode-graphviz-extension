@@ -10,20 +10,22 @@ import { DotCodeLensProvider } from './provider/DotCodeLensProvider';
 import { DotPreviewPanel } from './previewer/DotPreviewer';
 
 export function activate(context: vscode.ExtensionContext) {
-
+  DotPreviewPanel.extensionUri = context.extensionUri;
+  
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
     const title: string = args.title || 'graphviz';
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
     if(document) {
-      // previewer.preview(title, document);
-      DotPreviewPanel.preview( context.extensionUri, title, document);
+      DotPreviewPanel.preview( title, document);
     }
   });
 
   vscode.commands.registerCommand("graphviz.export", (args: any) => {
     const title: string = args.title ? args.title : 'graphviz';
-    const content: string = args.content;
-    // DotPreviewPanel.save(title, content);
+    const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
+    if(document) {
+      DotPreviewPanel.save(document);
+    }
   });
 
   // 注册 provider
