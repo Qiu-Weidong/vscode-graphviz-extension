@@ -7,15 +7,19 @@ selector = null;
 window.addEventListener("load", main);
 
 function main() {
+  // console.log('onload');
   init();
 
-  // render(`digraph { a -> b; }`, 'dot');
+  // 这样才能设置 onchange
+  selector.onchange = (e, v) => {
+    console.log('触发了下拉菜单', e.target.value);
+  }
 
   window.addEventListener('message', event => {
     const message = event.data;
     switch (message.command) {
       case 'postContent':
-        // console.log(message.content);
+        sessionStorage.setItem(message.uri, message.content);
         render(message.content);
         break;
     }
@@ -133,6 +137,9 @@ function bindEvents(element) {
 function init() {
   container = document.getElementById('container');
   loader = document.getElementById('loader');
+  selector = document.getElementById('selector');
+  
+  console.log(selector);
   viz = new Viz();
 }
 
@@ -150,7 +157,7 @@ function render(content) {
   container.innerHTML = '';
 
   setTimeout(() => {
-    viz.renderSVGElement(content)
+    viz.renderImageElement(content)
       .then(element => {
         loader.style.display = 'none';
         container.appendChild(element);
@@ -161,4 +168,9 @@ function render(content) {
         console.error(error);
       });
   }, 1);
+}
+
+
+function select(value) {
+  console.log('触发了下拉菜单', value);
 }

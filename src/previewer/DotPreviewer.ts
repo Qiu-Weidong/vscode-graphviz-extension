@@ -134,13 +134,13 @@ export class DotPreviewPanel {
               <span class="codicon codicon-save"></span>
             </vscode-button>
           
-            <vscode-dropdown>
-              <vscode-option>dot</vscode-option>
-              <vscode-option>circo</vscode-option>
-              <vscode-option>fdp</vscode-option>
-              <vscode-option>neato</vscode-option>
-              <vscode-option selected>osage</vscode-option>
-              <vscode-option>twopi</vscode-option>
+            <vscode-dropdown id="selector">
+              <vscode-option value="dot">dot</vscode-option>
+              <vscode-option value="circo">circo</vscode-option>
+              <vscode-option value="fdp">fdp</vscode-option>
+              <vscode-option value="neato">neato</vscode-option>
+              <vscode-option value="osage">osage</vscode-option>
+              <vscode-option value="twopi">twopi</vscode-option>
             </vscode-dropdown>
           </div>
           
