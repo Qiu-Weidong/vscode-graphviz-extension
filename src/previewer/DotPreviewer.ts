@@ -1,4 +1,9 @@
 import { Disposable, TextDocument, Uri, ViewColumn, Webview, WebviewPanel, window } from "vscode";
+const Viz = require("viz.js");
+const { Module, render } = require('viz.js/full.render.js');
+
+let viz = new Viz({ Module, render });
+
 
 
 export class DotPreviewer {
@@ -14,11 +19,14 @@ export class DotPreviewer {
   public preview(title: string, document: TextDocument) {
     let panel = this._panels.get(document.uri);
     if(! panel) {
-      panel = new DotPreviewPanel(this._extensionUri, title);
+      panel = new DotPreviewPanel(this._extensionUri, document.uri, title);
       this._panels.set(document.uri, panel);
+      panel.render(title, document.getText(), this._extensionUri);
     }
-
-    panel.render(title, document);
+    else {
+      panel.render(title, document.getText(), this._extensionUri);
+    }
+    
   }
 
 }
@@ -28,11 +36,14 @@ export class DotPreviewer {
 
 
 export class DotPreviewPanel {
+  private static _panels: Map<Uri, DotPreviewPanel> = new Map() ;
 
   private _disposables: Disposable[] = [];
   private _panel: WebviewPanel;
+  private _documentUri: Uri;
 
-  constructor(extensionUri: Uri, title: string) {
+  constructor(extensionUri: Uri, documentUri: Uri, title: string) {
+    this._documentUri = documentUri
     this._panel = window.createWebviewPanel(
       "preview",
       title,
@@ -44,12 +55,14 @@ export class DotPreviewPanel {
     this._panel.iconPath = Uri.joinPath(extensionUri, 'media', 'icon.png');
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
     
-    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title);
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, '<vscode-progress-ring></vscode-progress-ring>');
     this._setWebviewMessageListener(this._panel.webview);
   }
 
   public dispose() {
     this._panel.dispose();
+    DotPreviewPanel._panels.delete(this._documentUri);
+    
     while (this._disposables.length) {
       const disposable = this._disposables.pop();
       if (disposable) {
@@ -57,19 +70,6 @@ export class DotPreviewPanel {
       }
     }
   }
-
-  // 直接将数据投递过去即可，交给 panel 渲染。
-  public render(title: string, document: TextDocument) {
-    this._panel.title = title;
-
-    this._panel.webview.postMessage({
-      command: 'postContent',
-      content: document.getText(),
-      uri: document.uri.toString()
-    }).then(success => {
-      if(! success) window.showErrorMessage(`render failed`);
-    });
-  } 
 
   private _setWebviewMessageListener(webview: Webview) {
     webview.onDidReceiveMessage(
@@ -88,7 +88,7 @@ export class DotPreviewPanel {
     );
   }
 
-  private _getWebviewContent(webview: Webview, extensionUri: Uri, title: string): string {
+  private _getWebviewContent(webview: Webview, extensionUri: Uri, title: string, svgOrError: string): string {
     const toolkitUri = webview.asWebviewUri(
       Uri.joinPath(extensionUri, 'node_modules', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.js')
     );
@@ -97,12 +97,6 @@ export class DotPreviewPanel {
     );
     const codiconsUri = webview.asWebviewUri(
       Uri.joinPath(extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
-    );
-    const vizUri = webview.asWebviewUri(
-      Uri.joinPath(extensionUri, 'node_modules', 'viz.js', 'viz.js')
-    );
-    const vizRenderUri = webview.asWebviewUri(
-      Uri.joinPath(extensionUri, 'node_modules', 'viz.js', 'full.render.js')
     );
 
     return /*html */ `<!DOCTYPE html>
@@ -117,8 +111,6 @@ export class DotPreviewPanel {
           <script src="full.render.js"></script>
 
           <script type="module" src="${toolkitUri}"></script>
-          <script src="${vizUri}"></script>
-          <script src="${vizRenderUri}"></script>
           <script type="module" src="${mainUri}"></script>
           <link href="${codiconsUri}" rel="stylesheet" />
         </head>
@@ -144,15 +136,29 @@ export class DotPreviewPanel {
             </vscode-dropdown>
           </div>
           
-          <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-            <div id="loader">
-              <vscode-progress-ring></vscode-progress-ring>
-            </div>
-            <div id="container"></div>
+          <div id="container" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+            ${svgOrError}
           </div>
         </body>
       </html>
     `;
+  }
+
+  public render(title: string, content: string, extensionUri: Uri) {
+    this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, '<vscode-progress-ring></vscode-progress-ring>');
+    viz.renderString(content).then((svg: string) => {
+      this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, svg);
+      this._panel.title = title;
+
+      if (!this._panel.visible) this._panel.reveal();
+
+    }).catch((err: any) => {
+      window.showErrorMessage(`${err}`);
+      viz = new Viz({ Module, render });
+      this._panel.webview.html = this._getWebviewContent(this._panel.webview, extensionUri, title, err);
+      this._panel.title = title;
+    });
+
   }
 
 }
