@@ -7,6 +7,9 @@ let viz = new Viz({ Module, render });
 
 // 将 panel 和文件对应起来
 export class DotPreviewPanel {
+  private static _panels: Map<Uri, WebviewPanel> = new Map();
+
+
   public static currentPanel: DotPreviewPanel | undefined;
   private readonly _panel: WebviewPanel;
   private _disposables: Disposable[] = [];

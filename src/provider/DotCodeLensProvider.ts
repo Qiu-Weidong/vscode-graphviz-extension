@@ -6,16 +6,17 @@ export class DotCodeLensProvider implements CodeLensProvider {
   onDidChangeCodeLenses?: Event<void> | undefined;
   provideCodeLenses(document: TextDocument, token: CancellationToken): ProviderResult<CodeLens[]> {
     textDocuments.updateDocument(document);
-    const visitor = new DotCodeLensVisitor();
+    const visitor = new DotCodeLensVisitor(document);
     try {
        textDocuments.getTree(document).accept(visitor);
     } catch(err) {}
 
     return visitor.getCodeLens();
   }
-  resolveCodeLens?(codeLens: CodeLens, token: CancellationToken): ProviderResult<CodeLens> {
-    throw new Error("Method not implemented.");
-  }
+
+  // resolveCodeLens?(codeLens: CodeLens, token: CancellationToken): ProviderResult<CodeLens> {
+  //   throw new Error("Method not implemented.");
+  // }
   
 }
 
