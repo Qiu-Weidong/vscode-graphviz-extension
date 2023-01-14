@@ -1,9 +1,5 @@
-// 所有属性
-
 import { CompletionItem, CompletionItemKind, MarkdownString, SnippetString, Uri } from "vscode";
 
-
-// Attribute Type 类型名称，取值范围使用一个正则表达式来校验
 // 共 33 种类型 178中属性
 const attributes = [
   { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `A string in the xdot format specifying an arbitrary background.`, },
@@ -394,8 +390,7 @@ const colorMap = new Map([
   ['yellowgreen', '#9acd32'],
   ['rebeccapurple', '#663399'],
   ['transparent', '#00000000']
-])
-
+]);
 
 // 采用单例模式
 export class Attribute {
@@ -655,7 +650,7 @@ export class Attribute {
       struct3 [label="hello&#92;nworld |{ b |{c|<here> d|e}| f}| g | h"];
       struct1:f1 -> struct2:f0;
       struct1:f2 -> struct3:here;
-  }
+    }
     \`\`\`
     `);
     result.push(record);

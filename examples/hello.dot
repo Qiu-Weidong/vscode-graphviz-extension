@@ -5,7 +5,19 @@
 digraph G{
 
   Hello -> World ;
-  bgcolor="transparent:darkgreen:crimson";
+  bgcolor="transparent:darkgreen:crimson:transparent";
+
+  v1 [shape=ribosite] ;
+  v2 [shape=plaintext, label="邱彦祖"];
+  v1 -> v2 [arrowhead=vee];
+  v1 -> v3 [arrowhead=open];
+  "张三" -> "World" [dir=none];
+  v3 [shape=Mcircle];
+
+  charset = "utf-8";
+
+  subgraph cluster_0 {
+  }
 }
 
 
