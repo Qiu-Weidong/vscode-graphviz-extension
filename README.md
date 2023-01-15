@@ -1,5 +1,5 @@
 # Graphviz(dot) language supported and preview (Visual Studio Code Extension)
-[中文版](README.zh.md)
+[中文版](README_CN.md)
 
 
 This plugin provides features such as code highlighting, error prompts, auto-completion, color selection, automatic formatting, find references and rename references for the `dot` language. At the same time, use [viz.js](https://github.com/mdaines/viz.js.git) to preview the code.
