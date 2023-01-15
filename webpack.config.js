@@ -33,11 +33,11 @@ const config = {
       exclude: /node_modules/,
       use: [{
         loader: 'ts-loader',
-        options: {
-          compilerOptions: {
-            "module": "commonjs" // override `tsconfig.json` so that TypeScript emits native JavaScript modules.
-          }
-        }
+        // options: {
+        //   compilerOptions: {
+        //     "module": "es6" // override `tsconfig.json` so that TypeScript emits native JavaScript modules.
+        //   }
+        // }
       }]
     }]
   },

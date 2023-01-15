@@ -1,7 +1,9 @@
 import { TextEncoder } from "util";
 import { Disposable, TextDocument, Uri, ViewColumn, Webview, WebviewPanel, window, workspace } from "vscode";
-const Viz = require("viz.js");
-const { Module, render } = require('viz.js/full.render.js');
+import Viz from 'viz.js';
+import { Module, render } from 'viz.js/full.render.js';
+// const Viz = require("viz.js");
+// const { Module, render } = require('viz.js/full.render.js');
 
 let viz = new Viz({ Module, render });
 
