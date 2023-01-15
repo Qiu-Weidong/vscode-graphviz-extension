@@ -8,3 +8,4 @@ src/**
 **/.eslintrc.json
 **/*.map
 **/*.ts
+examples/**
