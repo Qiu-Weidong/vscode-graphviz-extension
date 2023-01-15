@@ -1,6 +1,6 @@
 import { CancellationToken, CodeLens, CodeLensProvider, Event, Position, ProviderResult, Range, TextDocument, Command } from "vscode";
 import textDocuments from "../TextDocuments";
-import { DotCodeLensVisitor } from "../visitor/DotCodelensVisitor";
+import { DotCodeLensVisitor } from "../visitor/DotCodeLensVisitor";
 
 export class DotCodeLensProvider implements CodeLensProvider {
   onDidChangeCodeLenses?: Event<void> | undefined;

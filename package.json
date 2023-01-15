@@ -43,11 +43,14 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
+		"vscode:prepublish": "npm run esbuild-base -- --minify",
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
-		"antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot"
+		"antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
@@ -55,6 +58,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"antlr4ts-cli": "^0.5.0-alpha.4",
+		"esbuild": "^0.17.0",
 		"eslint": "^8.26.0",
 		"typescript": "^4.8.4"
 	},
