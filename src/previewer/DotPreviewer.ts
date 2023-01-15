@@ -157,7 +157,7 @@ export class DotPreviewPanel {
       this._panel.webview.html = this._getWebviewContent(this._panel.webview,
         this._panel.title,
         svg);
-      this._panel.reveal();
+      // this._panel.reveal();
 
     }).catch((err: any) => {
       window.showErrorMessage(`${err}`);
@@ -173,12 +173,16 @@ export class DotPreviewPanel {
     if (!DotPreviewPanel._uniquePanel) {
       DotPreviewPanel._uniquePanel = new DotPreviewPanel(document, 'graphviz');
       DotPreviewPanel._uniquePanel._render();
+      if(! DotPreviewPanel._uniquePanel._panel.visible)
+      DotPreviewPanel._uniquePanel._panel.reveal();
     }
     else {
       const panel = DotPreviewPanel._uniquePanel;
       panel._history.push({ document: panel._document, engine: panel._engine });
       panel._document = document;
       panel._render();
+      if(! panel._panel.visible)
+      panel._panel.reveal();
     }
   }
 

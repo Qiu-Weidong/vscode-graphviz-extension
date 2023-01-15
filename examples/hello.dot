@@ -1,24 +1,14 @@
 digraph G{
-  Hello -> World;
-  bgcolor="transparent:darkgreen:crimson:transparent";
-  v1 [shape="ribosite"];
-  v2 [shape="plaintext", label="邱彦祖"];
-  v1 -> v2 [arrowhead="vee"];
-  v1 -> v3 [arrowhead="open"];
-  "张三" -> "World" [dir="none"];
-  v3 [shape="Mcircle"];
-  charset="utf-8";
-  v4 [color="lawngreen", shape="folder", label="下划线"];
-  
-  subgraph cluster_0 {
-    label="shit";
-    v6 -> v7 [arrowhead=diamond];
-    bgcolor="brown:aqua:transparent";
+  // node [fontcolor=aquamarine];
+  Hello -> World [label="edge", fontcolor="aqua"];
+  fontcolor="beige";
+  bgcolor="brown:transparent";
+
+  v3 [shape=circle, color=azure, fontcolor=beige];
+  v3 -> v4;
+
+  subgraph cluster_3 {
+    v7 -> v8;
+    label="subgraph";
   }
-
-  // subgraph cluster_1 {
-  //   v8 -> v9 [arrowhead=crow];
-  // }
-
-
 }
