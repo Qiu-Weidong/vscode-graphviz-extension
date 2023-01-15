@@ -29,7 +29,7 @@ At the same time, you can also prompt for the defined nodes and the [port](https
 ![](asset/other/completion2.gif)
 
 ## formatting
-![](asset/other/formatting.gif)
+![](asset/other/formating.gif)
 
 ## Find references, rename nodes
 ![](asset/other/symbol.gif)
