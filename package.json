@@ -43,7 +43,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile",
+		"vscode:prepublish": "npm run webpack",
 		"webpack": "webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
 		"package": "webpack --mode production --devtool hidden-source-map",
