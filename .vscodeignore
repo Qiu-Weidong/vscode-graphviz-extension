@@ -10,3 +10,5 @@ package-lock.json
 .gitignore
 .yarnrc
 webpack.config.js
+node_modules
+out
