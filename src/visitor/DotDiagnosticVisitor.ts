@@ -63,10 +63,10 @@ export class DotDiagnosticVisitor implements DotVisitor<void> {
       const attribute = Attribute.getInstance();
       
       if(
-        (this.scope.includes('cluster') || this.scope.includes('subgraph')) && ! attribute.isClusterOrSubgraphAttribute(name) ||
-        this.scope.includes('node') && ! attribute.isNodeAttribute(name) ||
-        this.scope.includes('graph') && ! attribute.isGraphAttribute(name) ||
-        this.scope.includes('edge') && ! attribute.isEdgeAttribute(name)
+        (this.scope == 'cluster' || this.scope == 'subgraph') && ! attribute.isClusterOrSubgraphAttribute(name) ||
+        this.scope == 'node' && ! attribute.isNodeAttribute(name) ||
+        this.scope == 'graph' && ! attribute.isGraphAttribute(name) ||
+        this.scope == 'edge' && ! attribute.isEdgeAttribute(name)
       )
       {
         const diagnostic: Diagnostic = {

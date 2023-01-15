@@ -27,6 +27,7 @@
 ![](asset/other/completion2.gif)
 
 ## 格式化
+这有一个小 bug ，格式化功能会删除所有的注释。如果您想要保留注释，请不要使用格式化功能。
 ![](asset/other/formating.gif)
 
 ## 查找引用、重命名节点

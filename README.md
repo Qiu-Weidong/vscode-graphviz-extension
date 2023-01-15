@@ -29,6 +29,7 @@ At the same time, you can also prompt for the defined nodes and the [port](https
 ![](asset/other/completion2.gif)
 
 ## formatting
+There is a small bug where the formatting function removes all comments. If you want to keep comments, please don't use formatting.
 ![](asset/other/formating.gif)
 
 ## Find references, rename nodes
