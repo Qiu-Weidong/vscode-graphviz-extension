@@ -444,10 +444,7 @@ export class Attribute {
   }
 
   public provideValueofStyle(ty: string): CompletionItem[] {
-    if (ty.includes('graph')) {
-      return this.attrMap.get('style:graph') || [];
-    }
-    else if (ty.includes('cluster')) {
+    if (ty.includes('graph') || ty.includes('cluster')) {
       return this.attrMap.get('style:cluster') || [];
     }
     else if (ty.includes('node')) {
@@ -735,10 +732,10 @@ export class Attribute {
     tapered.documentation = new MarkdownString(`
 |dir or arrowhead |	normal |	none |
 | -- | -- | -- |
-| forward | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |		
-| back		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
-| both		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
-| none		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
+| forward | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_forward.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_forward.png')}) |		
+| back		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_back.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_back.png')}) |
+| both		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
+| none		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_none.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_none.png')}) |
 `);
 
 
