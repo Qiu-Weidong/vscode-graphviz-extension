@@ -439,6 +439,21 @@ export class Attribute {
     this.attrMap.set('smoothType', this._getSmoothValue());
   }
 
+  public provideValueofStyle(ty: string): CompletionItem[] {
+    if (ty.includes('graph')) {
+      return this.attrMap.get('style:graph') || [];
+    }
+    else if (ty.includes('cluster')) {
+      return this.attrMap.get('style:cluster') || [];
+    }
+    else if (ty.includes('node')) {
+      return this.attrMap.get('style:node') || [];
+    }
+    else if (ty.includes('edge')) {
+      return this.attrMap.get('style:edge') || [];
+    }
+    return [];
+  }
 
   public provideValueOfAttribute(attrName: string): CompletionItem[] {
     const attr = attributes.find(item => item.name == attrName);
@@ -476,8 +491,17 @@ export class Attribute {
       item => {
         let result = new CompletionItem(item.name, CompletionItemKind.Property);
         result.detail = item.description;
-        if (item.type.length == 1 && item.type.includes('string')) {
-          result.insertText = new SnippetString(`${item.name} = "$1"`);
+        if (item.type.length == 1) {
+          const ty = item.type[0];
+          switch (ty) {
+            case 'string':
+              result.insertText = new SnippetString(`${item.name} = "$1"`);
+              break;
+            case 'rect':
+              result.insertText = new SnippetString(`${item.name}="$1, $2, $3, $4"`);
+              break;
+          }
+
         }
         return result;
       }
@@ -515,7 +539,7 @@ export class Attribute {
 
   private _getColorValue(): CompletionItem[] {
     let result: CompletionItem[] = [];
-    for(const [key, value] of colorMap.entries()) {
+    for (const [key, value] of colorMap.entries()) {
       const ret = new CompletionItem(key, CompletionItemKind.Color);
       ret.detail = key;
       ret.documentation = value;
@@ -663,5 +687,25 @@ export class Attribute {
       value => new CompletionItem(value, CompletionItemKind.Constant)
     );
   }
+
+  private _getNodeStyleValue(): CompletionItem[] {
+    return ["dashed", "dotted", "solid", "invis", "bold", "filled", "striped", "wedged", "diagonals", "rounded"].map(
+      value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+
+        return ret;
+      })
+    return [];
+  }
+
+  private _getEdgeStyleValue(): CompletionItem[] {
+    return [];
+  }
+
+  private _getClusterStyleValue(): CompletionItem[] {
+    return [];
+  }
+
+
 
 };

@@ -332,7 +332,12 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
 
   completeAttrValue(attr_name: string): void {
     const completions = Attribute.getInstance().provideValueOfAttribute(attr_name);
-    this.completionItems.push(...completions);
+    // style 要特判
+    if (attr_name == 'style') {
+      this.completionItems.push(...Attribute.getInstance().provideValueofStyle(this.scope));
+    }
+    else
+      this.completionItems.push(...completions);
   }
 
   completePort(node_name: string): void {

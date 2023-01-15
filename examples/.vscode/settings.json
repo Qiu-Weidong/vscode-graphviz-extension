@@ -1,6 +1,6 @@
 {
     "graphviz": {
-      "multiPanel": false,
+      "multiPanel": true,
       "hotUpdate": true
     }
 }

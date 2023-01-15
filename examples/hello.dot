@@ -2,9 +2,9 @@ digraph G{
   // node [fontcolor=aquamarine];
   Hello -> World [label="edge", fontcolor="aqua"];
   fontcolor="beige";
-  bgcolor="brown:transparent";
+  // bgcolor="brown:transparent";
 
-  v3 [shape=circle, color=azure, fontcolor=beige];
+  v3 [shape=circle, color=azure, fontcolor=beige, rects="2, 3, 7, 8"];
   v3 -> v4;
 
   subgraph cluster_3 {
