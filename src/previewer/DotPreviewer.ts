@@ -17,7 +17,7 @@ export class DotPreviewPanel {
 
   private _document: TextDocument;
   private _engine: string;
-  private _history: { document: TextDocument, engine: string } [];
+  private _history: { document: TextDocument, engine: string }[];
 
   constructor(document: TextDocument, title: string, engine?: string) {
     this._document = document;
@@ -40,7 +40,7 @@ export class DotPreviewPanel {
   }
 
   public dispose() {
-    if(this == DotPreviewPanel._uniquePanel) DotPreviewPanel._uniquePanel = undefined;
+    if (this == DotPreviewPanel._uniquePanel) DotPreviewPanel._uniquePanel = undefined;
 
     this._panel.dispose();
     DotPreviewPanel._panels.delete(this._document.uri.toString());
@@ -80,7 +80,7 @@ export class DotPreviewPanel {
 
   private _back() {
     const item = this._history.pop();
-    if(item) {
+    if (item) {
       this._document = item.document;
       this._engine = item.engine;
       this._render();
@@ -170,13 +170,13 @@ export class DotPreviewPanel {
 
 
   public static previewInUniquePanel(document: TextDocument) {
-    if(! DotPreviewPanel._uniquePanel) {
+    if (!DotPreviewPanel._uniquePanel) {
       DotPreviewPanel._uniquePanel = new DotPreviewPanel(document, 'graphviz');
       DotPreviewPanel._uniquePanel._render();
     }
     else {
       const panel = DotPreviewPanel._uniquePanel;
-      panel._history.push({document: panel._document, engine: panel._engine});
+      panel._history.push({ document: panel._document, engine: panel._engine });
       panel._document = document;
       panel._render();
     }
@@ -202,14 +202,14 @@ export class DotPreviewPanel {
       title: 'choose a engine, dot is default',
       placeHolder: 'choose a engine, dot is default'
     });
-    if(! engine) return;
+    if (!engine) return;
 
     const format = await window.showQuickPick(["svg", "dot", "xdot", "plain", "plain-ext", "ps", "ps2", "json", "json0"], {
       title: 'choose a format, svg is default',
       placeHolder: 'choose a format, svg is default'
     });
 
-    if(! format) return;
+    if (!format) return;
 
     const uri = await window.showSaveDialog({
       filters: { 'images': [format] }
@@ -231,9 +231,19 @@ export class DotPreviewPanel {
 
   public static updateDocument(document: TextDocument) {
     const panel = DotPreviewPanel._panels.get(document.uri.toString());
-    if(panel) {
+    if (panel) {
       panel._document = document;
       panel._render();
+    }
+
+    if (DotPreviewPanel._uniquePanel) {
+      const uri = DotPreviewPanel._uniquePanel._document.uri.toString();
+      const uri2 = document.uri.toString();
+      if (uri == uri2) {
+        DotPreviewPanel._uniquePanel._document = document;
+        DotPreviewPanel._uniquePanel._render();
+      }
+
     }
   }
 

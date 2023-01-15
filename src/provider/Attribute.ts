@@ -1,6 +1,6 @@
 import { CompletionItem, CompletionItemKind, MarkdownString, SnippetString, Uri } from "vscode";
 
-// 共 33 种类型 178中属性
+// 共 33 种类型 176中属性
 const attributes = [
   { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `A string in the xdot format specifying an arbitrary background.`, },
   { name: "area", usedby: ['Nodes', 'Clusters'], type: ['double'], description: `Indicates the preferred area for a node or empty cluster.\n patchwork only.`, },

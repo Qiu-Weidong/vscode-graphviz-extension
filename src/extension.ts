@@ -13,15 +13,15 @@ import { Attribute } from './provider/Attribute';
 export function activate(context: vscode.ExtensionContext) {
   DotPreviewPanel.extensionUri = context.extensionUri;
   Attribute.setExtensionUri(context.extensionUri);
-  
+
   vscode.commands.registerCommand("graphviz.generate", (args: any) => {
-    
+
     const title: string = args.title || 'graphviz';
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
-    if(document) {
+    if (document) {
       const settings = vscode.workspace.getConfiguration('graphviz');
-      if(settings.get<boolean>('multiPanel')) {
-        DotPreviewPanel.preview( title, document);
+      if (settings.get<boolean>('multiPanel')) {
+        DotPreviewPanel.preview(title, document);
       }
       else {
         DotPreviewPanel.previewInUniquePanel(document);
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.commands.registerCommand("graphviz.export", (args: any) => {
     const document: vscode.TextDocument = args.document || vscode.window.activeTextEditor?.document;
-    if(document) {
+    if (document) {
       DotPreviewPanel.save(document);
     }
   });
@@ -41,18 +41,27 @@ export function activate(context: vscode.ExtensionContext) {
 
   // 看不懂，直接抄过来的。
   if (vscode.window.registerWebviewPanelSerializer) {
-		vscode.window.registerWebviewPanelSerializer('preview', {
-			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
-				console.log(`Got state: ${state}`);
+    vscode.window.registerWebviewPanelSerializer('preview', {
+      async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+        console.log(`Got state: ${state}`);
         webviewPanel.reveal();
-			}
-		});
-	}
-
+      }
+    });
+  }
 
   vscode.workspace.onDidOpenTextDocument(document => {
     DotPreviewPanel.updateDocument(document);
-  })
+  });
+
+  const settings = vscode.workspace.getConfiguration('graphviz');
+  if (settings.get<boolean>('hotUpdate')) {
+    // 热更新
+
+    vscode.workspace.onDidSaveTextDocument(document => {
+      DotPreviewPanel.updateDocument(document);
+    });
+  }
+
 }
 
 
