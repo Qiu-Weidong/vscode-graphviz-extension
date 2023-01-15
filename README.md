@@ -16,3 +16,11 @@
  - 错误诊断
  - 代码格式化
  - Hover
+
+
+|dir \ arrowhead|	normal|	none|
+|--|--|--|
+|forward|![](asset/style/edge/none_back.png) | ![](asset/style/edge/none_both.png) |		
+|back		|||
+|both		|||
+|none		|||

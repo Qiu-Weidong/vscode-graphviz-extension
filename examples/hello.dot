@@ -1,14 +1,14 @@
 digraph G{
-  // node [fontcolor=aquamarine];
-  Hello -> World [label="edge", fontcolor="aqua"];
-  fontcolor="beige";
-  // bgcolor="brown:transparent";
+  node [fontcolor=aquamarine, style="dotted"];
+  Hello -> World [label="edge", fontcolor="aqua", color="blue:aliceblue"];
 
-  v3 [shape=circle, color=azure, fontcolor=beige, rects="2, 3, 7, 8"];
-  v3 -> v4;
+  subgraph cluster_0 {
+    style="striped";
+    v1 -> v2 [style="tapered"];
 
-  subgraph cluster_3 {
-    v7 -> v8;
-    label="subgraph";
+    style = "invis";
   }
+
+  // graph [style=""];
+  // node [style="dotted"];
 }

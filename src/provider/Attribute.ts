@@ -437,6 +437,10 @@ export class Attribute {
     this.attrMap.set('rankType', this._getRankTypeValue());
     this.attrMap.set('shape', this._getShapeValue());
     this.attrMap.set('smoothType', this._getSmoothValue());
+
+    this.attrMap.set('style:node', this._getNodeStyleValue());
+    this.attrMap.set('style:edge', this._getEdgeStyleValue());
+    this.attrMap.set('style:cluster', this._getClusterStyleValue());
   }
 
   public provideValueofStyle(ty: string): CompletionItem[] {
@@ -689,21 +693,79 @@ export class Attribute {
   }
 
   private _getNodeStyleValue(): CompletionItem[] {
-    return ["dashed", "dotted", "solid", "invis", "bold", "filled", "striped", "wedged", "diagonals", "rounded"].map(
+    const result = ["dashed", "dotted", "solid", "bold", "filled", "striped", "wedged", "diagonals", "rounded"].map(
       value => {
         const ret = new CompletionItem(value, CompletionItemKind.Constant);
-
+        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'node', 'n_' + value + '.png')
+          })`);
+        ret.detail = value;
         return ret;
-      })
-    return [];
+      });
+    // 添加一个invis
+    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
+    invis.detail = 'invis';
+    result.push(invis);
+
+    // 添加一个 radical
+    const radial = new CompletionItem('radial', CompletionItemKind.Constant);
+    radial.detail = 'radial';
+    radial.documentation = `The style "radial" is recognized for nodes, clusters and graphs, and indicates a radial-style gradient fill if applicable.`;
+    result.push(radial);
+    return result;
   }
 
   private _getEdgeStyleValue(): CompletionItem[] {
-    return [];
+    const result: CompletionItem[] = ["dashed", "dotted", "solid", "bold"].map(
+      value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'e_' + value + '.png')
+          })`);
+        ret.detail = value;
+        return ret;
+      });
+
+    // 添加一个invis
+    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
+    invis.detail = 'invis';
+    result.push(invis);
+
+    // tapered
+    const tapered = new CompletionItem('tapered', CompletionItemKind.Constant);
+    tapered.detail = 'tapered';
+    tapered.documentation = new MarkdownString(`
+|dir or arrowhead |	normal |	none |
+| -- | -- | -- |
+| forward | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |		
+| back		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
+| both		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
+| none		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
+`);
+
+
+    result.push(tapered);
+    return result;
   }
 
   private _getClusterStyleValue(): CompletionItem[] {
-    return [];
+    const result: CompletionItem[] = ["dashed", "dotted", "solid", "bold", "filled", "striped", "rounded"].map(
+      value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'cluster', 'c_' + value + '.png')
+          })`);
+        ret.detail = value;
+        return ret;
+      });
+
+    const radial = new CompletionItem('radial', CompletionItemKind.Constant);
+    radial.detail = 'radial';
+    radial.documentation = `The style "radial" is recognized for nodes, clusters and graphs, and indicates a radial-style gradient fill if applicable.`;
+    result.push(radial);
+    // 添加一个invis
+    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
+    invis.detail = 'invis';
+    result.push(invis);
+
+    return result;
   }
 
 
