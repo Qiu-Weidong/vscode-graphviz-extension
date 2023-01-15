@@ -1,23 +1,511 @@
-import { CompletionItem, CompletionItemKind, MarkdownString, SnippetString, Uri } from "vscode";
+export const attributes = [
+  { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `# \_background
 
-// 共 33 种类型 176中属性
-const attributes = [
-  { name: "_background", usedby: ['Graphs'], type: ['xdot'], description: `A string in the xdot format specifying an arbitrary background.`, },
-  { name: "area", usedby: ['Nodes', 'Clusters'], type: ['double'], description: `Indicates the preferred area for a node or empty cluster.\n patchwork only.`, },
-  { name: "arrowhead", usedby: ['Edges'], type: ['arrowType'], description: `Style of arrowhead on the head node of an edge.`, },
-  { name: "arrowsize", usedby: ['Edges'], type: ['double'], description: `Multiplicative scale factor for arrowheads.`, },
-  { name: "arrowtail", usedby: ['Edges'], type: ['arrowType'], description: `Style of arrowhead on the tail node of an edge.`, },
-  { name: "bb", usedby: ['Graphs'], type: ['rect'], description: `Bounding box of drawing in points.\n write only.`, },
-  { name: "beautify", usedby: ['Graphs'], type: ['bool'], description: `Whether to draw leaf nodes uniformly in a circle around the root node in sfdp..\n sfdp only.`, },
-  { name: "bgcolor", usedby: ['Graphs', 'Clusters'], type: ['color', 'colorList'], description: `Canvas background color.`, },
-  { name: "center", usedby: ['Graphs'], type: ['bool'], description: `Whether to center the drawing in the output canvas.`, },
-  { name: "charset", usedby: ['Graphs'], type: ['string'], description: `Character encoding used when interpreting string input as a text label..`, },
-  { name: "class", usedby: ['Edges', 'Nodes', 'Clusters', 'Graphs'], type: ['string'], description: `Classnames to attach to the node, edge, graph, or cluster's SVG element.\n svg only.`, },
-  { name: "cluster", usedby: ['Clusters', 'Subgraphs'], type: ['bool'], description: `Whether the subgraph is a cluster.`, },
-  {
-    name: "clusterrank", usedby: ['Graphs'], type: ['clusterMode'], description: `Mode used for handling clusters.\n dot only.`,
-  }, { name: "color", usedby: ['Edges', 'Nodes', 'Clusters'], type: ['color', 'colorList'], description: `Basic drawing color for graphics, not text.`, },
-  { name: "colorscheme", usedby: ['Edges', 'Nodes', 'Clusters', 'Graphs'], type: ['string'], description: `A color scheme namespace: the context for interpreting color names.`, },
+  A string in the [\`xdot\` format](/docs/attr-types/xdot/) specifying an arbitrary background
+  
+  type: _[xdot](/docs/attr-types/xdot/), default: \`<none>\`_
+  
+  During rendering, the canvas is first filled as described in the [\`bgcolor\` attribute](https://graphviz.org/docs/attrs/bgcolor/).
+  
+  Then, if \`_background\` is defined, the graphics operations described in the string are performed on the canvas.
+  
+  See [\`xdot\` format](/docs/attr-types/xdot/) page for more information.
+  
+  Render a red square in the background
+  
+  \`\`\`dot
+  digraph G {
+    _background="c 7 -#ff0000 p 4 4 4 36 4 36 36 4 36";
+    a -> b
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  [Search the Graphviz codebase for \`"_background"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="_background">)`, },
+  { name: "area", usedby: ['Nodes', 'Clusters'], type: ['double'], description: `# area
+
+  Indicates the preferred area for a node or empty cluster
+  
+  type: _[double](/docs/attr-types/double/), default: \`1.0\`, minimum: \`>0\`_
+  
+  Example: Australian Coins, area proportional to value
+  
+  \`\`\`dot
+  graph {
+    layout="patchwork"
+    node [style=filled]
+    "5c"  [area=  5 fillcolor=silver]
+    "10c" [area= 10 fillcolor=silver]
+    "20c" [area= 20 fillcolor=silver]
+    "50c" [area= 50 fillcolor=silver]
+    "$1"  [area=100 fillcolor=gold]
+    "$2"  [area=200 fillcolor=gold]
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Nodes
+  * Clusters
+  
+  _Note: [patchwork](/docs/layouts/patchwork/) only._
+  
+  [Search the Graphviz codebase for \`"area"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="area">)
+  
+  Last modified October 2, 2022: [area: shorten description \(ae570f0\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/ae570f0817415c3bb81f83ce94f6a68ae26bca9c)`, },
+  { name: "arrowhead", usedby: ['Edges'], type: ['arrowType'], description: `# arrowhead
+
+Style of arrowhead on the head node of an edge
+
+type: _[arrowType](/docs/attr-types/arrowType/), default: \`normal\`_
+
+This will only appear if the [\`dir\` attribute](https://graphviz.org/docs/attrs/dir/) is \`forward\` or \`both\`.
+
+See the [limitation](https://graphviz.org/doc/info/attrs.html#undir_note).
+
+See also:
+
+* [\`arrowtail\`](https://graphviz.org/docs/attrs/arrowtail/)
+
+_Valid on:_
+
+* Edges
+
+[Search the Graphviz codebase for \`"arrowhead"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="arrowhead">)
+
+Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "arrowsize", usedby: ['Edges'], type: ['double'], description: `# arrowsize
+
+  Multiplicative scale factor for arrowheads
+  
+  type: _[double](/docs/attr-types/double/), default: \`1.0\`, minimum: \`0.0\`_
+  
+  Example
+  
+  \`\`\`dot
+  digraph {
+    quiver -> "0.5" [arrowsize=0.5]
+    quiver -> "1"
+    quiver -> "2" [arrowsize=2]
+    quiver -> "3" [arrowsize=3]
+  }
+  \`\`\`
+  
+  
+  _Valid on:_
+  
+  * Edges
+  
+  [Search the Graphviz codebase for \`"arrowsize"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="arrowsize">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "arrowtail", usedby: ['Edges'], type: ['arrowType'], description: `# arrowtail
+
+  Style of arrowhead on the tail node of an edge
+  
+  type: _[arrowType](/docs/attr-types/arrowType/), default: \`normal\`_
+  
+  This will only appear if the [\`dir\` attribute](https://graphviz.org/docs/attrs/dir/) is \`back\` or \`both\`.
+  
+  See the [limitation](https://graphviz.org/doc/info/attrs.html#undir_note).
+  
+  See also:
+  
+  * [\`arrowhead\`](https://graphviz.org/docs/attrs/arrowhead/)
+  
+  _Valid on:_
+  
+  * Edges
+  
+  [Search the Graphviz codebase for \`"arrowtail"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="arrowtail">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "bb", usedby: ['Graphs'], type: ['rect'], description: `# bb
+
+  Bounding box of drawing in points
+  
+  type: _[rect](/docs/attr-types/rect/)_
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  _Note: write only._
+  
+  [Search the Graphviz codebase for \`"bb"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="bb">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "beautify", usedby: ['Graphs'], type: ['bool'], description: `# beautify
+
+  Whether to draw leaf nodes uniformly in a circle around the root node in sfdp.
+  
+  type: _[bool](/docs/attr-types/bool/), default: \`false\`_
+  
+  Whether to try to draw leaf nodes uniformly on a circle around the root node.
+  
+  Note this is affected by [Issue 2283](https://gitlab.com/graphviz/graphviz/-/issues/2283): rendering one fewer sector than necessary, overlapping the first and last nodes.
+  
+  Examples:
+  
+  Beautify
+  
+  \`\`\`dot
+  digraph G {
+      layout="sfdp"
+      beautify=true
+  
+      N0 -> {N1; N2; N3; N4; N5; N6}
+  }
+  \`\`\`
+  
+  
+  
+  No beautify
+  
+  \`\`\`dot
+  digraph G {
+      layout="sfdp"
+      beautify=false
+  
+      N0 -> {N1; N2; N3; N4; N5; N6}
+  }
+  \`\`\`
+  
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  _Note: [sfdp](/docs/layouts/sfdp/) only._
+  
+  [Search the Graphviz codebase for \`"beautify"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="beautify">)
+  
+  Last modified September 27, 2022: [Add more info to beautify \(e7b6a4d\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/e7b6a4d2f2b439543b12702cfe15649d523f177b)`, },
+  { name: "bgcolor", usedby: ['Graphs', 'Clusters'], type: ['color', 'colorList'], description: `# bgcolor
+
+  Canvas background color
+  
+  type: _[color](/docs/attr-types/color/) | [colorList](/docs/attr-types/colorList/), default: \`<none>\`_
+  
+  When attached to the root graph, this color is used as the background for entire canvas.
+  
+  When a cluster attribute, it is used as the initial background for the cluster. If a cluster has a filled [\`style\`](https://graphviz.org/docs/attrs/style/), the cluster's [\`fillcolor\`](https://graphviz.org/docs/attrs/fillcolor/) will overlay the background color.
+  
+  If the value is a [\`colorList\`](/docs/attr-types/colorList/), a gradient fill is used. By default, this is a linear fill; setting \`[style](https://graphviz.org/docs/attrs/style/)=radial\` will cause a radial fill. Only two colors are used. If the second color \(after a colon\) is missing, the default color is used for it. See also the [\`gradientangle\`](https://graphviz.org/docs/attrs/gradientangle/) attribute for setting the gradient angle.
+  
+  For certain output formats, such as PostScript, no fill is done for the root graph unless \`bgcolor\` is explicitly set.
+  
+  For bitmap formats, however, the bits need to be initialized to something, so the canvas is filled with white by default. This means that if the bitmap output is included in some other document, all of the bits within the bitmap's bounding box will be set, overwriting whatever color or graphics were already on the page. If this effect is not desired, and you only want to set bits explicitly assigned in drawing the graph, set \`bgcolor="transparent"\`.
+  
+  Example
+  
+  \`\`\`dot
+  graph {
+    bgcolor="lightblue"
+    label="Home"
+    subgraph cluster_ground_floor {
+      bgcolor="lightgreen"
+      label="Ground Floor"
+      Lounge
+      Kitchen
+    }
+    subgraph cluster_top_floor {
+      bgcolor="lightyellow"
+      label="Top Floor"
+      Bedroom
+      Bathroom
+    }
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Graphs
+  * Clusters
+  
+  [Search the Graphviz codebase for \`"bgcolor"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="bgcolor">)
+  
+  Last modified September 18, 2022: [Update bgcolor.md: add description \(51135fb\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/51135fb040a93ebb43a8c520d4574e28aabe5420)`, },
+  { name: "center", usedby: ['Graphs'], type: ['bool'], description: `# center
+
+  Whether to center the drawing in the output canvas
+  
+  type: _[bool](/docs/attr-types/bool/), default: \`false\`_
+  
+  Can be \`true\` or \`false\`.
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  [Search the Graphviz codebase for \`"center"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="center">)
+  
+  Last modified September 14, 2022: [Update center.md: use 'whether' \(shorter description\). \(ce5ce41\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/ce5ce41233ff4bed8a0c2666d2a7071c6cd5d674)`, },
+  { name: "charset", usedby: ['Graphs'], type: ['string'], description: `# charset
+
+  Character encoding used when interpreting string input as a text label.
+  
+  type: _[string](/docs/attr-types/string/), default: \`"UTF-8"\`_
+  
+  The default value is \`"UTF-8"\`. The other legal values are:
+  
+  * \`"utf-8"\` / \`"utf8"\` \(default value\)
+  * \`"iso-8859-1"\` / \`"ISO_8859-1"\` / \`"ISO8859-1"\` / \`"ISO-IR-100"\` / \`"Latin1"\` / \`"l1"\` / \`"latin-1"\`
+  * \`"big-5"\` / \`"big5"\`: the [Big-5 Chinese encoding](https://en.wikipedia.org/wiki/Big5)
+  
+  The \`charset\` attribute is case-insensitive.
+  
+  Note that if the character encoding used in the input does not match the \`charset\` value, the resulting output may be very strange.
+  
+  Example
+  
+  \`\`\`dot
+  digraph G {
+    charset="UTF-8"
+    "🍔" -> "💩"
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  [Search the Graphviz codebase for \`"charset"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="charset">)
+  
+  Last modified September 17, 2022: [Update charset.md: add reference to big5 \(b9ccdbb\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b9ccdbbe4ce64737d793ac8c313976b89250359d)`, },
+  { name: "class", usedby: ['Edges', 'Nodes', 'Clusters', 'Graphs'], type: ['string'], description: `# class
+
+  Classnames to attach to the node, edge, graph, or cluster's SVG element
+  
+  type: _[string](/docs/attr-types/string/), default: \`""\`_
+  
+  Combine with [\`stylesheet\`](https://graphviz.org/docs/attrs/stylesheet/) for styling SVG output using CSS classnames.
+  
+  Multiple space-separated classes are supported.
+  
+  See also:
+  
+  * [\`stylesheet\`](https://graphviz.org/docs/attrs/stylesheet/)
+  * [\`id\`](https://graphviz.org/docs/attrs/id/)
+  
+  Example:
+  
+  \`\`\`dot
+  digraph G {
+    graph [class="cats"];
+  
+    subgraph cluster_big {
+      graph [class="big_cats"];
+  
+      "Lion" [class="yellow social"];
+      "Snow Leopard" [class="white solitary"];
+    }
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Edges
+  * Nodes
+  * Clusters
+  * Graphs
+  
+  _Note: [svg](/docs/outputs/svg/) only._
+  
+  [Search the Graphviz codebase for \`"class"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="class">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "cluster", usedby: ['Clusters', 'Subgraphs'], type: ['bool'], description: `# cluster
+
+  Whether the subgraph is a cluster
+  
+  type: _[bool](/docs/attr-types/bool/), default: \`false\`_
+  
+  Subgraph clusters are rendered differently, e.g. [\`dot\`](/docs/layouts/dot/) renders a box around subgraph clusters, but doesn't draw a box around non-subgraph clusters.
+  
+  Example:
+  
+  \`\`\`dot
+  digraph cats {
+    subgraph cluster_big_cats {
+      // This subgraph is a cluster, because the name begins with "cluster"
+      
+      "Lion";
+      "Snow Leopard";
+    }
+  
+    subgraph domestic_cats {
+      // This subgraph is also a cluster, because cluster=true.
+      cluster=true;
+  
+      "Siamese";
+      "Persian";
+    }
+  
+    subgraph not_a_cluster {
+      // This subgraph is not a cluster, because it doesn't start with "cluster",
+      // nor sets cluster=true.
+      
+      "Wildcat";
+    }
+  }
+  \`\`\`
+  
+  _Valid on:_
+  
+  * Clusters
+  * Subgraphs
+  
+  [Search the Graphviz codebase for \`"cluster"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="cluster">)
+  
+  Last modified September 17, 2022: [Update cluster.md: remove duplicate dot \(f227bc5\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/f227bc50170040a9317cdcc1294a1d0e0fd69adf)`, },
+  { name: "clusterrank", usedby: ['Graphs'], type: ['clusterMode'], description: `# clusterrank
+
+  Mode used for handling clusters
+  
+  type: _[clusterMode](/docs/attr-types/clusterMode/), default: \`local\`_
+  
+  If \`clusterrank=local\`, a subgraph whose name begins with \`cluster\` is given special treatment.
+  
+  The subgraph is laid out separately, and then integrated as a unit into its parent graph, with a bounding rectangle drawn about it. If the cluster has a [\`label\`](https://graphviz.org/docs/attrs/label/) parameter, this label is displayed within the rectangle.
+  
+  Note also that there can be clusters within clusters.
+  
+  The modes \`clusterrank=global\` and \`clusterrank=none\` appear to be identical, both turning off the special cluster processing.
+  
+  _Valid on:_
+  
+  * Graphs
+  
+  _Note: [dot](/docs/layouts/dot/) only._
+  
+  [Search the Graphviz codebase for \`"clusterrank"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="clusterrank">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`,}, 
+  { name: "color", usedby: ['Edges', 'Nodes', 'Clusters'], type: ['color', 'colorList'], description: `# color
+
+  Basic drawing color for graphics, not text
+  
+  type: _[color](/docs/attr-types/color/) | [colorList](/docs/attr-types/colorList/), default: \`black\`_
+  
+  For the latter, use the [\`fontcolor\`](https://graphviz.org/docs/attrs/fontcolor/) attribute.
+  
+  For edges, the value can either be a single color or a [\`colorList\`](/docs/attr-types/colorList/).
+  
+  In the latter case, if \`colorList\` has no fractions, the edge is drawn using parallel splines or lines, one for each color in the list, in the order given.
+  
+  The head arrow, if any, is drawn using the first color in the list, and the tail arrow, if any, the second color. This supports the common case of drawing opposing edges, but using parallel splines instead of separately routed multiedges.
+  
+  If any fraction is used, the colors are drawn in series, with each color being given roughly its specified fraction of the edge.
+  
+  For example, the graph:
+  
+  Edge Color Example
+  
+  \`\`\`dot
+  digraph G {
+    a -> b [dir=both color="red:blue"]
+    c -> d [dir=none color="green:red;0.25:blue"]
+  }
+  \`\`\`
+  
+  yields:
+  
+  ![](https://graphviz.org/doc/info/colorlist.svg)
+  
+  Subgraph \& Node Color Example
+  
+  \`\`\`dot
+  digraph G {
+    subgraph cluster_yellow {
+      color="yellow"
+      a [color="red"]
+      b [color="green"]
+    }
+  }
+  \`\`\`
+  
+  yields:
+  
+  ![](https://graphviz.org/doc/info/subgraph_node_color.svg)
+  
+  See also:
+  
+  * [\`colorscheme\`](https://graphviz.org/docs/attrs/colorscheme/)
+  
+  _Valid on:_
+  
+  * Edges
+  * Nodes
+  * Clusters
+  
+  [Search the Graphviz codebase for \`"color"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="color">)
+  
+  Last modified June 12, 2022: [add simple descriptions for attributes \(b2a18ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/b2a18ac791c2a51fed2d08379198d1feb59c84c8)`, },
+  { name: "colorscheme", usedby: ['Edges', 'Nodes', 'Clusters', 'Graphs'], type: ['string'], description: `# colorscheme
+
+  A color scheme namespace: the context for interpreting color names
+  
+  type: _[string](/docs/attr-types/string/), default: \`""\`_
+  
+  In particular, if a [\`color\`](/docs/attr-types/color/) value has form \`"xxx"\` or \`"//xxx"\`, then the color \`xxx\` will be evaluated according to the current color scheme. If no color scheme is set, the standard [X11 naming](https://graphviz.org/doc/info/colors.html#x11) is used.
+  
+  For example, if \`colorscheme=oranges9\` \(from [Brewer color schemes](https://graphviz.org/doc/info/colors.html#brewer)\), then \`color=7\` is interpreted as \`color="/oranges9/7"\`, the 7th color in the \`oranges9\` colorscheme.
+  
+  Orange Colorscheme
+  
+  \`\`\`dot
+  graph {
+    node [colorscheme=oranges9] # Apply colorscheme to all nodes
+    1 [color=1]
+    2 [color=2]
+    3 [color=3]
+    4 [color=4]
+    5 [color=5]
+    6 [color=6]
+    7 [color=7]
+    8 [color=8]
+    9 [color=9]
+  }
+  \`\`\`
+  
+  Green Colorscheme
+  
+  \`\`\`dot
+  graph {
+    node [colorscheme=greens9] # Apply colorscheme to all nodes
+    1 [color=1]
+    2 [color=2]
+    3 [color=3]
+    4 [color=4]
+    5 [color=5]
+    6 [color=6]
+    7 [color=7]
+    8 [color=8]
+    9 [color=9]
+  }
+  \`\`\`
+  
+  See also:
+  
+  * [\`color\`](https://graphviz.org/docs/attrs/color/)
+  
+  _Valid on:_
+  
+  * Edges
+  * Nodes
+  * Clusters
+  * Graphs
+  
+  [Search the Graphviz codebase for \`"colorscheme"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="colorscheme">)
+  
+  Last modified September 14, 2022: [Update colorscheme.md: make the description shorter \(2d52cba\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/2d52cba6f34af043fa1ce8aebedeecef6a3be191)`, },
+  
+  
+  
   { name: "comment", usedby: ['Edges', 'Nodes', 'Graphs'], type: ['string'], description: `Comments are inserted into output.`, }, {
     name: "compound", usedby: ['Graphs'], type: ['bool'], description: `If true, allow edges between clusters.\n dot only.`,
   }, { name: "concentrate", usedby: ['Graphs'], type: ['bool'], description: `If true, use edge concentrators.`, }, {
@@ -237,534 +725,50 @@ const attributes = [
   }, { name: "weight", usedby: ['Edges'], type: ['int', 'double'], description: `Weight of edge.`, },
   { name: "width", usedby: ['Nodes'], type: ['double'], description: `Width of node, in inches.`, }, {
     name: "xdotversion", usedby: ['Graphs'], type: ['string'], description: `Determines the version of xdot used in output.\n xdot only.`,
-  }, { name: "xlabel", usedby: ['Edges', 'Nodes'], type: ['lblString'], description: `External label for a node or edge.`, }, {
-    name: "xlp", usedby: ['Nodes', 'Edges'], type: ['point'], description: `Position of an exterior label, in points.\n write only.`,
-  },
-  { name: "z", usedby: ['Nodes'], type: ['double'], description: `Z-coordinate value for 3D layouts and displays.`, },
-];
+  }, 
+  
+  { name: "xlabel", usedby: ['Edges', 'Nodes'], type: ['lblString'], description: `External label for a node or edge.`, }, 
+  
+  
+  {
+    name: "xlp", usedby: ['Nodes', 'Edges'], type: ['point'], description: `# xlp
 
-const colorMap = new Map([
-  ['silver', '#c0c0c0'],
-  ['gray', '#808080'],
-  ['white', '#ffffff'],
-  ['maroon', '#800000'],
-  ['red', '#ff0000'],
-  ['purple', '#800080'],
-  ['fuchsia', '#ff00ff'],
-  ['green', '#008000'],
-  ['lime', '#00ff00'],
-  ['olive', '#808000'],
-  ['yellow', '#ffff00'],
-  ['navy', '#000080'],
-  ['blue', '#0000ff'],
-  ['teal', '#008080'],
-  ['aqua', '#00ffff'],
-  ['orange', '#ffa500'],
-  ['aliceblue', '#f0f8ff'],
-  ['antiquewhite', '#faebd7'],
-  ['aquamarine', '#7fffd4'],
-  ['azure', '#f0ffff'],
-  ['beige', '#f5f5dc'],
-  ['bisque', '#ffe4c4'],
-  ['blanchedalmond', '#ffe4c4'],
-  ['blueviolet', '#8a2be2'],
-  ['brown', '#a52a2a'],
-  ['burlywood', '#deb887'],
-  ['cadetblue', '#5f9ea0'],
-  ['chartreuse', '#7fff00'],
-  ['chocolate', '#d2691e'],
-  ['coral', '#ff7f50'],
-  ['cornflowerblue', '#6495ed'],
-  ['cornsilk', '#fff8dc'],
-  ['crimson', '#dc143c'],
-  ['darkblue', '#00008b'],
-  ['darkcyan', '#008b8b'],
-  ['darkgoldenrod', '#b8860b'],
-  ['darkgray', '#a9a9a9'],
-  ['darkgreen', '#006400'],
-  ['darkgrey', '#a9a9a9'],
-  ['darkkhaki', '#bdb76b'],
-  ['darkmagenta', '#8b008b'],
-  ['darkolivegreen', '#556b2f'],
-  ['darkorange', '#ff8c00'],
-  ['darkorchid', '#9932cc'],
-  ['darkred', '#8b0000'],
-  ['darksalmon', '#e9967a'],
-  ['darkseagreen', '#8fbc8f'],
-  ['darkslateblue', '#483d8b'],
-  ['darkslategray', '#2f4f4f'],
-  ['darkslategrey', '#2f4f4f'],
-  ['darkturquoise', '#00ced1'],
-  ['darkviolet', '#9400d3'],
-  ['deeppink', '#ff1493'],
-  ['deepskyblue', '#00bfff'],
-  ['dimgray', '#696969'],
-  ['dimgrey', '#696969'],
-  ['dodgerblue', '#1e90ff'],
-  ['firebrick', '#b22222'],
-  ['floralwhite', '#fffaf0'],
-  ['forestgreen', '#228b22'],
-  ['gainsboro', '#dcdcdc'],
-  ['ghostwhite', '#f8f8ff'],
-  ['gold', '#ffd700'],
-  ['goldenrod', '#daa520'],
-  ['greenyellow', '#adff2f'],
-  ['grey', '#808080'],
-  ['honeydew', '#f0fff0'],
-  ['hotpink', '#ff69b4'],
-  ['indianred', '#cd5c5c'],
-  ['indigo', '#4b0082'],
-  ['ivory', '#fffff0'],
-  ['khaki', '#f0e68c'],
-  ['lavender', '#e6e6fa'],
-  ['lavenderblush', '#fff0f5'],
-  ['lawngreen', '#7cfc00'],
-  ['lemonchiffon', '#fffacd'],
-  ['lightblue', '#add8e6'],
-  ['lightcoral', '#f08080'],
-  ['lightcyan', '#e0ffff'],
-  ['lightgoldenrodyellow', '#fafad2'],
-  ['lightgray', '#d3d3d3'],
-  ['lightgreen', '#90ee90'],
-  ['lightgrey', '#d3d3d3'],
-  ['lightpink', '#ffb6c1'],
-  ['lightsalmon', '#ffa07a'],
-  ['lightseagreen', '#20b2aa'],
-  ['lightskyblue', '#87cefa'],
-  ['lightslategray', '#778899'],
-  ['lightslategrey', '#778899'],
-  ['lightsteelblue', '#b0c4de'],
-  ['lightyellow', '#ffffe0'],
-  ['limegreen', '#32cd32'],
-  ['linen', '#faf0e6'],
-  ['mediumaquamarine', '#66cdaa'],
-  ['mediumblue', '#0000cd'],
-  ['mediumorchid', '#ba55d3'],
-  ['mediumpurple', '#9370db'],
-  ['mediumseagreen', '#3cb371'],
-  ['mediumslateblue', '#7b68ee'],
-  ['mediumspringgreen', '#00fa9a'],
-  ['mediumturquoise', '#48d1cc'],
-  ['mediumvioletred', '#c71585'],
-  ['midnightblue', '#191970'],
-  ['mintcream', '#f5fffa'],
-  ['mistyrose', '#ffe4e1'],
-  ['moccasin', '#ffe4b5'],
-  ['navajowhite', '#ffdead'],
-  ['oldlace', '#fdf5e6'],
-  ['olivedrab', '#6b8e23'],
-  ['orangered', '#ff4500'],
-  ['orchid', '#da70d6'],
-  ['palegoldenrod', '#eee8aa'],
-  ['palegreen', '#98fb98'],
-  ['paleturquoise', '#afeeee'],
-  ['palevioletred', '#db7093'],
-  ['papayawhip', '#ffefd5'],
-  ['peachpuff', '#ffdab9'],
-  ['peru', '#cd853f'],
-  ['pink', '#ffc0cb'],
-  ['plum', '#dda0dd'],
-  ['powderblue', '#b0e0e6'],
-  ['rosybrown', '#bc8f8f'],
-  ['royalblue', '#4169e1'],
-  ['saddlebrown', '#8b4513'],
-  ['salmon', '#fa8072'],
-  ['sandybrown', '#f4a460'],
-  ['seagreen', '#2e8b57'],
-  ['seashell', '#fff5ee'],
-  ['sienna', '#a0522d'],
-  ['skyblue', '#87ceeb'],
-  ['slateblue', '#6a5acd'],
-  ['slategray', '#708090'],
-  ['slategrey', '#708090'],
-  ['snow', '#fffafa'],
-  ['springgreen', '#00ff7f'],
-  ['steelblue', '#4682b4'],
-  ['tan', '#d2b48c'],
-  ['thistle', '#d8bfd8'],
-  ['tomato', '#ff6347'],
-  ['turquoise', '#40e0d0'],
-  ['violet', '#ee82ee'],
-  ['wheat', '#f5deb3'],
-  ['whitesmoke', '#f5f5f5'],
-  ['yellowgreen', '#9acd32'],
-  ['rebeccapurple', '#663399'],
-  ['transparent', '#00000000']
-]);
-
-// 采用单例模式
-export class Attribute {
-  private static extensionUri: Uri;
-  private static instance: Attribute | undefined = undefined;
-
-  public static getInstance(): Attribute {
-    if (!Attribute.instance) {
-      Attribute.instance = new Attribute();
-    }
-
-    return Attribute.instance;
-  }
-
-  public static setExtensionUri(extensionUri: Uri) {
-    Attribute.extensionUri = extensionUri;
-  }
-
-  private readonly node_attrs: CompletionItem[];
-  private readonly edge_attrs: CompletionItem[];
-  private readonly cluster_attrs: CompletionItem[];
-  private readonly subgraph_attrs: CompletionItem[];
-  private readonly graph_attrs: CompletionItem[];
-  private attrMap: Map<string, CompletionItem[]>;
-
-  private constructor() {
-    this.node_attrs = this._filterAttribute('Nodes');
-    this.edge_attrs = this._filterAttribute('Edges');
-    this.cluster_attrs = this._filterAttribute('Clusters');
-    this.graph_attrs = this._filterAttribute('Graphs');
-    this.subgraph_attrs = this._filterAttribute('Subgraphs');
-
-    this.attrMap = new Map();
-    this.attrMap.set('bool', this._getBoolValue());
-    this.attrMap.set('arrowType', this._getArrowTypeValue());
-    this.attrMap.set('clusterMode', this._getClusterModeValue());
-    this.attrMap.set('color', this._getColorValue());
-    this.attrMap.set('dirType', this._getDirTypeValue());
-    this.attrMap.set('outputMode', this._getOutputModeValue());
-    this.attrMap.set('packMode', this._getPackModeValue());
-    this.attrMap.set('pagedir', this._getPagedirValue());
-    this.attrMap.set('quadType', this._getQuadTypeValue());
-    this.attrMap.set('rankdir', this._getRankdirValue());
-    this.attrMap.set('rankType', this._getRankTypeValue());
-    this.attrMap.set('shape', this._getShapeValue());
-    this.attrMap.set('smoothType', this._getSmoothValue());
-
-    this.attrMap.set('style:node', this._getNodeStyleValue());
-    this.attrMap.set('style:edge', this._getEdgeStyleValue());
-    this.attrMap.set('style:cluster', this._getClusterStyleValue());
-  }
-
-  public provideValueofStyle(ty: string): CompletionItem[] {
-    if (ty.includes('graph') || ty.includes('cluster')) {
-      return this.attrMap.get('style:cluster') || [];
-    }
-    else if (ty.includes('node')) {
-      return this.attrMap.get('style:node') || [];
-    }
-    else if (ty.includes('edge')) {
-      return this.attrMap.get('style:edge') || [];
-    }
-    return [];
-  }
-
-  public provideValueOfAttribute(attrName: string): CompletionItem[] {
-    const attr = attributes.find(item => item.name == attrName);
-    let result: CompletionItem[] = [];
-    if (attr) {
-      for (const ty of attr.type) {
-        result.push(...(this.attrMap.get(ty) || []));
-      }
-    }
-    return result;
-  }
-
-  public provideSubgraphAttribute() {
-    return this.subgraph_attrs;
-  }
-
-  public providegraphAttribute() {
-    return this.graph_attrs;
-  }
-
-  public provideEdgeAttribute() {
-    return this.edge_attrs;
-  }
-
-  public provideNodeAttribute() {
-    return this.node_attrs;
-  }
-
-  public provideClusterAttribute() {
-    return this.cluster_attrs;
-  }
-
-  private _filterAttribute(attr: string) {
-    return attributes.filter(item => item.usedby.includes(attr)).map(
-      item => {
-        let result = new CompletionItem(item.name, CompletionItemKind.Property);
-        result.detail = item.description;
-        if (item.type.length == 1) {
-          const ty = item.type[0];
-          switch (ty) {
-            case 'string':
-              result.insertText = new SnippetString(`${item.name} = "$1"`);
-              break;
-            case 'rect':
-              result.insertText = new SnippetString(`${item.name}="$1, $2, $3, $4"`);
-              break;
-          }
-
-        }
-        return result;
-      }
-    );
-  }
-
-  private _getBoolValue(): CompletionItem[] {
-    return ['true', 'false'].map(
-      value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.detail = `Boolean; true or false.`;
-        return ret;
-      }
-    );
-  }
-
-  private _getArrowTypeValue(): CompletionItem[] {
-    return ['normal', 'inv', 'dot', 'invdot', 'odot', 'invodot', 'none', 'tee',
-      'empty', 'invempty', 'diamond', 'odiamond', 'ediamond', 'crow', 'box', 'obox',
-      'open', 'halfopen', 'vee'].map(value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(
-          Attribute.extensionUri, 'asset', 'arrowType', value + '.gif')})`
-        );
-        ret.detail = `Edge arrowhead shape`;
-        return ret;
-      });
-  }
-
-  private _getClusterModeValue(): CompletionItem[] {
-    return ['local', 'global', 'none'].map(
-      value => new CompletionItem(value, CompletionItemKind.Constant)
-    );
-  }
-
-  private _getColorValue(): CompletionItem[] {
-    let result: CompletionItem[] = [];
-    for (const [key, value] of colorMap.entries()) {
-      const ret = new CompletionItem(key, CompletionItemKind.Color);
-      ret.detail = key;
-      ret.documentation = value;
-      result.push(ret);
-    }
-    return result;
-  }
-
-  private _getDirTypeValue(): CompletionItem[] {
-    return ['forward', 'back', 'both', 'none'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = new MarkdownString(`![](${Uri.joinPath(
-        Attribute.extensionUri, 'asset', 'dirType', value + '.gif'
-      )})`);
-      ret.detail = `Edge arrow direction type`;
-      return ret;
-    });
-  }
-
-  private _getOutputModeValue(): CompletionItem[] {
-    const pairs = [
-      {
-        name: 'breadthfirst',
-        detail: `The default "breadthfirst" is the simplest, but when the graph layout does not avoid edge-node overlap, this mode will sometimes have edges drawn over nodes and sometimes on top of nodes.`
-      }, {
-        name: 'nodesfirst',
-        detail: `If the mode "nodesfirst" is chosen, all nodes are drawn first, followed by the edges. This guarantees an edge-node overlap will not be mistaken for an edge ending at a node.`
-      }, {
-        name: 'edgesfirst',
-        detail: `On the other hand, usually for aesthetic reasons, it may be desirable that all edges appear beneath nodes, even if the resulting drawing is ambiguous. This can be achieved by choosing "edgesfirst".`
-      }
-    ];
-
-    return pairs.map(item => {
-      const ret = new CompletionItem(item.name, CompletionItemKind.Constant);
-      ret.documentation = item.detail;
-      ret.detail = `The order in which nodes and edges are drawn in output.`;
-      return ret;
-    });
-  }
-
-  private _getPackModeValue(): CompletionItem[] {
-    const documentation = `The modes "node", "clust" or "graph" specify that the components should be packed together tightly, using the specified granularity. A value of "node" causes packing at the node and edge level, with no overlapping of these objects. This produces a layout with the least area, but it also allows interleaving, where a node of one component may lie between two nodes in another component. A value of "graph" does a packing using the bounding box of the component. Thus, there will be a rectangular region around a component free of elements of any other component. A value of "clust" guarantees that top-level clusters are kept intact. What effect a value has also depends on the layout algorithm. For example, neato does not support clusters, so a value of "clust" will have the same effect as the default "node" value.
-
-    The mode "array(_flag)?(%d)?" indicates that the components should be packed at the graph level into an array of graphs. By default, the components are in row-major order, with the number of columns roughly the square root of the number of components. If the optional flags contains 'c', then column-major order is used. Finally, if the optional integer suffix is used, this specifies the number of columns for row-major or the number of rows for column-major. Thus, the mode "array_c4" indicates array packing, with 4 rows, starting in the upper left and going down the first column, then down the second column, etc., until all components are used.
-
-    If a graph is smaller than the array cell it occupies, it is centered by default. The optional flags may contain 't', 'b', 'l', or 'r', indicating that the graphs should be aligned along the top, bottom, left or right, respectively.
+    Position of an exterior label, [in points](/doc/info/attrs.html#points)
     
-    If the optional flags contains 'u', this causes the insertion order of elements in the array to be determined by user-supplied values. Each component can specify its sort value by a non-negative integer using the sortv attribute. Components are inserted in order, starting with the one with the smallest sort value. If no sort value is specified, zero is used.
-    `;
-    const ret = [
-      new CompletionItem('none', CompletionItemKind.Constant),
-      new CompletionItem('clust', CompletionItemKind.Constant),
-      new CompletionItem('graph', CompletionItemKind.Constant),
-      new CompletionItem('array(_flags)?(%d)?', CompletionItemKind.Constant)
-    ];
-    ret.forEach(item => {
-      item.detail = `How closely to pack together graph components`;
-      item.documentation = documentation;
-    });
+    type: _[point](/docs/attr-types/point/)_
+    
+    The position indicates the center of the label.
+    
+    _Valid on:_
+    
+    * Nodes
+    * Edges
+    
+    _Note: write only._
+    
+    [Search the Graphviz codebase for \`"xlp"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="xlp">)
+    
+    Last modified June 18, 2022: [attributes descriptions with links \(25b13ac\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/25b13acb914eab6f408940717df3ae945d4da779)`,
+  },
 
 
-    return ret;
-  }
+  { name: "z", usedby: ['Nodes'], type: ['double'], description: `# z
 
-  private _getPagedirValue(): CompletionItem[] {
-    const ret = ['BL', 'BR', 'TL', 'TR', 'RB', 'RT', 'LB', 'LT'];
-    const documentation = `These specify the 8 row or column major orders for traversing a rectangular array, the first character corresponding to the major order and the second to the minor order. Thus, for "BL", the major order is from bottom to top, and the minor order is from left to right. This means the bottom row is traversed first, from left to right, then the next row up, from left to right, and so on, until the topmost row is traversed.`;
-    return ret.map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = documentation;
-      ret.detail = `Page Direction`;
-      return ret;
-    });
-  }
-
-  private _getQuadTypeValue(): CompletionItem[] {
-    const documentation = `Using "fast" gives about a 2-4 times overall speedup compared with "normal", though layout quality can suffer a little.`;
-    return ['normal', 'fast', 'none'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = documentation;
-      return ret;
-    });
-  }
-
-  private _getRankdirValue(): CompletionItem[] {
-    const documentation = `Corresponding to directed graphs drawn from top to bottom, from left to right, from bottom to top, and from right to left, respectively.`;
-    return ['normal', 'fast', 'none'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = documentation;
-      ret.detail = `Direction to draw directed graphs (one rank at a time)`;
-      return ret;
-    });
-  }
-
-  private _getRankTypeValue(): CompletionItem[] {
-    const detail = `Rank constraints on the nodes in a subgraph`;
-    return ['same', 'min', 'source', 'max', 'sink'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.detail = detail;
-      return ret;
-    })
-  }
-
-  private _getShapeValue(): CompletionItem[] {
-    const result = ['box', 'polygon', 'ellipse', 'oval', 'circle', 'point', 'egg',
-      'triangle', 'plaintext', 'plain', 'diamond', 'trapezium', 'parallelogram',
-      'house', 'pentagon', 'hexagon', 'septagon', 'octagon', 'doublecircle',
-      'doubleoctagon', 'tripleoctagon', 'invtriangle', 'invtrapezium',
-      'invhouse', 'Mdiamond', 'Msquare', 'Mcircle', 'rect', 'rectangle',
-      'square', 'star', 'none', 'underline', 'cylinder', 'note', 'tab',
-      'folder', 'box3d', 'component', 'promoter', 'cds', 'terminator',
-      'utr', 'primersite', 'restrictionsite', 'fivepoverhang', 'threepoverhang',
-      'noverhang', 'assembly', 'signature', 'insulator', 'ribosite', 'rnastab',
-      'proteasesite', 'proteinstab', 'rpromoter', 'rarrow', 'larrow', 'lpromoter'].map(value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.documentation = new MarkdownString(`![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'shape', value + '.gif')
-          })`);
-        ret.detail = `the shape of a node`;
-        return ret;
-      });
-
-    const record = new CompletionItem('record', CompletionItemKind.Constant);
-    record.detail = `Record-based Nodes`;
-    record.documentation = new MarkdownString(`
-    As an example of a record node, the dot input:
-    \`\`\`dot
-    digraph structs {
-      node [shape=record];
-      struct1 [label="<f0> left|<f1> mid&#92; dle|<f2> right"];
-      struct2 [label="<f0> one|<f1> two"];
-      struct3 [label="hello&#92;nworld |{ b |{c|<here> d|e}| f}| g | h"];
-      struct1:f1 -> struct2:f0;
-      struct1:f2 -> struct3:here;
-    }
-    \`\`\`
-    `);
-    result.push(record);
-    // 补充一个record
-    return result;
-  }
-
-  private _getSmoothValue(): CompletionItem[] {
-    return ['none', 'avg_dist', 'graph_dist', 'power_dist', 'rng', 'spring', 'triangle'].map(
-      value => new CompletionItem(value, CompletionItemKind.Constant)
-    );
-  }
-
-  private _getNodeStyleValue(): CompletionItem[] {
-    const result = ["dashed", "dotted", "solid", "bold", "filled", "striped", "wedged", "diagonals", "rounded"].map(
-      value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'node', 'n_' + value + '.png')
-          })`);
-        ret.detail = value;
-        return ret;
-      });
-    // 添加一个invis
-    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
-    invis.detail = 'invis';
-    result.push(invis);
-
-    // 添加一个 radical
-    const radial = new CompletionItem('radial', CompletionItemKind.Constant);
-    radial.detail = 'radial';
-    radial.documentation = `The style "radial" is recognized for nodes, clusters and graphs, and indicates a radial-style gradient fill if applicable.`;
-    result.push(radial);
-    return result;
-  }
-
-  private _getEdgeStyleValue(): CompletionItem[] {
-    const result: CompletionItem[] = ["dashed", "dotted", "solid", "bold"].map(
-      value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'e_' + value + '.png')
-          })`);
-        ret.detail = value;
-        return ret;
-      });
-
-    // 添加一个invis
-    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
-    invis.detail = 'invis';
-    result.push(invis);
-
-    // tapered
-    const tapered = new CompletionItem('tapered', CompletionItemKind.Constant);
-    tapered.detail = 'tapered';
-    tapered.documentation = new MarkdownString(`
-|dir or arrowhead |	normal |	none |
-| -- | -- | -- |
-| forward | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_forward.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_forward.png')}) |		
-| back		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_back.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_back.png')}) |
-| both		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_both.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_both.png')}) |
-| none		| ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'normal_none.png')}) | ![](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'edge', 'none_none.png')}) |
-`);
-
-
-    result.push(tapered);
-    return result;
-  }
-
-  private _getClusterStyleValue(): CompletionItem[] {
-    const result: CompletionItem[] = ["dashed", "dotted", "solid", "bold", "filled", "striped", "rounded"].map(
-      value => {
-        const ret = new CompletionItem(value, CompletionItemKind.Constant);
-        ret.documentation = new MarkdownString(`![img](${Uri.joinPath(Attribute.extensionUri, 'asset', 'style', 'cluster', 'c_' + value + '.png')
-          })`);
-        ret.detail = value;
-        return ret;
-      });
-
-    const radial = new CompletionItem('radial', CompletionItemKind.Constant);
-    radial.detail = 'radial';
-    radial.documentation = `The style "radial" is recognized for nodes, clusters and graphs, and indicates a radial-style gradient fill if applicable.`;
-    result.push(radial);
-    // 添加一个invis
-    const invis = new CompletionItem('invis', CompletionItemKind.Constant);
-    invis.detail = 'invis';
-    result.push(invis);
-
-    return result;
-  }
-
-
-
-};
+  Z-coordinate value for 3D layouts and displays
+  
+  type: _[double](/docs/attr-types/double/), default: \`0.0\`, minimum: \`-MAXFLOAT\`, \`-1000\`_
+  
+  **Deprecated:** Use [\`pos\`](https://graphviz.org/docs/attrs/pos/) attribute, along with [\`dimen\`](https://graphviz.org/docs/attrs/dimen/) and/or [\`dim\`](https://graphviz.org/docs/attrs/dim/) to specify dimensions.
+  
+  If the graph has [\`dim\`](https://graphviz.org/docs/attrs/dim/) set to 3 \(or more\), neato will use a node's \`z\` value for the z coordinate of its initial position if its [\`pos\`](https://graphviz.org/docs/attrs/pos/) attribute is also defined.
+  
+  Even if no \`z\` values are specified in the input, it is necessary to declare a \`z\` attribute for nodes, e.g, using \`node[z=""]\` in order to get z values on output. Thus, setting \`[dim](https://graphviz.org/docs/attrs/dim/)=3\` but not declaring \`z\` will cause \`neato \-Tvrml\` to layout the graph in 3D but project the layout onto the xy-plane for the rendering. If the \`z\` attribute is declared, the final rendering will be in 3D.
+  
+  _Valid on:_
+  
+  * Nodes
+  
+  [Search the Graphviz codebase for \`"z"\`](<https://gitlab.com/search?group_id=1996273&project_id=4207231&repository_ref=main&scope=blobs&search="z">)
+  
+  Last modified September 14, 2022: [Update z.md: remove extra dot \(0968dd3\)](https://gitlab.com/graphviz/graphviz.gitlab.io/commit/0968dd3c82356d4faf79c42d3bec9a6f03363a4f)`, },
+];

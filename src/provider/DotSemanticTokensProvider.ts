@@ -3,7 +3,7 @@ import {
   DocumentSemanticTokensProvider, SemanticTokensLegend, SemanticTokensBuilder, Range,
 } from "vscode";
 import textDocuments from "../TextDocuments";
-import { DotSemanticTokensVisitor } from "./DotSemanticTokensVisitor";
+import { DotSemanticTokensVisitor } from "../visitor/DotSemanticTokensVisitor";
 
 
 export class DotSemanticTokensProvider implements DocumentSemanticTokensProvider {

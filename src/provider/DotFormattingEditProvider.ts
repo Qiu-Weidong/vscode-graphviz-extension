@@ -1,6 +1,6 @@
 import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, Position, ProviderResult, Range, TextDocument, TextEdit } from "vscode";
 import textDocuments from "../TextDocuments";
-import { DotFormattingEditVisitor } from "./DotFormattingEditVisitor";
+import { DotFormattingEditVisitor } from "../visitor/DotFormattingEditVisitor";
 
 
 export class DotFormattingEditProvider implements DocumentFormattingEditProvider {

@@ -7,8 +7,8 @@ digraph G{
     v1 -> v2 [style="tapered", dir="none"];
 
   }
-
+  
   v1 [style="filled"];
-  v1 -> v7 [arrowhead="empty", dir="both", arrowtail="diamond"];
+  v1 -> v7 ;
 
 }

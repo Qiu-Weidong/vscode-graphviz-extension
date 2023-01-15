@@ -6,7 +6,7 @@ import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { CompletionItem, CompletionItemKind, Position, MarkdownString } from "vscode";
 import { Assign_stmtContext, Attr_listContext, Attr_stmtContext, A_listContext, Compass_ptContext, EdgeopContext, EdgeRHSContext, Edge_stmtContext, GraphContext, Graph_listContext, IdContext, LexprContext, Node_idContext, Node_stmtContext, PortContext, RexprContext, StmtContext, Stmt_listContext, SubgraphContext } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
-import { Attribute } from "./Attribute";
+import { Attribute } from "../attribute/Attribute";
 
 
 export class DotCompletionItemVisitor implements DotVisitor<void> {

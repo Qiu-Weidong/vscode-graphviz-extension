@@ -1,5 +1,5 @@
 import { CancellationToken, Hover, HoverProvider, Position, ProviderResult, TextDocument } from "vscode";
-import { DotHoverVisitor } from "./DotHoverVisitor";
+import { DotHoverVisitor } from "../visitor/DotHoverVisitor";
 import textDocuments from "../TextDocuments";
 
 

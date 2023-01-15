@@ -3,7 +3,7 @@ import { DotParser } from './dot/DotParser';
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { Uri, TextDocument, Diagnostic } from 'vscode';
 import { ParseTree } from 'antlr4ts/tree/ParseTree';
-import { NodeVisitor } from './provider/NodeVisitor';
+import { NodeVisitor } from './visitor/NodeVisitor';
 import { DiagnosticCollection } from 'vscode';
 import { languages } from 'vscode';
 import { DotDiagnosticListener } from './DotDiagnosticListener';

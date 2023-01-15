@@ -1,6 +1,6 @@
 import textDocuments from "../TextDocuments";
 import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, CompletionList, Position, ProviderResult, TextDocument } from "vscode";
-import { DotCompletionItemVisitor } from "./DotCompletionItemVisitor";
+import { DotCompletionItemVisitor } from "../visitor/DotCompletionItemVisitor";
 
 
 export class DotCompletionItemProvider implements CompletionItemProvider {

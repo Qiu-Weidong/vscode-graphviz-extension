@@ -6,6 +6,7 @@ import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext, Attr_listContext, A_listContext, Assign_stmtContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext, Node_stmtContext, Node_idContext, PortContext, Compass_ptContext, SubgraphContext, IdContext, LexprContext, RexprContext } from "../dot/DotParser";
 import { ParserRuleContext } from "antlr4ts";
+import { attributes } from "../attribute/Attributes";
 
 
 export class DotHoverVisitor implements DotVisitor<void> {
@@ -72,21 +73,23 @@ export class DotHoverVisitor implements DotVisitor<void> {
       ctx.lexpr().accept(this);
     }
   }
-  visitEdge_stmt(ctx: Edge_stmtContext) { }
+  visitEdge_stmt(ctx: Edge_stmtContext) { ctx.attr_list()?.accept(this); }
   visitEdgeRHS(ctx: EdgeRHSContext) { }
   visitEdgeop(ctx: EdgeopContext) { }
-  visitNode_stmt(ctx: Node_stmtContext) { }
+  visitNode_stmt(ctx: Node_stmtContext) { ctx.attr_list()?.accept(this); }
   visitNode_id(ctx: Node_idContext) { }
   visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
-  visitSubgraph(ctx: SubgraphContext) { }
+  visitSubgraph(ctx: SubgraphContext) { ctx.stmt_list().accept(this); }
   visitId(ctx: IdContext) { }
 
   visitLexpr(ctx: LexprContext) {
     let name = ctx.ID()?.symbol.text || ctx.STRING()?.symbol.text || '';
     if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
     // 根据 name 设置 hover 的内容。
-    this.result = new Hover(new MarkdownString(name));
+    const description = attributes.find(item => item.name == name)?.description;
+    if(description)
+      this.result = new Hover(new MarkdownString(description));
   }
   visitRexpr(ctx: RexprContext) { }
 

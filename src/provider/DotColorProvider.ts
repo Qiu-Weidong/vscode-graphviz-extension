@@ -1,6 +1,6 @@
 import { CancellationToken, Color, ColorInformation, ColorPresentation, DocumentColorProvider, ProviderResult, Range, TextDocument } from "vscode";
 import textDocuments from "../TextDocuments";
-import { DotColorVisitor } from "./DotColorVisitor";
+import { DotColorVisitor } from "../visitor/DotColorVisitor";
 
 
 export class DotColorProvider implements DocumentColorProvider {
