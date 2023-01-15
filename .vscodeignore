@@ -3,9 +3,7 @@
 examples/**
 .vscode/**
 .vscode-test/**
-node_modules
 src/**
-out/**
 package-lock.json
 **/tsconfig.json
 **/.eslintrc.json

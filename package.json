@@ -20,7 +20,7 @@
 	"activationEvents": [
 		"onLanguage:dot"
 	],
-	"main": "./dist/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
 			{
@@ -43,7 +43,7 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "webpack --mode production",
+		"vscode:prepublish": "npm run compile",
 		"webpack": "webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
 		"compile": "tsc -p ./",
