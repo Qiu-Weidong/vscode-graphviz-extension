@@ -8,6 +8,11 @@
 	"engines": {
 		"vscode": "^1.74.0"
 	},
+  "keywords": [
+    "graphviz", "dot"
+  ],
+  "icon": "asset/icon.png",
+  "license": "MIT",
 	"categories": [
 		"Programming Languages"
 	],
