@@ -201,6 +201,30 @@ export class Attribute {
     this.attrMap.set('style:cluster', this._getClusterStyleValue());
   }
 
+  public isNodeAttribute(attrName: string): boolean {
+    const attr = attributes.find(attr => attr.name == attrName);
+    if(! attr) return false;
+    return attr.usedby.includes('Nodes');
+  }
+
+  public isEdgeAttribute(attrName: string): boolean {
+    const attr = attributes.find(attr => attr.name == attrName);
+    if(! attr) return false;
+    return attr.usedby.includes('Edges');
+  }
+
+  public isGraphAttribute(attrName: string): boolean {
+    const attr = attributes.find(attr => attr.name == attrName);
+    if(! attr) return false;
+    return attr.usedby.includes('Graphs');
+  }
+
+  public isClusterOrSubgraphAttribute(attrName: string) {
+    const attr = attributes.find(attr => attr.name == attrName);
+    if(! attr) return false;
+    return attr.usedby.includes('Subgraphs') || attr.usedby.includes('Clusters');
+  }
+
   public provideValueofStyle(ty: string): CompletionItem[] {
     if (ty.includes('graph') || ty.includes('cluster')) {
       return this.attrMap.get('style:cluster') || [];

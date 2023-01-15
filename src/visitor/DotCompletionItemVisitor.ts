@@ -70,8 +70,10 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     else if (this.positionInContext(ctx.stmt_list())) {
       // 如果正在编辑 stmt_list， 那么就继续，id 不提示
       // 将当前 scope 置为 graph
+      const lastScope = this.scope;
       this.scope = 'graph';
       ctx.stmt_list().accept(this);
+      this.scope = lastScope;
     }
 
   }
@@ -93,8 +95,10 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     }
     else if (this.positionInContext(ctx.attr_list())) {
       // 正在编辑 attr_list;
+      const lastScope = this.scope;
       this.scope = ctx.EDGE() ? 'edge_attr' : ctx.GRAPH() ? 'graph_attr' : ctx.NODE() ? 'node_attr' : 'unknown_attr';
       ctx.attr_list().accept(this);
+      this.scope = lastScope;
     }
 
   }
@@ -136,6 +140,7 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
   // edge_stmt: ( node_id | subgraph) edgeRHS attr_list?;
   visitEdge_stmt(ctx: Edge_stmtContext) {
     // 访问到这里的时候，一定可以确定是 edge。
+    const lastScope = this.scope;
     this.scope = 'edge';
 
     const attr_list = ctx.attr_list();
@@ -155,6 +160,8 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     else if (this.positionInContext(ctx.edgeRHS())) {
       ctx.edgeRHS().accept(this);
     }
+
+    this.scope = lastScope;
 
   }
 
@@ -185,8 +192,10 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
     }
     else if (attr_list && this.positionInContext(attr_list)) {
       // 正在编辑节点的属性
+      const lastScope = this.scope;
       this.scope = 'node_attr';
       attr_list.accept(this);
+      this.scope = lastScope;
     }
 
   }
@@ -264,8 +273,10 @@ export class DotCompletionItemVisitor implements DotVisitor<void> {
       if (name.startsWith('"') && name.endsWith('"'))
         name = name.slice(1, name.length - 1);
 
+      const lastScope = this.scope;
       this.scope = name.startsWith('cluster') ? 'cluster' : 'subgraph';
       ctx.stmt_list().accept(this);
+      this.scope = lastScope;
     }
   }
 

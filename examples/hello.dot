@@ -4,9 +4,11 @@ digraph G{
   
   subgraph cluster_0 {
     style="striped";
-    v1 -> v2 [style="tapered", dir="none"];
+    v1 -> v2 [dir="none", color="blue:brown:aqua:aquamarine"];
 
   }
+
+  bgcolor="antiquewhite";
   
   v1 [style="filled"];
   v1 -> v7 ;

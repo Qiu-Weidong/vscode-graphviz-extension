@@ -73,14 +73,25 @@ export class DotHoverVisitor implements DotVisitor<void> {
       ctx.lexpr().accept(this);
     }
   }
-  visitEdge_stmt(ctx: Edge_stmtContext) { ctx.attr_list()?.accept(this); }
+  visitEdge_stmt(ctx: Edge_stmtContext) {
+    const attr_list = ctx.attr_list();
+    if (attr_list && this.positionInContext(attr_list))
+      attr_list.accept(this);
+  }
   visitEdgeRHS(ctx: EdgeRHSContext) { }
   visitEdgeop(ctx: EdgeopContext) { }
-  visitNode_stmt(ctx: Node_stmtContext) { ctx.attr_list()?.accept(this); }
+  visitNode_stmt(ctx: Node_stmtContext) {
+    const attr_list = ctx.attr_list();
+    if (attr_list && this.positionInContext(attr_list))
+      attr_list.accept(this);
+  }
   visitNode_id(ctx: Node_idContext) { }
   visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
-  visitSubgraph(ctx: SubgraphContext) { ctx.stmt_list().accept(this); }
+  visitSubgraph(ctx: SubgraphContext) { 
+    const stmt_list = ctx.stmt_list();
+    if(this.positionInContext(stmt_list)) stmt_list.accept(this);
+  }
   visitId(ctx: IdContext) { }
 
   visitLexpr(ctx: LexprContext) {
@@ -88,7 +99,7 @@ export class DotHoverVisitor implements DotVisitor<void> {
     if (name.startsWith('"') && name.endsWith('"')) name = name.slice(1, name.length - 1);
     // 根据 name 设置 hover 的内容。
     const description = attributes.find(item => item.name == name)?.description;
-    if(description)
+    if (description)
       this.result = new Hover(new MarkdownString(description));
   }
   visitRexpr(ctx: RexprContext) { }

@@ -7,6 +7,7 @@ import { NodeVisitor } from './visitor/NodeVisitor';
 import { DiagnosticCollection } from 'vscode';
 import { languages } from 'vscode';
 import { DotDiagnosticListener } from './DotDiagnosticListener';
+import { DotDiagnosticVisitor } from './visitor/DotDiagnosticVisitor';
 import { DocumentSymbol } from 'vscode';
 
 // 缓存内容 token 流、语法树、符号表(储存所有的顶点名称即可)、错误信息
@@ -66,6 +67,11 @@ class TextDocuments {
       tree.accept(visitor);
     }
     catch(err) {}
+
+    const diagnosticVisitor = new DotDiagnosticVisitor(diagnostics);
+    try {
+      tree.accept(diagnosticVisitor);
+    } catch(err) {}
 
     // 检查属性是否正确，使用 warning 。
     
