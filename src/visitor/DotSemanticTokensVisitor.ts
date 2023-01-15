@@ -9,7 +9,7 @@ import {
 } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
 import { Position, Range, SemanticTokensBuilder } from "vscode";
-import { assert } from "console";
+// import { assert } from "console";
 
 
 export class DotSemanticTokensVisitor implements DotVisitor<void> {
@@ -91,7 +91,7 @@ export class DotSemanticTokensVisitor implements DotVisitor<void> {
   // 注意，当语法更新时，需要同步更新
   static getTokenType(num: number): string {
     
-    assert(num < 21);
+    // assert(num < 21);
     // '=' '->' '--' ':'
     if(num == 4 || num >=8 && num <= 10) { return 'operator';}
     // 'strict' 给个 decorator
