@@ -89,13 +89,13 @@ export class DotPreviewPanel {
 
   private _getWebviewContent(webview: Webview, title: string, svgOrError: string): string {
     const toolkitUri = webview.asWebviewUri(
-      Uri.joinPath(DotPreviewPanel.extensionUri, 'node_modules', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.js')
+      Uri.joinPath(DotPreviewPanel.extensionUri, 'media', '@vscode', 'webview-ui-toolkit', 'dist', 'toolkit.min.js')
     );
     const mainUri = webview.asWebviewUri(
       Uri.joinPath(DotPreviewPanel.extensionUri, 'media', 'main.js')
     );
     const codiconsUri = webview.asWebviewUri(
-      Uri.joinPath(DotPreviewPanel.extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css')
+      Uri.joinPath(DotPreviewPanel.extensionUri, 'media', '@vscode', 'codicons', 'dist', 'codicon.css')
     );
 
     // 用一种很恶心的方式来将 engine 传过去。

@@ -50,11 +50,7 @@
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
-		"antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot",
-		"esbuild-base": "rimraf out && esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
-		"esbuild": "npm run esbuild-base -- --sourcemap",
-		"eswatch": "npm run -S esbuild-base -- --sourcemap --watch",
-		"esbuild-watch": "npm run esbuild-base -- --sourcemap --watch"
+		"antlr4ts": "antlr4ts src/dot/Dot.g4 -visitor -o src/dot"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
