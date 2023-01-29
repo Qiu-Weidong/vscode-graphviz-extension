@@ -203,25 +203,25 @@ export class Attribute {
 
   public isNodeAttribute(attrName: string): boolean {
     const attr = attributes.find(attr => attr.name == attrName);
-    if(! attr) return false;
+    if (!attr) return false;
     return attr.usedby.includes('Nodes');
   }
 
   public isEdgeAttribute(attrName: string): boolean {
     const attr = attributes.find(attr => attr.name == attrName);
-    if(! attr) return false;
+    if (!attr) return false;
     return attr.usedby.includes('Edges');
   }
 
   public isGraphAttribute(attrName: string): boolean {
     const attr = attributes.find(attr => attr.name == attrName);
-    if(! attr) return false;
+    if (!attr) return false;
     return attr.usedby.includes('Graphs');
   }
 
   public isClusterOrSubgraphAttribute(attrName: string) {
     const attr = attributes.find(attr => attr.name == attrName);
-    if(! attr) return false;
+    if (!attr) return false;
     return attr.usedby.includes('Subgraphs') || attr.usedby.includes('Clusters');
   }
 
@@ -411,12 +411,12 @@ export class Attribute {
 
   private _getRankdirValue(): CompletionItem[] {
     const documentation = `Corresponding to directed graphs drawn from top to bottom, from left to right, from bottom to top, and from right to left, respectively.`;
-    return ['normal', 'fast', 'none'].map(value => {
-      const ret = new CompletionItem(value, CompletionItemKind.Constant);
-      ret.documentation = documentation;
-      ret.detail = `Direction to draw directed graphs (one rank at a time)`;
-      return ret;
-    });
+    return ["TB", "LR", "BT", "RL"].map(value => {
+        const ret = new CompletionItem(value, CompletionItemKind.Constant);
+        ret.documentation = documentation;
+        ret.detail = `Direction to draw directed graphs (one rank at a time)`;
+        return ret;
+      });
   }
 
   private _getRankTypeValue(): CompletionItem[] {

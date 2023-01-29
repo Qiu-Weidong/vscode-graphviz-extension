@@ -11,7 +11,8 @@ export class DotFormattingEditProvider implements DocumentFormattingEditProvider
   ): ProviderResult<TextEdit[]> {
     textDocuments.updateDocument(document);
     const tree = textDocuments.getTree(document);
-    const visitor = new DotFormattingEditVisitor();
+    const tokens = textDocuments.getTokens(document);
+    const visitor = new DotFormattingEditVisitor(tokens);
 
     let result = '';
     try {
@@ -27,8 +28,6 @@ export class DotFormattingEditProvider implements DocumentFormattingEditProvider
       ),
       result
     )];
-
-    throw new Error("Method not implemented.");
   }
 
 }

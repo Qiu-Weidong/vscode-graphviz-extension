@@ -1,9 +1,9 @@
 digraph {
-  bgcolor="transparent";
+  rankdir = "LR";
   fontname="Helvetica,Arial,sans-serif";
   node [fontname="Helvetica,Arial,sans-serif"];
   edge [fontname="Helvetica,Arial,sans-serif"];
-  node [shape="circle", fillcolor="white:black", fontcolor="black"];
+  node [shape="circle"; fillcolor="white:black"; fontcolor="black"];
   
   subgraph cluster_1 {
     label="Linear Angle Variations (white to black gradient)";

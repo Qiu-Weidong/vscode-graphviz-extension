@@ -1,4 +1,4 @@
-import { Token } from "antlr4ts";
+import { CommonTokenStream, ParserRuleContext, Token } from "antlr4ts";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
@@ -9,8 +9,21 @@ import { DotVisitor } from "../dot/DotVisitor";
 
 
 export class DotFormattingEditVisitor implements DotVisitor<string> {
-
+  private tokens: CommonTokenStream;
   private retraction: string = '';
+
+  constructor(tokens: CommonTokenStream) { this.tokens = tokens; }
+
+  // 判断是否包含注释
+  containsComment(ctx: ParserRuleContext): boolean {
+    const start = ctx.start;
+    const stop = ctx.stop;
+    for(let i=start.tokenIndex; i<=(stop?.tokenIndex || -100); i++) {
+      const channel = this.tokens.get(i).channel;
+      if(channel != 0) return true;
+    }
+    return false;
+  }
 
   visitGraph_list(ctx: Graph_listContext): string { 
     let result = '';

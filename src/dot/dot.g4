@@ -21,7 +21,7 @@ attr_stmt: ( GRAPH | NODE | EDGE) attr_list;
 
 attr_list: ( '[' a_list? ']')+;
 
-a_list: ( assign_stmt ','?)+;
+a_list: ( assign_stmt (','| ';')?)+;
 
 assign_stmt: lexpr '=' rexpr ;
 
