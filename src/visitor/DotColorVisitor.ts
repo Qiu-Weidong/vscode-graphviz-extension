@@ -4,7 +4,7 @@ import { DotVisitor } from "../dot/DotVisitor";
 import {
   Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext,
   Attr_listContext, A_listContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext,
-  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext, Assign_stmtContext
+  Node_stmtContext, Node_idContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext, Assign_stmtContext
 } from "../dot/DotParser";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
@@ -99,7 +99,6 @@ export class DotColorVisitor implements DotVisitor<void> {
   visitEdgeop(ctx: EdgeopContext) { }
   visitNode_stmt(ctx: Node_stmtContext) { ctx.attr_list()?.accept(this); }
   visitNode_id(ctx: Node_idContext) { }
-  visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
   visitSubgraph(ctx: SubgraphContext) { ctx.stmt_list().accept(this); }
   visitId(ctx: IdContext) { }

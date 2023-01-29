@@ -16,7 +16,6 @@ import { EdgeRHSContext } from "./DotParser";
 import { EdgeopContext } from "./DotParser";
 import { Node_stmtContext } from "./DotParser";
 import { Node_idContext } from "./DotParser";
-import { PortContext } from "./DotParser";
 import { Compass_ptContext } from "./DotParser";
 import { SubgraphContext } from "./DotParser";
 import { IdContext } from "./DotParser";
@@ -122,13 +121,6 @@ export interface DotVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitNode_id?: (ctx: Node_idContext) => Result;
-
-	/**
-	 * Visit a parse tree produced by `DotParser.port`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitPort?: (ctx: PortContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `DotParser.compass_pt`.

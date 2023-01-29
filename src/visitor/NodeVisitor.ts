@@ -2,7 +2,7 @@ import { DotVisitor } from "../dot/DotVisitor";
 import {
   Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext,
   Attr_listContext, A_listContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext,
-  Node_stmtContext, Node_idContext, PortContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext, Assign_stmtContext
+  Node_stmtContext, Node_idContext, SubgraphContext, IdContext, Compass_ptContext, LexprContext, RexprContext, Assign_stmtContext
 } from "../dot/DotParser";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
@@ -191,7 +191,6 @@ export class NodeVisitor implements DotVisitor<void> {
   }
 
   visitNode_id(ctx: Node_idContext) { }
-  visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
 
   visitSubgraph(ctx: SubgraphContext) {

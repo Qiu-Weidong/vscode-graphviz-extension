@@ -16,7 +16,6 @@ import { EdgeRHSContext } from "./DotParser";
 import { EdgeopContext } from "./DotParser";
 import { Node_stmtContext } from "./DotParser";
 import { Node_idContext } from "./DotParser";
-import { PortContext } from "./DotParser";
 import { Compass_ptContext } from "./DotParser";
 import { SubgraphContext } from "./DotParser";
 import { IdContext } from "./DotParser";
@@ -171,17 +170,6 @@ export interface DotListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitNode_id?: (ctx: Node_idContext) => void;
-
-	/**
-	 * Enter a parse tree produced by `DotParser.port`.
-	 * @param ctx the parse tree
-	 */
-	enterPort?: (ctx: PortContext) => void;
-	/**
-	 * Exit a parse tree produced by `DotParser.port`.
-	 * @param ctx the parse tree
-	 */
-	exitPort?: (ctx: PortContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `DotParser.compass_pt`.

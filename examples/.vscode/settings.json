@@ -1,4 +1,6 @@
 {
   "graphviz.multiPanel": true,
-  "graphviz.hotUpdate": true
+  "graphviz.hotUpdate": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false
 }

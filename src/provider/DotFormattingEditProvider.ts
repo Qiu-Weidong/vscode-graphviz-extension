@@ -1,3 +1,4 @@
+import { Token } from "antlr4ts";
 import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, Position, ProviderResult, Range, TextDocument, TextEdit } from "vscode";
 import textDocuments from "../TextDocuments";
 import { DotFormattingEditVisitor } from "../visitor/DotFormattingEditVisitor";
@@ -12,12 +13,17 @@ export class DotFormattingEditProvider implements DocumentFormattingEditProvider
     textDocuments.updateDocument(document);
     const tree = textDocuments.getTree(document);
     const tokens = textDocuments.getTokens(document);
-    const visitor = new DotFormattingEditVisitor(tokens);
+    const comments: Token[] = [];
+    for(const token of tokens.getTokens()) {
+      if(token.channel != 0) comments.push(token);
+    }
+    
+    const visitor = new DotFormattingEditVisitor(comments, options.tabSize);
 
-    let result = '';
     try {
-      result = tree.accept(visitor);
+      tree.accept(visitor);
     } catch {}
+    const result = visitor.getResult();
     if(! result) return;
     
     // 直接将 语法树 转换成 格式化后的字符串。

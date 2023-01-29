@@ -4,7 +4,7 @@ import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext, Attr_listContext, A_listContext, Assign_stmtContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext, Node_stmtContext, Node_idContext, PortContext, Compass_ptContext, SubgraphContext, IdContext, LexprContext, RexprContext } from "../dot/DotParser";
+import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext, Attr_listContext, A_listContext, Assign_stmtContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext, Node_stmtContext, Node_idContext, Compass_ptContext, SubgraphContext, IdContext, LexprContext, RexprContext } from "../dot/DotParser";
 import { ParserRuleContext } from "antlr4ts";
 import { attributes } from "../attribute/Attributes";
 
@@ -86,7 +86,6 @@ export class DotHoverVisitor implements DotVisitor<void> {
       attr_list.accept(this);
   }
   visitNode_id(ctx: Node_idContext) { }
-  visitPort(ctx: PortContext) { }
   visitCompass_pt(ctx: Compass_ptContext) { }
   visitSubgraph(ctx: SubgraphContext) { 
     const stmt_list = ctx.stmt_list();

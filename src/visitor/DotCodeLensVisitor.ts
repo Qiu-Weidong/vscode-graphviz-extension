@@ -3,7 +3,7 @@ import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { CodeLens, Position, Range, TextDocument } from "vscode";
-import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext, Attr_listContext, A_listContext, Assign_stmtContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext, Node_stmtContext, Node_idContext, PortContext, Compass_ptContext, SubgraphContext, IdContext, LexprContext, RexprContext } from "../dot/DotParser";
+import { Graph_listContext, GraphContext, Stmt_listContext, StmtContext, Attr_stmtContext, Attr_listContext, A_listContext, Assign_stmtContext, Edge_stmtContext, EdgeRHSContext, EdgeopContext, Node_stmtContext, Node_idContext, Compass_ptContext, SubgraphContext, IdContext, LexprContext, RexprContext } from "../dot/DotParser";
 import { DotVisitor } from "../dot/DotVisitor";
 
 
@@ -73,7 +73,6 @@ export class DotCodeLensVisitor implements DotVisitor<void> {
   visitEdgeop: ((ctx: EdgeopContext) => void) = (ctx) => this.visitChildren(ctx);
   visitNode_stmt: ((ctx: Node_stmtContext) => void) = (ctx) => this.visitChildren(ctx);
   visitNode_id: ((ctx: Node_idContext) => void) = (ctx) => this.visitChildren(ctx);
-  visitPort: ((ctx: PortContext) => void) = (ctx) => this.visitChildren(ctx);
   visitCompass_pt: ((ctx: Compass_ptContext) => void) = (ctx) => this.visitChildren(ctx);
   visitSubgraph: ((ctx: SubgraphContext) => void) = (ctx) => this.visitChildren(ctx);
   visitId: ((ctx: IdContext) => void) = (ctx) => this.visitChildren(ctx);

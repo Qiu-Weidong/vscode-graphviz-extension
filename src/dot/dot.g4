@@ -6,24 +6,27 @@ grammar Dot;
 
 graph_list: graph+ EOF;
 
-graph: STRICT? ( GRAPH | DIGRAPH) id? '{' stmt_list '}';
+graph:
+	STRICT? (GRAPH | DIGRAPH) id? lp = '{' stmt_list rp = '}';
 
-stmt_list: ( stmt ';'?)*;
+stmt_list: ( stmt)*;
 
 stmt:
-	node_stmt       // node_id attr_list?
-	| edge_stmt     // (node_id | subgraph) edgeRHS attr_list?
-	| attr_stmt     // (NODE | GRAPH | EDGE) attr_list
-	| assign_stmt   // lexpr '=' rexpr
-	| subgraph;     // 'subgraph' '{' 
+	(
+		node_stmt // node_id attr_list?
+		| edge_stmt // (node_id | subgraph) edgeRHS attr_list?
+		| attr_stmt // (NODE | GRAPH | EDGE) attr_list
+		| assign_stmt // lexpr '=' rexpr
+		| subgraph // 'subgraph' '{' 
+	) semicolon = ';'?;
 
 attr_stmt: ( GRAPH | NODE | EDGE) attr_list;
 
-attr_list: ( '[' a_list? ']')+;
+attr_list: (  a_list )+;
 
-a_list: ( assign_stmt (','| ';')?)+;
+a_list: lp = '['( assign_stmt separator = (',' | ';')?)* rp = ']';
 
-assign_stmt: lexpr '=' rexpr ;
+assign_stmt: lexpr equ = '=' rexpr;
 
 edge_stmt: ( node_id | subgraph) edgeRHS attr_list?;
 
@@ -31,16 +34,12 @@ edgeRHS: ( edgeop ( node_id | subgraph))+;
 
 edgeop: '->' | '--';
 
-node_stmt: node_id attr_list?;  
-node_id: id (':' id)? (':' compass_pt)?; 
-port: ':' id ( ':' compass_pt)? | ':' compass_pt;
+node_stmt: node_id attr_list?;
+node_id: id (colon = ':' id)? (colon = ':' compass_pt)?;
 
-compass_pt: (
-		ID
-    | STRING
-	);
+compass_pt: ( ID | STRING);
 
-subgraph: ( SUBGRAPH id?)? '{' stmt_list '}';
+subgraph: ( SUBGRAPH id?)? lp = '{' stmt_list rp = '}';
 
 // 等号左边可以是 ID、String。等号右边可以是 ID、STRING、HTML_STRING、NUMBER 图名称、子图名称、节点名称可以是 ID、STRING、NUMBER。
 id: ID | STRING | NUMBER;
