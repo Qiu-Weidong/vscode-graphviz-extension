@@ -1,16 +1,24 @@
-digraph G{
-  node [fontcolor="aquamarine:green", style="dotted"];
+// ldowp kdwod jaque
+/*sldpeidofjeld */
+digraph G {
+  /* pekdilq 910278wjdle*/
+  node [fontcolor="aquamarine:green", style=/*bufeo 09123$% jie*/"dotted"];
+  /* Nihaodlw 0127%%%%$$$$!@~!```09*** */
   Hello -> World [label="edge", fontcolor="aqua", color="blue:aliceblue"];
-  
   subgraph cluster_0 {
     style="striped";
-    v1 -> v2 [dir="none", color="blue:brown:aqua:aquamarine"];
-
+    v1 -> /* losp qiowdkw */v2 [dir="none", color="blue:brown:aqua:aquamarine"];
   }
-
   bgcolor="antiquewhite";
-  
-  v1 [style="filled"];
-  v1 -> v7 ;
-
+  v1 // line comment
+    [style="filled"];
+  v1 -> v7;
+// 注释
 }
+// 最后的注释
+
+/*
+力龙科的904jleaj;la
+ladfj
+o][\  \w1]
+*/

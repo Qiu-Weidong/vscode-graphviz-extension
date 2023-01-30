@@ -27,9 +27,11 @@
 ![](asset/other/completion2.gif)
 
 ## 格式化
-这有一个小 bug ，格式化功能会删除所有的注释。如果您想要保留注释，请不要使用格式化功能。
-![](asset/other/formating.gif)
 
+对于 `1.1.14` 以下的版本有一个小 bug ，格式化功能会删除所有的注释。如果您想要保留注释，请不要使用格式化功能。但是 `1.1.14` 修复了这个 bug。
+![](asset/other/formating.gif)
+保留注释的格式化:
+![](asset/other/format2.gif)
 ## 查找引用、重命名节点
 ![](asset/other/symbol.gif)
 
